@@ -19,7 +19,6 @@ import java.net.UnknownHostException;
 
 
 @RestController
-@RequestMapping(value = "authentication")
 public class UserController {
 
     @Autowired
