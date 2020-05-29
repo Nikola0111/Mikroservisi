@@ -4,8 +4,8 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.repositor
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -27,7 +27,7 @@ public class SessionService {
     @Autowired
     AgentRepository agentRepository;
     
-    
+    /*
     public String getLoggedUsername(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -93,5 +93,7 @@ public class SessionService {
         }
         return null;
     }
+
+    */
 
 }

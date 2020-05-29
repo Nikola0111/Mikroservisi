@@ -2,6 +2,8 @@ package com.AthorizationAndAuthentication.AthorizationAndAuthentication.controll
 
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.dtos.UserDTO;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.EntityUser;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.LoginInfo;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.LoginInfoService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +19,14 @@ import java.net.UnknownHostException;
 
 
 @RestController
+@RequestMapping(value = "authentication")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LoginInfoService loginInfoService;
 
 
 
@@ -30,14 +36,34 @@ public class UserController {
 		
         return new ResponseEntity<>(String.format("NEMANJA TI SI GOVNOI i jebi se i pusi "), HttpStatus.OK);
     }
-    
+    /*
     @PostMapping(value = "/login")
     public String Login(){
 
 
+        
         System.out.println("PROSO PROSO");
 
       return "proslo";
+    } */
+
+
+    @PostMapping(value = "/login", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<LoginInfo> Login(@RequestBody LoginInfo login){
+
+        System.out.println(login.getEmail() + " " + login.getPassword());
+
+        //provera email-a i username-a:
+        LoginInfo loginInfo = loginInfoService.findByEmail(login.getEmail());
+        if(loginInfo == null){
+            System.out.println("Wrong username or password");
+            return new ResponseEntity<>(loginInfo, HttpStatus.BAD_REQUEST);
+        }
+
+
+        userService.saveUser(loginInfo);
+
+        return new ResponseEntity<>(loginInfo, HttpStatus.OK);
     }
 
 

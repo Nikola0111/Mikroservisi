@@ -143,11 +143,11 @@ import { AuthInterceptor } from './services/httpInterceptor.service';
               ConversationService,
               HistoryService,
               EndUserService,
-              {
-                provide:HTTP_INTERCEPTORS,
-                useClass: AuthInterceptor,
-                multi:true
-              }
+            //  {
+             //   provide:HTTP_INTERCEPTORS,
+            //    useClass: AuthInterceptor,
+            //    multi:true
+            //  }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChangeDiscountDialogComponent, ImagesDialogComponent]

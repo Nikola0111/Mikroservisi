@@ -1,5 +1,5 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security;
-
+/*
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
@@ -23,10 +23,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.util.Assert;
 
+extends AbstractUserDetailsAuthenticationProvider
+*/
 
-public class DaoAuthenticationProviderOurs extends AbstractUserDetailsAuthenticationProvider {
+public class DaoAuthenticationProviderOurs  {
 
-
+/*
     private PasswordEncoder passwordEncoder;
 
     private volatile String userNotFoundEncodedPassword;
@@ -116,5 +118,5 @@ public class DaoAuthenticationProviderOurs extends AbstractUserDetailsAuthentica
 		this.userNotFoundEncodedPassword = null;
 	}
 
-    
+    */
 }

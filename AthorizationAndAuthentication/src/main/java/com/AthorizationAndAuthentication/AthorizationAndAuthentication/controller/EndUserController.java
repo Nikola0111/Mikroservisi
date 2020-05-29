@@ -27,6 +27,7 @@ import java.util.Base64.Encoder;
 
 
 @RestController
+@RequestMapping(value = "authentication")
 public class EndUserController {
 
     @Autowired

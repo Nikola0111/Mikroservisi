@@ -14,7 +14,7 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,14 +56,23 @@ public class UserService {
     }
     
 
-    public void saveUser(EntityUser userDB){
+    public void saveUser(LoginInfo log){
 
         //Sacuvati korisnika u sesiji
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
                 .currentRequestAttributes();
         HttpSession session = attr.getRequest().getSession(true);
 
-        session.setAttribute("user", userDB.getId());
+        for (EntityUser user: userRepository.findAll()) {
+            
+            if(user.getLoginInfo().getId().equals(log.getId())){
+                session.setAttribute("user", user.getId());
+        
+            }
+
+        }
+
+      
         
 
     }
@@ -74,7 +83,7 @@ public class UserService {
 
     }
 
-    
+  /*  
     public void saveNewUser(EntityUser entityUser){
 
         String salt=makeSalt();      
@@ -115,7 +124,48 @@ public class UserService {
       //  String verificationToken = UUID.randomUUID().toString();
       //  verificationTokenService.save(endUser, verificationToken);
     }
+*/
 
+public void saveNewUser(EntityUser entityUser){
+
+    String salt=makeSalt();      
+
+    System.out.println("Naso ga je lepo"+ findOneByid(entityUser.getId()));
+
+    System.out.println("HESOVAN PASSWORD == "+hashIt(entityUser.getPassword(),salt));
+
+    LoginInfo loginInfo=new LoginInfo(
+    entityUser.getUsername(),
+    entityUser.getPassword(), 
+    entityUser.getLoginInfo().getEmail(),
+   // salt,
+  //  ApplicationUserRole.ENDUSER.getGrantedAuthorities(),
+    true,
+    true,
+    true,
+    true);
+
+    loginInfoService.save(loginInfo);
+
+    entityUser.setLoginInfo(loginInfoService.findOneById(loginInfo.getId()));
+
+        //cuvanje u bazi
+    saveInDatabase(entityUser);
+
+    EndUser endUser=new EndUser();
+    
+    endUser.setNumber_of_requests(0);
+    endUser.setAccount_activated(false);
+    endUser.setAdminApproved(false);
+    endUser.setUser(findOneByid(entityUser.getId()));
+
+    
+    endUserService.save(endUser);
+
+
+  //  String verificationToken = UUID.randomUUID().toString();
+  //  verificationTokenService.save(endUser, verificationToken);
+}
     private String hashIt(String password, String salt){
         
         String passwordPlusSalt=password+salt;

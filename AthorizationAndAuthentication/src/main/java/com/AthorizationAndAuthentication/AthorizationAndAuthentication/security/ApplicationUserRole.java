@@ -1,13 +1,14 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security;
 
-import com.google.common.collect.Sets;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import com.google.common.collect.Sets;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.*;
 
 public enum ApplicationUserRole {
+    /*
     ENDUSER(Sets.newHashSet(ApplicationUserPermission.ADVERTISEMENT_READ, ApplicationUserPermission.ADVERTISEMENT_WRITE)),
     AGENT(Sets.newHashSet(ApplicationUserPermission.ADVERTISEMENT_READ, ApplicationUserPermission.ADVERTISEMENT_WRITE)),
     ADMIN(Sets.newHashSet(ApplicationUserPermission.ADVERTISEMENT_READ));
@@ -29,4 +30,5 @@ public enum ApplicationUserRole {
         permissions.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return permissions;
     }
+    */
 }

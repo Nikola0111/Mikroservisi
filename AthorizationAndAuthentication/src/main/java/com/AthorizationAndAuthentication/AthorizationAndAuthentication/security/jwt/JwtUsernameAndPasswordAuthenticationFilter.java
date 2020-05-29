@@ -2,14 +2,14 @@ package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+//import io.jsonwebtoken.Jwts;
+//import io.jsonwebtoken.security.Keys;
+//
+//import org.springframework.security.authentication.AuthenticationManager;
+//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.AuthenticationException;
+//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
@@ -20,9 +20,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+//extends UsernamePasswordAuthenticationFilter
 
-    private final AuthenticationManager authenticationManager;
+public class JwtUsernameAndPasswordAuthenticationFilter {
+
+  /*  private final AuthenticationManager authenticationManager;
    
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -69,4 +71,6 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
         response.addHeader("Authorization", "Bearer " + token);
     }
+
+    */
 }
