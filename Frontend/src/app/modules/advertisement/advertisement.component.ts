@@ -92,9 +92,9 @@ export class AdvertisementComponent implements OnInit {
     this.advertisement.pictures =this.slike;
 
     // tslint:disable-next-line:prefer-for-of
-    for (let i=0; i<this.selectedFiles.length;i++){
-      this.advertisementService.upload(this.selectedFiles[i]).subscribe();
-    }
+   // for (let i=0; i<this.selectedFiles.length;i++){
+   //   this.advertisementService.upload(this.selectedFiles[i]).subscribe();
+    //}
 
     console.log(this.advertisement);
     this.advertisementService.save(this.advertisement).subscribe();

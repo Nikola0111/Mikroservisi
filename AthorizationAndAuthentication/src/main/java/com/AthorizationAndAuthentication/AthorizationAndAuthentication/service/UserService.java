@@ -77,6 +77,20 @@ public class UserService {
 
     }
 
+    public Long getLoggedUser(){
+
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
+        .currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession(true);
+
+        Long userId=(Long)session.getAttribute("user");
+
+        return userId;
+
+    }
+
+
+
     public void saveInDatabase(EntityUser entity){
 
         userRepository.save(entity);

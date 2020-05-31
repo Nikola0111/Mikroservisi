@@ -47,4 +47,9 @@ return loginInfoRepository.findByUsername(username).getSalt();
 
     }
 
+    public LoginInfo findOneByUsername(String username){
+
+        return loginInfoRepository.findByUsername(username);
+    }
+
 }

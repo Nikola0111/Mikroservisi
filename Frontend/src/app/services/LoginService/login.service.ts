@@ -9,6 +9,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/shareReplay';
 
 import {UserDTO} from '../../dtos/user-dto';
+import { LoginInfo } from 'src/app/model/login-info';
 
 
 const httpOptions = {headers: new HttpHeaders({'Content-Type' : 'application/json'})};
@@ -21,14 +22,19 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  public login(username: string,password:string){
-    const body = {"username":username,
-  "password":password};
-    return this.http.post<HttpResponse<any>>('/server/authentication/login', body, { observe: 'response' })
-    .do(response => this.setSession(response)) 
-    .shareReplay();
 
+  public login(username: string, password: string){
+    const loginInfo = new LoginInfo();
+    loginInfo.email = '';
+    loginInfo.username = username;
+    loginInfo.password = password;
+    const body = JSON.stringify(loginInfo);
+    return this.http.post<HttpResponse<any>>('/server/authentication/login', body, httpOptions)
+    .do(response => this.setSession(response))
+    .shareReplay();
   }
+
+
 
   public loginToken(){
     console.log("Pogodio");

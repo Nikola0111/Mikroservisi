@@ -47,19 +47,19 @@ services:
 
 
 
-#  advert-service:
-#    build: ./Advertisement
-#    image: advert-image
-#    restart: always
-#    volumes:
-#    - $USERPROFILE/.m2:/root/.m2
-#    ports:
-#    - "8085:8085"
-#    environment:
-#      - REGISTRY_HOST=eureka-serviceregistry
-#    tty: true
-#    depends_on:
-#      - eureka-serviceregistry
+  advert-service:
+    build: ./Advertisement
+    image: advert-image
+    restart: always
+    volumes:
+    - $USERPROFILE/.m2:/root/.m2
+    ports:
+    - "8085:8085"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    tty: true
+    depends_on:
+      - eureka-serviceregistry
     #  - axon-server    
 
   zuul:

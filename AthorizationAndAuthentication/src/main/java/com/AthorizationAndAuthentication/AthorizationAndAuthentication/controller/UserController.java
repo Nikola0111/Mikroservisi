@@ -50,10 +50,8 @@ public class UserController {
     @PostMapping(value = "/login", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginInfo> Login(@RequestBody LoginInfo login){
 
-        System.out.println(login.getEmail() + " " + login.getPassword());
-
-        //provera email-a i username-a:
-        LoginInfo loginInfo = loginInfoService.findByEmail(login.getEmail());
+        
+        LoginInfo loginInfo = loginInfoService.findOneByUsername(login.getUsername());
         if(loginInfo == null){
             System.out.println("Wrong username or password");
             return new ResponseEntity<>(loginInfo, HttpStatus.BAD_REQUEST);
@@ -101,6 +99,18 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+    @GetMapping(value = "/getUserId")
+    public ResponseEntity<Long> getUserId() {
+      
+        
+        System.out.println("izbrisao sve proslo izlogovan");
+
+        return new ResponseEntity<>(userService.getLoggedUser(), HttpStatus.OK);
+    }
+
+
 
     // @PostMapping(value = "/passwordChange", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     // public ResponseEntity<Long> changePassword(@RequestBody UserDTO userDTO){

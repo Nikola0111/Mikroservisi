@@ -5,10 +5,11 @@ import com.Advertisement.Advertisement.model.*;
 import com.Advertisement.Advertisement.dtos.*;
 import com.Advertisement.Advertisement.repository.*;
 import com.Advertisement.Advertisement.service.*;
-
+import com.netflix.ribbon.RequestTemplate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +42,8 @@ public class AdvertisementService {
 	@Autowired
 	CommentRepository commentRepository;
 
+	RestTemplate restTemplate=new RestTemplate();
+
 	// @Autowired
 	// EndUserRepository endUserRepository;
 
@@ -58,9 +61,9 @@ public class AdvertisementService {
 		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		HttpSession session = attr.getRequest().getSession(true);
 
-		Long id = (Long) session.getAttribute("user");
+	//	Long id = (Long) session.getAttribute("user");
 
-       //TREBA SE NACI KONKRETAN USER
+     Long id=restTemplate.getForObject("http://localhost:8080/getUserId", Long.class);
 
 		Advertisement ad = new Advertisement(advertisementDTO.getName(), advertisementDTO.getModel(),
 				advertisementDTO.getBrand(), advertisementDTO.getFuelType(), advertisementDTO.getTransmissionType(),
