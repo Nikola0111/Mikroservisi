@@ -33,31 +33,49 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.*
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
+ 
     private final PasswordEncoder passwordEncoder;
     private final LoginInfoService loginInfoService;
 
     
+    private final KeyPairClassService keyPairClassService;
+
+    
 @Autowired
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,LoginInfoService loginInfoService) {
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,LoginInfoService loginInfoService, KeyPairClassService keyPairClassService){
         this.passwordEncoder = passwordEncoder;
         this.loginInfoService = loginInfoService;
+        this.keyPairClassService=keyPairClassService;
+        this.keyPairClassService.setKeyPair();
      
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
+                
+                
+               
+                .csrf().disable()
+                //odkomentarisati radi bezbednosti
+                //.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                //.and()
+                //ZBOG H2 BAZE CSRF INGORING I HEAERS.FRAME
+                //.csrf().ignoringAntMatchers("/h2-console/**")
+                //.and()
+                //Stavlja se zbog h2 baze
+                //.headers().frameOptions().sameOrigin()
+                //.and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
-                .addFilterAfter(new JwtTokenVerifier(),JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),keyPairClassService.getPrivateKey()))
+                .addFilterAfter(new JwtTokenVerifier(keyPairClassService.getPublicKey()),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/login", "/register","/loginToken","/logout", "/hello").permitAll()
+                .antMatchers("/login", "/register","/loginToken","/logout","/h2-console/**").permitAll()
                 .anyRequest()
                 .authenticated();
+             
     }
 
     @Override

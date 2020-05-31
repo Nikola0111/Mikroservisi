@@ -1,5 +1,6 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.jwt;
 
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.KeyPairClassService;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +29,17 @@ import java.util.stream.Collectors;
 
 public class JwtTokenVerifier extends OncePerRequestFilter {
     
+private KeyPairClassService keyPairClassService;
+
+    
+
+private final Key publicKey;
+
+
+public JwtTokenVerifier(Key publicKey){
+    this.publicKey=publicKey;
+}
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -46,10 +59,14 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
         try {
 
-            String secretKey = "securesecuresecuresecuresecuresecuresecuresecuresecure";
+          
+
+            
                                 
             Jws<Claims> claimsJws = Jwts.parser()
-                    .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
+            
+            
+                    .setSigningKey(publicKey)
                     .parseClaimsJws(token);
 
             Claims body = claimsJws.getBody();

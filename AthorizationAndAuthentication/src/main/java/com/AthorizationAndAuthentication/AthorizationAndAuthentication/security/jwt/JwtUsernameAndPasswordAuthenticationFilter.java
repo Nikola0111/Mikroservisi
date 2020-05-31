@@ -1,10 +1,13 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.jwt;
 
 
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.repository.KeyPairClassRepository;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.KeyPairClassService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,16 +20,22 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Key;
 import java.time.LocalDate;
 import java.util.Date;
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+
+    private final Key privateKey;
+   
+   
    
 
-    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager, Key privateKey) {
         this.authenticationManager = authenticationManager;
+        this.privateKey=privateKey;
         
     }
 
@@ -57,16 +66,20 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-        String key="securesecuresecuresecuresecuresecuresecuresecuresecure";
 
-        String token = Jwts.builder()
+                                                System.out.println("On udje gde treba da generise");
+         String token = Jwts.builder()
+        
                 .setSubject(authResult.getName())
                 .claim("authorities", authResult.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(2)))
-                .signWith(Keys.hmacShaKeyFor(key.getBytes()))
+                
+                .signWith(privateKey)
+                
                 .compact();
 
+        
         response.addHeader("Authorization", "Bearer " + token);
     }
 }
