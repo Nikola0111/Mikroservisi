@@ -9,6 +9,7 @@ import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
 import {SessionService} from '../../services/SessionService/session.service';
 
 import { ItemInCart } from 'src/app/model/itemInCart';
+import { AdvertisementService } from 'src/app/services/advertisement.service/advertisement.service';
 
 
 @Component({
@@ -22,10 +23,11 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable, {static: false}) table: MatTable<ShoppingCartItem>;
   dataSource: ShoppingCartDataSource;
 
+
   advertisements: AdvertisementInCart[];
   dialogData: ItemInCart;
   selected: AdvertisementInCart;
-
+  getAdvertisementsId: number[];
 
   sameOwner: ItemInCart[];
   itemsInCart: ItemInCart[];
@@ -34,34 +36,52 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
   displayedColumns = ['name', 'model', 'brand', 'fuelType', 'transType', 'carClass','owner', "checkbox", "button"];
 //DODATI 'timeFrom' I 'timeTo'
 
-  constructor(private shopingCartService: ShopingCartService, private sessionService: SessionService){
+  constructor(private shopingCartService: ShopingCartService, private sessionService: SessionService, private advertisementService: AdvertisementService){
     console.log(this.sessionService.ulogovaniKorisnik);
   }
 
 
   ngOnInit() {
     this.dataSource = new ShoppingCartDataSource(null);
+
+    this.getAdvertisementsId=[];
     this.shopingCartService.getAllForCart().subscribe(
       data => {
         this.itemsInCart = data;
         this.sameOwner= data;
+        
         this.sameOwner.forEach(same => {
             this.itemsInCart.forEach(element => {
-              
+              this.getAdvertisementsId.push(element.advertisementId);
               if(same.id!=element.id){
 
-              if(same.advertisement.postedBy.jmbg===element.advertisement.postedBy.jmbg){
+              if(same.advertisementPostedById===element.advertisementPostedById){
                 same.owner=true;
               }
             }
             });
         });
 
-        this.dataSource = new ShoppingCartDataSource(this.sameOwner);
+        
+
+        this.advertisementService.getAllByIds(this.getAdvertisementsId).subscribe(
+          data => {
+            this.advertisements=data;
+          }
+        );
+
+        this.dataSource = new ShoppingCartDataSource(this.advertisements);
       }
-    );
+      
+
+   
+    )
+
+   
+
   }
 
+  
 
 
   sendRequest(){

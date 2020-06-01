@@ -7,9 +7,12 @@ import com.Booking.Booking.repository.ShoppingCartRepository;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.core.ParameterizedTypeReference;
 
 
 import java.util.ArrayList;
@@ -25,6 +28,9 @@ public class ShoppingCartService {
 
     @Autowired
     ItemInCartRepository itemInCartRepository;
+
+    @Autowired
+    RestTemplate restTemplate;
 
 public void save(Long id){
 
@@ -88,10 +94,13 @@ return vrati;
 
 
 public Long getLogedUserId(){
-    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-    HttpSession session = attr.getRequest().getSession(true);
+    
 
-    Long id = (Long) session.getAttribute("user");
+    Long id = restTemplate.exchange("http://auth/getUserId", HttpMethod.GET, null, 
+    new ParameterizedTypeReference<Long>() {} ).getBody();
+
+    System.out.println("Nasao je id="+id);
+
     return id;
 }
 

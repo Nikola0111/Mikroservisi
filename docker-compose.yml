@@ -18,21 +18,23 @@ services:
  #     - 8024:8024
  #     - 8124:8124
 
-#  book-service:
-#    build: ./Booking
-#    restart: always
-#    image: booking-image 
-#    volumes:
-#    - $USERPROFILE/.m2:/root/.m2
-#    - ./Booking
-#    ports:
-#    - "8086:8086"
-#    environment:
-#      - REGISTRY_HOST=eureka-serviceregistry
-#    tty: true
-#    depends_on:
-#      - eureka-serviceregistry
+  book-service:
+    build: ./Booking
+    restart: always
+    image: booking-image 
+    volumes:
+    - $USERPROFILE/.m2:/root/.m2
+    ports:
+    - "8086:8086"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    tty: true
+    depends_on:
+      - eureka-serviceregistry
   #    - axon-server    
+    networks:
+      - mikroservisi 
+
 
   auth-service:
     build: ./AthorizationAndAuthentication
@@ -81,8 +83,8 @@ services:
       - eureka-serviceregistry
     #  - consumer-service
     #  - reglog-service
-    #   - advert-service
-     # - book-service
+      - advert-service
+      - book-service
       - auth-service
     networks:
       - mikroservisi

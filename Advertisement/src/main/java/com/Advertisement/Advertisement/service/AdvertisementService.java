@@ -13,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -99,11 +101,22 @@ public class AdvertisementService {
 		return advertisementRepository.save(ad);
 	}
 
+
+
+
 	public void saveImage(MultipartFile image) {
 
 		String path = System.getProperty("user.dir");
+
+		//String path= C:\\Users\\Sherlock\\Desktop\\Mikroservisi\\Frontend\\src\\assets\\images
+
+		System.out.println("EVO GA DIREKTORIJUM");
+		String cwd = new File("").getAbsolutePath();
+		System.out.println("OVO JE NOVA PUTANJA:="+cwd);
 		System.out.println("Putanja do direktorijuma je :" + path);
-		String newPath = path.replace("Backend", "Frontend\\src\\assets\\images");
+
+		// dodajte putanju do vaseg dir
+		String newPath = path.replace("Advertisement", "Frontend\\src\\assets\\images");
 		System.out.println("PRVI POKUSAJ=" + newPath);
 		byte[] bytes;
 		try {
@@ -223,6 +236,25 @@ public class AdvertisementService {
 		// loggerService.doLog("neka funkcija", "neki rezultat", "INFO");			//REZULTATI: ID OGLASA/NEUSPESNO, ID ZAHTEVA/NEUSPESNO, ID ZAHTEVA/NEUSPESNO, ID ZAHTEVA/NEUSPESNO, ID OGLASA/NEUSPESNO
 
 		return advertisements;
+	}
+
+	public List<Advertisement> findAllByIds(ArrayList<Long> ids) {
+		List<Advertisement> advertisements = advertisementRepository.findAll();
+		List<Advertisement> returnAdvert=new ArrayList<Advertisement>();
+		
+		for(Advertisement advert: advertisements) {
+			
+			for (Long id : ids) {
+
+				if(advert.getId().equals(id)){
+
+					returnAdvert.add(advert);
+				}
+			}
+
+		}
+
+		return returnAdvert;
 	}
 	
 	

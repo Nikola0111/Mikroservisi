@@ -34,7 +34,7 @@ public class UserController {
     public ResponseEntity<?> get() {
        
 		
-        return new ResponseEntity<>(String.format("NEMANJA TI SI GOVNOI i jebi se i pusi "), HttpStatus.OK);
+        return new ResponseEntity<>(String.format("NEMANJA "), HttpStatus.OK);
     }
     /*
     @PostMapping(value = "/login")

@@ -24,7 +24,6 @@ export class AdvertisementComponent implements OnInit {
   transType: string;
   carClass: string;
   brand: string;
-
   model: string;
   carDetails: CarDetails[];
   slike: String[];
@@ -72,8 +71,10 @@ export class AdvertisementComponent implements OnInit {
       fuelType: [''],
       transType: [''],
       carClass: [''],
+
       travelled: [''],
       price: [''],
+      discount:[''],
       carSeats: ['']
     });
   }
@@ -91,13 +92,14 @@ export class AdvertisementComponent implements OnInit {
     this.advertisement.pictures = this.slike;
 
     // tslint:disable-next-line:prefer-for-of
-   // for (let i=0; i<this.selectedFiles.length;i++){
-   //   this.advertisementService.upload(this.selectedFiles[i]).subscribe();
-    //}
+    for (let i=0; i<this.selectedFiles.length;i++){
+      this.advertisementService.upload(this.selectedFiles[i]).subscribe();
+    }
 
     console.log(this.advertisement);
     this.advertisementService.save(this.advertisement).subscribe();
   }
+
 
   onFileSelected(event) {
     console.log(event);

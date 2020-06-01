@@ -7,6 +7,7 @@ import {AdvertisementDTO} from '../../dtos/advertisement-dto';
 import {ReplyDTO} from '../../dtos/reply-dto';
 import {CommentPreviewDTO} from "../../dtos/comment-preview-dto";
 import {CarDetails} from '../../model/car-details';
+import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type' : 'application/json'})
@@ -47,9 +48,17 @@ export class AdvertisementService {
     return this.http.get<Array<Advertisement>>(this.requestUrl, httpOptions);
   }
 
+  public getAllByIds(advertisementsIds: number[]){
+
+    this.requestUrl='/server/advertisement/allByIds';
+     const body = JSON.stringify(advertisementsIds);
+    return this.http.post<Array<AdvertisementInCart>>(this.requestUrl,body, httpOptions);
+
+  }
+
   public addAd(itemInCart: ItemInCart) {
     const body = JSON.stringify(itemInCart);
-    return this.http.post<ItemInCart>('/server/itemInCart/addItem', body, httpOptions);
+    return this.http.post<ItemInCart>('/server/booking/addItem', body, httpOptions);
   }
 
   public filter(filterAdsDTO: FilterAdsDTO) {
@@ -77,6 +86,7 @@ export class AdvertisementService {
   public getRentedCars(id: number) {
     return this.http.get<number[]>('/server/advertisement/getRentedCars/' + id, httpOptions);
   }
+  
 
   public getAllByPostedBy(id: number) {
       return this.http.get<Advertisement[]>('server/advertisement/getAllByPostedBy/' + id, httpOptions);

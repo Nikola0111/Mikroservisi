@@ -11,7 +11,8 @@ import { ItemInCart } from 'src/app/model/itemInCart';
 // TODO: Replace this with your own data model type
 export interface ShoppingCartItem  {
 id:number;
- advertisement:Advertisement;
+ advertisementPostedById:number;
+ advertisementId:number;
  timeFrom: Date;
  timeTo: Date;
  owner:boolean;

@@ -104,7 +104,7 @@ public class BookingRequestService {
                 
                 lastGroupId++;
                 bookingRequestRepository.save(new BookingRequest( ItemInCartDTO2.getAdvertisementPostedById(),getLogedUserId(),
-                 lastGroupId, RequestStates.PENDING,ItemInCartDTO2.getAdvertisement() , ItemInCartDTO2.isTogether(),ItemInCartDTO2.getTimeFrom(),ItemInCartDTO2.getTimeTo()));
+                 lastGroupId, RequestStates.PENDING,ItemInCartDTO2.getAdvertisementId() , ItemInCartDTO2.isTogether(),ItemInCartDTO2.getTimeFrom(),ItemInCartDTO2.getTimeTo()));
 
 
 
@@ -126,7 +126,7 @@ public class BookingRequestService {
                     //GET LoggedUserId MORA DA SE DOBAVI NEKAKO ZATO PUCAA
                     
                     bookingRequestRepository.save(new BookingRequest( ItemInCartDTO.getAdvertisementPostedById(),getLogedUserId(),
-                    lastGroupId, RequestStates.PENDING,ItemInCartDTO.getAdvertisement(),
+                    lastGroupId, RequestStates.PENDING,ItemInCartDTO.getAdvertisementId(),
                      ItemInCartDTO.isTogether(),ItemInCartDTO.getTimeFrom(),ItemInCartDTO.getTimeTo()));
 
 

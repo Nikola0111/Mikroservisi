@@ -41,7 +41,7 @@ public class AdvertisementController {
     public ResponseEntity<Long> uploadImage(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
 
 
-	System.out.println("Pogodio");
+	System.out.println("Pogodio JE OVAJ saveImage");
 		System.out.println(file.getOriginalFilename());
 
 		advertisementService.saveImage(file);
@@ -52,6 +52,8 @@ public class AdvertisementController {
 	@PostMapping(value="/save")
 	public ResponseEntity<Long> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO) {
 		Long id;
+
+		System.out.println("Pogodio je ovaj SAVE");
 		id = restTemplate.exchange("http://auth/getUserId", HttpMethod.GET, null, 
 		new ParameterizedTypeReference<Long>() {} ).getBody();
 	
@@ -65,6 +67,15 @@ public class AdvertisementController {
     public ResponseEntity<List<Advertisement>> getAll() {
         List<Advertisement> advertisements = advertisementService.findAll();
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
+	}
+
+	
+	@PostMapping(value="/allByIds", consumes= MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Advertisement>> getAllByIds(@RequestBody ArrayList<Long> ids) {
+		
+		
+
+		return new ResponseEntity<>(advertisementService.findAllByIds(ids), HttpStatus.OK);
 	}
 	
 
