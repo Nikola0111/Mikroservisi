@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +51,6 @@ public class UserController {
     @PostMapping(value = "/login", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginInfo> Login(@RequestBody LoginInfo login){
 
-        
         LoginInfo loginInfo = loginInfoService.findOneByUsername(login.getUsername());
         if(loginInfo == null){
             System.out.println("Wrong username or password");
@@ -103,14 +103,17 @@ public class UserController {
 
     @GetMapping(value = "/getUserId")
     public ResponseEntity<Long> getUserId() {
-      
-        
-        System.out.println("izbrisao sve proslo izlogovan");
-
+    
         return new ResponseEntity<>(userService.getLoggedUser(), HttpStatus.OK);
     }
 
+    @GetMapping(value="/getUserByUsername/{username}")
+    public ResponseEntity<EntityUser> getUserByUsername(@PathVariable("username") String username){
 
+        EntityUser user = userService.findByUsername(username);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
     // @PostMapping(value = "/passwordChange", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     // public ResponseEntity<Long> changePassword(@RequestBody UserDTO userDTO){

@@ -14,6 +14,16 @@ public class TransmissionType {
 
     private String name;
 
+    private String code;
+
+    public String getCode() {
+        return this.code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public Long getID(){
         return this.id;
     }
@@ -38,4 +48,12 @@ public class TransmissionType {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "TransType{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }

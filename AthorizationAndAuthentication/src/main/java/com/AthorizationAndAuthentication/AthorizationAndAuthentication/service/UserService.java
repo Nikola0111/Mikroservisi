@@ -49,6 +49,8 @@ public class UserService {
     @Autowired
     private SessionService sessionService;
 
+    private HttpSession session;
+
     private final PasswordEncoder passwordEncoder=new BCryptPasswordEncoder(10);
     
     public EntityUser findUserByEmailAndPassword(EntityUser user) {
@@ -61,35 +63,28 @@ public class UserService {
         //Sacuvati korisnika u sesiji
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
                 .currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true);
+        session = attr.getRequest().getSession(true);
 
         for (EntityUser user: userRepository.findAll()) {
             
             if(user.getLoginInfo().getId().equals(log.getId())){
                 session.setAttribute("user", user.getId());
-        
             }
 
         }
-
-      
         
+        System.out.println("//////////////////");
+        System.out.println((Long) session.getAttribute("user"));
+        System.out.println("//////////////////");
 
     }
 
     public Long getLoggedUser(){
 
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
-        .currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true);
-
-        Long userId=(Long)session.getAttribute("user");
-
+        Long userId = (Long) session.getAttribute("user");
         return userId;
 
     }
-
-
 
     public void saveInDatabase(EntityUser entity){
 
@@ -97,7 +92,10 @@ public class UserService {
 
     }
 
-  /*  
+    public EntityUser findByUsername(String username){
+        return userRepository.findByLoginInfo_Username(username);
+    }
+    /*  
     public void saveNewUser(EntityUser entityUser){
 
         String salt=makeSalt();      

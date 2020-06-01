@@ -101,6 +101,7 @@ import { AuthInterceptor } from './services/httpInterceptor.service';
     RouterModule.forRoot([
       {path: 'registrationConfirm.html', component: RegisterConfirmComponent},
       {path: 'izmenaLozinke', component: IzmenaLozinkeComponent},
+      {path: 'sifrarnik', component: SifrarnikComponent},
       {path: 'report/:id', component: CreateReportComponent},
       {path: '', component: RegistracijaComponent},
       {path: 'agent', component: AgentComponent},

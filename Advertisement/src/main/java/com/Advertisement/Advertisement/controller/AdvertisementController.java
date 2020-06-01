@@ -7,11 +7,13 @@ import com.Advertisement.Advertisement.service.AdvertisementService;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -24,6 +26,9 @@ public class AdvertisementController {
 
 	@Autowired
 	private AdvertisementService advertisementService;
+
+	@Autowired
+	private RestTemplate restTemplate;
 	
 	@GetMapping("/hello")
 	public ResponseEntity<?> get() {
@@ -45,17 +50,15 @@ public class AdvertisementController {
 }
 
 	@PostMapping(value="/save")
-	public ResponseEntity<Long> save(@RequestBody AdvertisementDTO advertisementDTO) {
-
-		System.out.println(advertisementDTO.getName()+advertisementDTO.getModel()+advertisementDTO.getBrand());
-		System.out.println("AMIN");
+	public ResponseEntity<Long> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO) {
+		Long id;
+		id = restTemplate.exchange("http://auth/getUserId", HttpMethod.GET, null, 
+		new ParameterizedTypeReference<Long>() {} ).getBody();
 	
-		advertisementService.save(advertisementDTO);
+		advertisementService.save(advertisementCreationDTO, id);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
-	
 
 	//@PreAuthorize("hasAnyRole('ROLE_ENDUSER', 'ROLE_AGENT')")	
     @GetMapping(value = "/all")
@@ -99,6 +102,27 @@ public class AdvertisementController {
 
 		return new ResponseEntity<>((long) 1, HttpStatus.OK);
 
+	}
+
+	@GetMapping(value = "/getAllDetails", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<CarDetailsDTO>> getAllDetails(){
+		List<CarDetailsDTO> cardetails = advertisementService.getCarDetails();
+
+		return new ResponseEntity<>(cardetails, HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/saveCarDetail", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> saveCarDetail(@RequestBody CarDetailsDTO carDetailsDTO){
+		Boolean ret = advertisementService.saveCarDetail(carDetailsDTO);
+
+		return new ResponseEntity<>(ret, HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/deleteCarDetail", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> deleteCarDetail(@RequestBody CarDetailsDTO carDetailsDTO){
+		Boolean ret = advertisementService.deleteCarDetail(carDetailsDTO);
+
+		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
 /*
 	@GetMapping(value = "/preview/{id}", produces = MediaType.APPLICATION_JSON_VALUE,  consumes= MediaType.APPLICATION_JSON_VALUE)

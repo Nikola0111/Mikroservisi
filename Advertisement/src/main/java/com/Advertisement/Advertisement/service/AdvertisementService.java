@@ -42,6 +42,21 @@ public class AdvertisementService {
 	@Autowired
 	CommentRepository commentRepository;
 
+	@Autowired
+	BrandRepository brandRepository;
+
+	@Autowired
+	CarClassRepository carClassRepository;
+
+	@Autowired
+	ModelRepository modelRepository;
+
+	@Autowired
+	FuelTypeRepository fuelTypeRepository;
+
+	@Autowired
+	TransmissionTypeRepository transmissionTypeRepository;
+
 	RestTemplate restTemplate=new RestTemplate();
 
 	// @Autowired
@@ -57,19 +72,27 @@ public class AdvertisementService {
 	// SessionService sessionService;
 	
 
-	public Advertisement save(AdvertisementDTO advertisementDTO) {
-		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-		HttpSession session = attr.getRequest().getSession(true);
+	public Advertisement save(AdvertisementCreationDTO advertisementCreationDTO, Long id) {
 
-	//	Long id = (Long) session.getAttribute("user");
+		System.out.println("/////////////Advertisement service//////////////////////////////////////");
+		System.out.println(id);
+		System.out.println("///////////////////////////////////////////////////");
 
-     Long id=restTemplate.getForObject("http://localhost:8080/getUserId", Long.class);
+		Model model = modelRepository.findByName(advertisementCreationDTO.getModel());
+		Brand brand = brandRepository.findByName(advertisementCreationDTO.getBrand());
+		CarClass carClass = carClassRepository.findByName(advertisementCreationDTO.getCarClass());
+		FuelType fuelType = fuelTypeRepository.findByName(advertisementCreationDTO.getFuelType());
+		TransmissionType transmissionType = transmissionTypeRepository.findByName(advertisementCreationDTO.getTransType());
 
-		Advertisement ad = new Advertisement(advertisementDTO.getName(), advertisementDTO.getModel(),
-				advertisementDTO.getBrand(), advertisementDTO.getFuelType(), advertisementDTO.getTransmissionType(),
-				advertisementDTO.getCarClass(), advertisementDTO.getTravelled(), advertisementDTO.getCarSeats(),
-				advertisementDTO.getPrice(), id, advertisementDTO.getDiscount(), advertisementDTO.getPictures(),
-				0.0);
+		System.out.println("///////////////////////");
+		System.out.println(advertisementCreationDTO.getTransType());
+		System.out.println(transmissionType);
+		System.out.println("////////////////////////");
+
+		Advertisement ad = new Advertisement(advertisementCreationDTO.getName(), model, brand, fuelType, transmissionType, 
+		carClass, advertisementCreationDTO.getTravelled(), advertisementCreationDTO.getCarSeats(),
+		advertisementCreationDTO.getPrice(), id, advertisementCreationDTO.getDiscount(), advertisementCreationDTO.getPictures(),
+		0.0);
 
 		// kada se kreira korisnik kreira mu se i korpa u koju ce moci da dodaje oglase!
 
@@ -93,6 +116,100 @@ public class AdvertisementService {
 			e.printStackTrace();
 			System.out.println("UPAO U EXCEPTION");
 		}
+	}
+
+	public List<CarDetailsDTO> getCarDetails(){
+		List<Brand> brands = brandRepository.findAll();
+		List<CarClass> classes = carClassRepository.findAll();
+		List<Model> models = modelRepository.findAll();
+		List<FuelType> fuels = fuelTypeRepository.findAll();
+		List<TransmissionType> transmisions = transmissionTypeRepository.findAll();
+
+		List<CarDetailsDTO> details = new ArrayList<CarDetailsDTO>();
+		CarDetailsDTO temp;
+
+		for (Brand brand : brands) {
+			temp = new CarDetailsDTO(brand.getName(), brand.getCode(), "BRAND");
+
+			details.add(temp);
+		}
+
+		for (Model model : models) {
+			temp = new CarDetailsDTO(model.getName(), model.getCode(), "CARMODEL");
+
+			details.add(temp);
+		}
+
+		for (CarClass carclass : classes) {
+			temp = new CarDetailsDTO(carclass.getName(), carclass.getCode(), "CARCLASS");
+
+			details.add(temp);
+		}
+
+		for (FuelType fuelType : fuels) {
+			temp = new CarDetailsDTO(fuelType.getName(), fuelType.getCode(), "FUELTYPE");
+
+			details.add(temp);
+		}
+
+		for (TransmissionType transmission : transmisions) {
+			temp = new CarDetailsDTO(transmission.getName(), transmission.getCode(), "GEARSHIFT");
+
+			details.add(temp);
+		}
+
+		return details;
+	}
+
+	public Boolean saveCarDetail(CarDetailsDTO carDetailsDTO) {
+		if(carDetailsDTO.getType().toLowerCase().equals("brand")){
+			Brand newItem = new Brand();
+			newItem.setCode(carDetailsDTO.getCode());
+			newItem.setName(carDetailsDTO.getName());
+			brandRepository.save(newItem);
+		}else if(carDetailsDTO.getType().toLowerCase().equals("carmodel")){
+			Model newItem = new Model();
+			newItem.setCode(carDetailsDTO.getCode());
+			newItem.setName(carDetailsDTO.getName());
+			modelRepository.save(newItem);
+		}else if(carDetailsDTO.getType().toLowerCase().equals("carclass")){
+			CarClass newItem = new CarClass();
+			newItem.setCode(carDetailsDTO.getCode());
+			newItem.setName(carDetailsDTO.getName());
+			carClassRepository.save(newItem);
+		}else if(carDetailsDTO.getType().toLowerCase().equals("fuel")){
+			FuelType newItem = new FuelType();
+			newItem.setCode(carDetailsDTO.getCode());
+			newItem.setName(carDetailsDTO.getName());
+			fuelTypeRepository.save(newItem);
+		}else if(carDetailsDTO.getType().toLowerCase().equals("gearshift")){
+			TransmissionType newItem = new TransmissionType();
+			newItem.setCode(carDetailsDTO.getCode());
+			newItem.setName(carDetailsDTO.getName());
+			transmissionTypeRepository.save(newItem);
+		}else {
+			return false;
+		}
+
+		return true;
+	}
+
+	public Boolean deleteCarDetail(CarDetailsDTO carDetailsDTO) {
+		if(carDetailsDTO.getType().toLowerCase().equals("brand")){
+			brandRepository.deleteByCode(carDetailsDTO.getCode());
+		}else if(carDetailsDTO.getType().toLowerCase().equals("carmodel")){
+			modelRepository.deleteByCode(carDetailsDTO.getCode());
+		}else if(carDetailsDTO.getType().toLowerCase().equals("carclass")){
+			carClassRepository.deleteByCode(carDetailsDTO.getCode());
+		}else if(carDetailsDTO.getType().toLowerCase().equals("fueltype")){
+			fuelTypeRepository.deleteByCode(carDetailsDTO.getCode());
+		}else if(carDetailsDTO.getType().toLowerCase().equals("GEARSHIFT")){
+			transmissionTypeRepository.deleteByCode(carDetailsDTO.getCode());
+		}else {
+			return false;
+		}
+
+		return true;
 	}
 	
 	public List<Advertisement> findAll() {

@@ -1,12 +1,16 @@
 version: '3'
 
-services:
+networks:
+  mikroservisi:
 
+services:
   eureka-serviceregistry:
     build: ./Eureca
     ports:
      - "8761:8761"
     tty: true
+    networks:
+      - mikroservisi
 
  # axon-server:
  #   image: axoniq/axonserver:4.3.2
@@ -44,6 +48,8 @@ services:
     depends_on:
       - eureka-serviceregistry
  #     - axon-server    
+    networks:
+      - mikroservisi
 
 
 
@@ -60,7 +66,9 @@ services:
     tty: true
     depends_on:
       - eureka-serviceregistry
-    #  - axon-server    
+    #  - axon-server   
+    networks:
+      - mikroservisi 
 
   zuul:
     build: ./Gateway
@@ -76,5 +84,8 @@ services:
     #   - advert-service
      # - book-service
       - auth-service
+    networks:
+      - mikroservisi
 
-      
+
+  
