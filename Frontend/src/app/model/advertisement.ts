@@ -21,6 +21,9 @@ export class Advertisement {
   pictures: String[];
   grade: number;
 
+  reservedFrom: Date;
+  reservedTo: Date;
+
 
   constructor() {
 

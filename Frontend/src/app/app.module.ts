@@ -53,8 +53,8 @@ import {MatInput, MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import { AgentsAdvertisementsComponent } from './modules/agent/agents-advertisements/agents-advertisements.component';
 import {MatRadioModule} from '@angular/material/radio';
-import {MatSelectModule} from "@angular/material/select";
-import { AuthInterceptor } from './services/httpInterceptor.service';
+import {MatSelectModule} from '@angular/material/select';
+import {ReserveComponent} from './modules/administrator/reserve/reserve.component';
 
 
 
@@ -117,7 +117,8 @@ import { AuthInterceptor } from './services/httpInterceptor.service';
       {path: 'register', component: RegistracijaComponent},
       {path: 'conversation/:id', component: ConversationComponent},
       {path: 'statistics', component: StatisticsComponent},
-      {path: 'advertisement-details/:id', component: AdvertisementDetailsComponent}
+      {path: 'advertisement-details/:id', component: AdvertisementDetailsComponent},
+      {path: 'reserve', component: ReserveComponent},
     ]),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBcBUQxfS6JldNG0Ltoju5YxE_0-CKJsu4',
