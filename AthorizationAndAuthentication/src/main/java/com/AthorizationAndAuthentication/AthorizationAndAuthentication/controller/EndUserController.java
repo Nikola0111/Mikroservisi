@@ -105,15 +105,17 @@ public class EndUserController {
     @PostMapping(value = "/accept", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> acceptRegistration(@RequestBody Long id){
         EndUser endUser = endUserService.changeAdminActivated(id);
+        System.out.println("Prosao aktiviranje od admina");
+        System.out.println(endUser);
         VerificationToken verificationToken = verificationTokenService.findByUser(endUser);
+        System.out.println("Nasao je token: " + verificationToken.getToken());
 
-        try {
-            mailSenderService.sendSimpleMessage(endUser.getUser().getLoginInfo().getEmail(), "Aktivacioni link",
-                    "Vaša registracija je prihvaćena! Kliknite na link da bi aktivirali vaš nalog i koristili usluge našeg servisa!\n\n"
-                            + "http://localhost:4200/registrationConfirm.html?token=" + verificationToken.getToken());
-        }catch (Exception e){
-            System.out.println("Slanje mail-a nije uspelo!");
-        }
+        
+        mailSenderService.sendSimpleMessage(endUser.getUser().getLoginInfo().getEmail(), "Aktivacioni link",
+            "Vaša registracija je prihvaćena! Kliknite na link da bi aktivirali vaš nalog i koristili usluge našeg servisa!\n\n"
+                + "http://localhost:4200/registrationConfirm.html?token=" + verificationToken.getToken());
+        
+       
 
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
@@ -137,7 +139,7 @@ public class EndUserController {
 
         //iz nekog razloga ne vraca nista na front, servis se nikad ne izvrsi na frontu i ne ode na homepage, vecno se zaglavi u ucitavanju
 
-        EndUser endUser = verificationToken.getUser();
+        EndUser endUser = verificationToken.getEndUser();
         endUserService.acceptRegistration(endUser.getId());
         verificationTokenService.delete(endUser.getId());
         return new ResponseEntity(0, HttpStatus.OK);
@@ -149,24 +151,23 @@ public class EndUserController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-  /*  @PostMapping(value = "/deactivate/{jmbg}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> deactivateAccount(@PathVariable("jmbg") String jmbg){
-        Integer ret = endUserService.deactivate(jmbg);
+    @PostMapping(value = "/deactivate/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> deactivateAccount(@PathVariable("id") Long id){
+        endUserService.deactivate(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/block/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> blockAccount(@PathVariable("id") Long id){
+        Boolean ret = endUserService.block(id);
 
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/block/{jmbg}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> blockAccount(@PathVariable("jmbg") String jmbg){
-        Boolean ret = endUserService.block(jmbg);
+    @PostMapping(value = "/unblock/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> unblockAccount(@PathVariable("id") Long id){
+        Boolean ret = endUserService.unblock(id);
 
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
-
-    @PostMapping(value = "/unblock/{jmbg}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> unblockAccount(@PathVariable("jmbg") String jmbg){
-        Boolean ret = endUserService.unblock(jmbg);
-
-        return new ResponseEntity<>(ret, HttpStatus.OK);
-    } */
 }

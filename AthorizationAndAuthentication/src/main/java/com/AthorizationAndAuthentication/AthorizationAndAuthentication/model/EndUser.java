@@ -58,7 +58,7 @@ public class EndUser {
 
     @Override
     public String toString() {
-        return "EndUser{}";
+        return "EndUser{" + this.user.getId() + "}";
     }
 
     public int getNumber_of_requests() {
@@ -117,5 +117,6 @@ public class EndUser {
     public void setId(Long id) {
         this.id = id;
     }
+
 
 }

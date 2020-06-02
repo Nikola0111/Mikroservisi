@@ -19,17 +19,17 @@ export class UserManagmentComponent implements OnInit {
   }
 
   deactivate(endUser: EndUser) {
-    this.endUserService.deactivate(endUser.jmbg).subscribe(data =>
+    this.endUserService.deactivate(endUser.id).subscribe(data =>
       this.endUserService.getRegisteredUsers().subscribe(users => this.endUsers = users));
   }
 
   block(endUser: EndUser) {
     endUser.blocked = true;
-    this.endUserService.block(endUser.jmbg).subscribe();
+    this.endUserService.block(endUser.id).subscribe();
   }
 
   unblock(endUser: EndUser) {
     endUser.blocked = false;
-    this.endUserService.unblock(endUser.jmbg).subscribe();
+    this.endUserService.unblock(endUser.id).subscribe();
   }
 }

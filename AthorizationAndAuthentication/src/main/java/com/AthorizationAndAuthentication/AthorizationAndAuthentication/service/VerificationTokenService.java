@@ -25,7 +25,8 @@ public class VerificationTokenService {
     }
 
     public VerificationToken findByUser(EndUser endUser) {
-        return verificationTokenRepository.findByUser(endUser);
+        System.out.println("Id endusera: " + endUser.getId());
+        return verificationTokenRepository.findByEndUser_Id(endUser.getId());
     }
 
     public VerificationToken findByToken(String token){
@@ -37,7 +38,7 @@ public class VerificationTokenService {
         Optional endUser = endUserRepository.findById(id);
 
         if(endUser.isPresent()){
-            verificationTokenRepository.deleteByUser((EndUser) endUser.get());
+            verificationTokenRepository.deleteByEndUser((EndUser) endUser.get());
         }
     }
 }
