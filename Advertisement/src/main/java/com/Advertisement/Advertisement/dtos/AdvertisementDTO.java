@@ -32,6 +32,8 @@ public class AdvertisementDTO {
 
     private double price;
 
+    private double postedByID;
+
     private double discount;
 
     private double priceWithDiscount;
@@ -69,6 +71,7 @@ public class AdvertisementDTO {
         this.travelled = ad.getTravelled();
         this.carSeats = ad.getCarSeats();
         this.price=ad.getPrice();
+        this.postedByID=ad.getPostedByID();
         this.discount = ad.getDiscount();
         this.priceWithDiscount = ad.getPriceWithDiscount();
         this.grade = ad.getGrade();
@@ -194,6 +197,14 @@ public class AdvertisementDTO {
 
     public void setComments(List<CommentPreviewDTO> comments) {
         this.comments = comments;
+    }
+
+    public double getPostedByID() {
+        return postedByID;
+    }
+
+    public void setPostedByID(double postedByID) {
+        this.postedByID = postedByID;
     }
 
 }

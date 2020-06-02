@@ -8,13 +8,19 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.E
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.MailSenderService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.UserService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.VerificationTokenService;
+import com.netflix.ribbon.proxy.annotation.Http.HttpMethod;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
+
+
 
 import javax.print.attribute.standard.Media;
 
@@ -41,6 +47,9 @@ public class EndUserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+	private RestTemplate restTemplate;
+
  
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,6 +75,13 @@ public class EndUserController {
 
 
         userService.saveNewUser(entityUser);
+        
+        HttpEntity<Long> request = new HttpEntity<>(entityUser.getId());
+        //restTemplate.postForLocation("http://book/createShoopingCart", HttpMethod.POST,request);
+
+         restTemplate.postForEntity("http://book/createShoopingCart", request,Long.class, entityUser.getId());
+        
+        //restTemplate.exchange("http://book/createShoopingCart", HttpMethod.POST, request);
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }

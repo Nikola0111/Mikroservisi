@@ -20,7 +20,7 @@ const httpOptions = {
       
 
       public getAllForCart() {
-        this.requestUrl = '/server/shoppingCart/forCart';
+        this.requestUrl = '/server/booking/forCart';
         return this.http.get<Array<ItemInCart>>(this.requestUrl, httpOptions);
         }
   

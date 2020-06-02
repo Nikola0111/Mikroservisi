@@ -37,16 +37,16 @@ public class ItemInCart {
         
     }
 
-    public ItemInCart( Long userId,Long advPostedBy, Long adv, LocalDateTime from, LocalDateTime to) {
+    public ItemInCart( Long userId,Long advertisementPostedById, Long advertisementId, LocalDateTime from, LocalDateTime to) {
         this.userId =userId;
-        this.advertisementPostedById=advPostedBy;
-        this.advertisementId= adv;
+        this.advertisementPostedById=advertisementPostedById;
+        this.advertisementId= advertisementId;
         this.timeFrom=from;
         this.timeTo=to;
     }
 
-    public ItemInCart( Long adv, LocalDateTime from, LocalDateTime to) {
-        this.advertisementId= adv;
+    public ItemInCart( Long advertisementId, LocalDateTime from, LocalDateTime to) {
+        this.advertisementId= advertisementId;
         this.timeFrom=from;
         this.timeTo=to;
     }
@@ -67,11 +67,11 @@ public class ItemInCart {
         this.userId = userId;
     }
 
-    public Long getAdvertisement() {
+    public Long getAdvertisementId() {
         return this.advertisementId;
     }
 
-    public void setAdvertisement(Long advertisementId) {
+    public void setAdvertisementId(Long advertisementId) {
         this.advertisementId = advertisementId;
     }
 

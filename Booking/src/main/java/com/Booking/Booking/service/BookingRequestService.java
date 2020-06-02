@@ -11,15 +11,21 @@ import com.Booking.Booking.model.requests.BookingRequest;
 import com.Booking.Booking.repository.BookingRequestRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.core.ParameterizedTypeReference;
 
 @Service
 public class BookingRequestService {
 
     @Autowired
     BookingRequestRepository bookingRequestRepository;
+
+    @Autowired
+    RestTemplate restTemplate;
 
    
 //PUCACE JER LogedUserId MORA DA SE DOBAVI NEKAKO
@@ -104,7 +110,7 @@ public class BookingRequestService {
                 
                 lastGroupId++;
                 bookingRequestRepository.save(new BookingRequest( ItemInCartDTO2.getAdvertisementPostedById(),getLogedUserId(),
-                 lastGroupId, RequestStates.PENDING,ItemInCartDTO2.getAdvertisement() , ItemInCartDTO2.isTogether(),ItemInCartDTO2.getTimeFrom(),ItemInCartDTO2.getTimeTo()));
+                 lastGroupId, RequestStates.PENDING,ItemInCartDTO2.getAdvertisementId() , ItemInCartDTO2.isTogether(),ItemInCartDTO2.getTimeFrom(),ItemInCartDTO2.getTimeTo()));
 
 
 
@@ -126,7 +132,7 @@ public class BookingRequestService {
                     //GET LoggedUserId MORA DA SE DOBAVI NEKAKO ZATO PUCAA
                     
                     bookingRequestRepository.save(new BookingRequest( ItemInCartDTO.getAdvertisementPostedById(),getLogedUserId(),
-                    lastGroupId, RequestStates.PENDING,ItemInCartDTO.getAdvertisement(),
+                    lastGroupId, RequestStates.PENDING,ItemInCartDTO.getAdvertisementId(),
                      ItemInCartDTO.isTogether(),ItemInCartDTO.getTimeFrom(),ItemInCartDTO.getTimeTo()));
 
 
@@ -267,13 +273,15 @@ public class BookingRequestService {
         }
     }
 
-    private Long getLogedUserId(){
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true);
+    public Long getLogedUserId(){
     
-        Long id = (Long) session.getAttribute("user");
+
+        Long id = restTemplate.exchange("http://auth/getUserId", HttpMethod.GET, null, 
+        new ParameterizedTypeReference<Long>() {} ).getBody();
+    
+        System.out.println("Nasao je id="+id);
+    
         return id;
     }
-    
 
 }

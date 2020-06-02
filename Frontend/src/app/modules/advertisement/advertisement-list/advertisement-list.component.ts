@@ -94,7 +94,8 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
 
   public save(advertisement: Advertisement) {
 
-    this.itemInCart.advertisement = advertisement;
+    this.itemInCart.advertisementId = advertisement.id;
+    this.itemInCart.advertisementPostedById=advertisement.postedByID;
     console.log(this.itemInCart);
     this.advertisementService.addAd(this.itemInCart).subscribe();
 

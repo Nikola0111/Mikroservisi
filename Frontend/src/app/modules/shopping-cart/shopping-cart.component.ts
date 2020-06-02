@@ -9,6 +9,7 @@ import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
 import {SessionService} from '../../services/SessionService/session.service';
 
 import { ItemInCart } from 'src/app/model/itemInCart';
+import { AdvertisementService } from 'src/app/services/advertisement.service/advertisement.service';
 
 
 @Component({
@@ -22,56 +23,107 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable, {static: false}) table: MatTable<ShoppingCartItem>;
   dataSource: ShoppingCartDataSource;
 
+
   advertisements: AdvertisementInCart[];
   dialogData: ItemInCart;
   selected: AdvertisementInCart;
-
+  getAdvertisementsId: number[];
+  sameOwnerAdvertisement: AdvertisementInCart[];
 
   sameOwner: ItemInCart[];
   itemsInCart: ItemInCart[];
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['name', 'model', 'brand', 'fuelType', 'transType', 'carClass','owner', "checkbox", "button"];
+  displayedColumns = ['name', 'model', 'brand', 'fuelType', 'transType', 'carClass', "checkbox", "button"];
 //DODATI 'timeFrom' I 'timeTo'
 
-  constructor(private shopingCartService: ShopingCartService, private sessionService: SessionService){
+  constructor(private shopingCartService: ShopingCartService, private sessionService: SessionService, private advertisementService: AdvertisementService){
     console.log(this.sessionService.ulogovaniKorisnik);
   }
 
 
   ngOnInit() {
     this.dataSource = new ShoppingCartDataSource(null);
+
+    this.getAdvertisementsId=[];
     this.shopingCartService.getAllForCart().subscribe(
       data => {
         this.itemsInCart = data;
         this.sameOwner= data;
+
         this.sameOwner.forEach(same => {
             this.itemsInCart.forEach(element => {
-              
+              this.getAdvertisementsId.push(element.advertisementId);
               if(same.id!=element.id){
 
-              if(same.advertisement.postedBy.jmbg===element.advertisement.postedBy.jmbg){
+              if(same.advertisementPostedById===element.advertisementPostedById){
                 same.owner=true;
               }
             }
             });
         });
 
-        this.dataSource = new ShoppingCartDataSource(this.sameOwner);
+
+
+        this.advertisementService.getAllByIds(this.getAdvertisementsId).subscribe(
+          data => {
+            this.advertisements=data;
+            this.sameOwnerAdvertisement=data;
+
+            this.advertisements.forEach(same => {
+              this.sameOwnerAdvertisement.forEach(element => {
+                
+                if(same.id!=element.id){
+  
+                if(same.postedBy===element.postedBy){
+                  same.owner=true;
+                }
+              }
+              });
+          });
+
+           
+            this.dataSource = new ShoppingCartDataSource(data);
+            
+          }
+        );
+
+         
       }
-    );
+
+
+
+    )
+
+
+
   }
+
 
 
 
   sendRequest(){
     console.log("Pogodio dugme u ts");
-   
+
+    this.advertisements.forEach(element => {
+      
+      this.sameOwner.forEach(itemInCart => {
+        
+        if(element.id===itemInCart.advertisementId){
+          itemInCart.together=element.together;
+        }
+
+      });
+
+
+    });
+
+
     this.dataSource = new ShoppingCartDataSource(null);
     this.shopingCartService.sentRequests(this.sameOwner).subscribe(
       data => {
-    
-        this.dataSource.data = data;
+
+        //this.dataSource.data = data;
         this.table.dataSource = this.dataSource;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -87,8 +139,8 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
     this.dataSource = new ShoppingCartDataSource(null);
     this.shopingCartService.removeFromCart(itemInCart).subscribe(
       data => {
-    
-        this.dataSource.data = data;
+
+      //  this.dataSource.data = data;
         this.table.dataSource = this.dataSource;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -98,7 +150,7 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
 
     );
 
- 
+
   }
 
 

@@ -11,4 +11,6 @@ public interface TransmissionTypeRepository extends JpaRepository<TransmissionTy
 
     public TransmissionType findOneByid(Long id);
     public List<TransmissionType> findAll();
+    public void deleteByCode(String code);
+    public TransmissionType findByName(String name);
 }

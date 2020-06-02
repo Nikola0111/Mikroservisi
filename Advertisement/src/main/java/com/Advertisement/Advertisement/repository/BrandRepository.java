@@ -11,4 +11,6 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
 
     public Brand findOneByid(Long id);
     public List<Brand> findAll();
+    public void deleteByCode(String code);
+    public Brand findByName(String name);
 }
