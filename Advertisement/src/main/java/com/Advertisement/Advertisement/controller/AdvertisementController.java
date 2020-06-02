@@ -71,7 +71,7 @@ public class AdvertisementController {
 
 	
 	@PostMapping(value="/allByIds", consumes= MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Advertisement>> getAllByIds(@RequestBody ArrayList<Long> ids) {
+	public ResponseEntity<List<AdvertisementCreationDTO>> getAllByIds(@RequestBody ArrayList<Long> ids) {
 		
 		
 

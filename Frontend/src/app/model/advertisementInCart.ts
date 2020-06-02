@@ -8,13 +8,13 @@ export class AdvertisementInCart {
   name: string;
   model: string;
   brand: string;
-  fuelType: FuelType;
-  transType: TransmissionType;
-  carClass: CarClass;
+  fuelType: string;
+  transType: string;
+  carClass: string;
   travelled: number;
   price: number;
   carSeats: number;
-  postedBy: User;
+  postedBy: number;
   owner: boolean;
   together:boolean;
   

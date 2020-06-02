@@ -28,12 +28,13 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
   dialogData: ItemInCart;
   selected: AdvertisementInCart;
   getAdvertisementsId: number[];
+  sameOwnerAdvertisement: AdvertisementInCart[];
 
   sameOwner: ItemInCart[];
   itemsInCart: ItemInCart[];
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['name', 'model', 'brand', 'fuelType', 'transType', 'carClass','owner', "checkbox", "button"];
+  displayedColumns = ['name', 'model', 'brand', 'fuelType', 'transType', 'carClass', "checkbox", "button"];
 //DODATI 'timeFrom' I 'timeTo'
 
   constructor(private shopingCartService: ShopingCartService, private sessionService: SessionService, private advertisementService: AdvertisementService){
@@ -67,10 +68,27 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
         this.advertisementService.getAllByIds(this.getAdvertisementsId).subscribe(
           data => {
             this.advertisements=data;
+            this.sameOwnerAdvertisement=data;
+
+            this.advertisements.forEach(same => {
+              this.sameOwnerAdvertisement.forEach(element => {
+                
+                if(same.id!=element.id){
+  
+                if(same.postedBy===element.postedBy){
+                  same.owner=true;
+                }
+              }
+              });
+          });
+
+           
+            this.dataSource = new ShoppingCartDataSource(data);
+            
           }
         );
 
-        // this.dataSource = new ShoppingCartDataSource(this.advertisements);
+         
       }
 
 
@@ -87,11 +105,25 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
   sendRequest(){
     console.log("Pogodio dugme u ts");
 
+    this.advertisements.forEach(element => {
+      
+      this.sameOwner.forEach(itemInCart => {
+        
+        if(element.id===itemInCart.advertisementId){
+          itemInCart.together=element.together;
+        }
+
+      });
+
+
+    });
+
+
     this.dataSource = new ShoppingCartDataSource(null);
     this.shopingCartService.sentRequests(this.sameOwner).subscribe(
       data => {
 
-        this.dataSource.data = data;
+        //this.dataSource.data = data;
         this.table.dataSource = this.dataSource;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -108,7 +140,7 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
     this.shopingCartService.removeFromCart(itemInCart).subscribe(
       data => {
 
-        this.dataSource.data = data;
+      //  this.dataSource.data = data;
         this.table.dataSource = this.dataSource;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;

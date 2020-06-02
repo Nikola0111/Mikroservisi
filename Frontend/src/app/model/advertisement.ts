@@ -15,7 +15,9 @@ export class Advertisement {
   travelled: number;
   price: number;
   carSeats: number;
+
   postedByID: number;
+  
   discount: number;
   priceWithDiscount: number;
   pictures: String[];

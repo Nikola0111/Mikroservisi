@@ -26,13 +26,15 @@ public class AdvertisementCreationDTO {
 
     private double price;
 
+    private Long postedByID;
+
     private double discount;
 
     private double priceWithDiscount;
 
     private ArrayList<String> pictures;
 
-    public AdvertisementCreationDTO(Long id, String name, String model, String brand, String fuelType, String transType, String carClass, int travelled, int carSeats, double price, double discount, double priceWithDiscount, ArrayList<String> pictures, double grade) {
+    public AdvertisementCreationDTO(Long id, String name, String model, String brand, String fuelType, String transType, String carClass, int travelled, int carSeats, double price,Long postedByID, double discount, double priceWithDiscount, ArrayList<String> pictures, double grade) {
         this.id = id;
         this.name = name;
         this.model = model;
@@ -43,6 +45,7 @@ public class AdvertisementCreationDTO {
         this.travelled = travelled;
         this.carSeats = carSeats;
         this.price = price;
+        this.postedByID=postedByID;
         this.discount = discount;
         this.priceWithDiscount = priceWithDiscount;
         this.pictures = pictures;
@@ -61,6 +64,7 @@ public class AdvertisementCreationDTO {
         this.price = ad.getPrice();
         this.carSeats = ad.getCarSeats();
         this.discount = ad.getDiscount();
+        this.postedByID=ad.getPostedByID();
         this.grade = ad.getGrade();
         this.travelled = ad.getTravelled();
         this.priceWithDiscount = ad.getPriceWithDiscount();
@@ -178,6 +182,14 @@ public class AdvertisementCreationDTO {
 
     public void setGrade(double grade) {
         this.grade = grade;
+    }
+
+    public Long getPostedByID() {
+        return postedByID;
+    }
+
+    public void setPostedByID(Long postedByID) {
+        this.postedByID = postedByID;
     }
 
 }

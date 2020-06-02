@@ -236,7 +236,7 @@ public class AdvertisementService {
 
 			temp = new AdvertisementCreationDTO(tempad.getId(), tempad.getName(), tempad.getModel().getName(), tempad.getBrand().getName(),
 			tempad.getFuelType().getName(), tempad.getTransmissionType().getName(), tempad.getCarClass().getName(), tempad.getTravelled(),
-			tempad.getCarSeats(), tempad.getPrice(), tempad.getDiscount(), tempad.getPriceWithDiscount(), tempad.getPictures(),
+			tempad.getCarSeats(), tempad.getPrice(), tempad.getPostedByID(),tempad.getDiscount(), tempad.getPriceWithDiscount(), tempad.getPictures(),
 			tempad.getGrade());
 
 			sending.add(temp);
@@ -252,23 +252,32 @@ public class AdvertisementService {
 		return sending;
 	}
 
-	public List<Advertisement> findAllByIds(ArrayList<Long> ids) {
+	public List<AdvertisementCreationDTO> findAllByIds(ArrayList<Long> ids) {
 		List<Advertisement> advertisements = advertisementRepository.findAll();
-		List<Advertisement> returnAdvert=new ArrayList<Advertisement>();
+		List<AdvertisementCreationDTO> sending = new ArrayList<AdvertisementCreationDTO>();
+		AdvertisementCreationDTO temp;
 		
-		for(Advertisement advert: advertisements) {
+		for(Advertisement tempad: advertisements) {
 			
 			for (Long id : ids) {
 
-				if(advert.getId().equals(id)){
+				if(tempad.getId().equals(id)){
 
-					returnAdvert.add(advert);
+			temp = new AdvertisementCreationDTO(tempad.getId(), tempad.getName(), tempad.getModel().getName(), tempad.getBrand().getName(),
+			tempad.getFuelType().getName(), tempad.getTransmissionType().getName(), tempad.getCarClass().getName(), tempad.getTravelled(),
+			tempad.getCarSeats(), tempad.getPrice(), tempad.getPostedByID(),tempad.getDiscount(), tempad.getPriceWithDiscount(), tempad.getPictures(),
+			tempad.getGrade());
+
+			sending.add(temp);
+			break;
 				}
 			}
 
 		}
 
-		return returnAdvert;
+		System.out.println("SALJEM TI OGLASA BR======================"+sending.size());
+
+		return sending;
 	}
 	
 	
