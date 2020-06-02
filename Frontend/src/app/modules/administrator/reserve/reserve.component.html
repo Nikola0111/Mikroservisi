@@ -3,9 +3,9 @@
     <div>
     <mat-form-field>
       <mat-label>Advertisement</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let ad of advertisements" value="ad.id" >
-          {{ad.id}} {{ad.name}}
+      <mat-select [(value)] = "this.adName" name = "advSelect" formControlName = "advSelect"> 
+        <mat-option *ngFor="let ad of advertisements" value={{ad.name}} >
+          {{ad.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
