@@ -151,24 +151,23 @@ public class EndUserController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-  /*  @PostMapping(value = "/deactivate/{jmbg}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> deactivateAccount(@PathVariable("jmbg") String jmbg){
-        Integer ret = endUserService.deactivate(jmbg);
+    @PostMapping(value = "/deactivate/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> deactivateAccount(@PathVariable("id") Long id){
+        endUserService.deactivate(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/block/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> blockAccount(@PathVariable("id") Long id){
+        Boolean ret = endUserService.block(id);
 
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/block/{jmbg}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> blockAccount(@PathVariable("jmbg") String jmbg){
-        Boolean ret = endUserService.block(jmbg);
+    @PostMapping(value = "/unblock/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> unblockAccount(@PathVariable("id") Long id){
+        Boolean ret = endUserService.unblock(id);
 
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
-
-    @PostMapping(value = "/unblock/{jmbg}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> unblockAccount(@PathVariable("jmbg") String jmbg){
-        Boolean ret = endUserService.unblock(jmbg);
-
-        return new ResponseEntity<>(ret, HttpStatus.OK);
-    } */
 }

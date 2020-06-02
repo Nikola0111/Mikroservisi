@@ -104,14 +104,18 @@ public class EndUserService {
         return endUserRepository.findAllByActivity(true);
     }
 
-  /*  @Transactional
-    public Integer deactivate(String jmbg){
-        return endUserRepository.deleteByJmbg(jmbg);
+    @Transactional
+    public void deactivate(Long id){
+        EndUser temp = endUserRepository.findOneById(id);
+        
+        loginInfoRepository.deleteById(temp.getUser().getLoginInfo().getId());
+        userRepository.deleteById(temp.getUser().getId());
+        endUserRepository.deleteById(id);
     }
 
     @Transactional
-    public Boolean block(String jmbg){
-        EndUser endUser = endUserRepository.findByJmbg(jmbg);
+    public Boolean block(Long id){
+        EndUser endUser = endUserRepository.findOneById(id);
 
         if(endUser == null){
             return false;
@@ -125,8 +129,8 @@ public class EndUserService {
     }
 
     @Transactional
-    public Boolean unblock(String jmbg){
-        EndUser endUser = endUserRepository.findByJmbg(jmbg);
+    public Boolean unblock(Long id){
+        EndUser endUser = endUserRepository.findOneById(id);
 
         if(endUser == null){
             return false;
@@ -136,5 +140,5 @@ public class EndUserService {
         endUserRepository.save(endUser);
 
         return true;
-    } */
+    } 
 }

@@ -33,15 +33,15 @@ export class EndUserService {
     return this.http.get<EndUser[]>('/server/authentication/getRegisteredUsers', httpOptions);
   }
 
-  public deactivate(jmbg: string) {
-    return this.http.post(`/server/authentication/deactivate/${jmbg}`, httpOptions);
+  public deactivate(id: number) {
+    return this.http.post(`/server/authentication/deactivate/${id}`, httpOptions);
   }
 
-  public block(jmbg: string) {
-    return this.http.post(`/server/authentication/block/${jmbg}`, httpOptions);
+  public block(id: number) {
+    return this.http.post<boolean>(`/server/authentication/block/${id}`, httpOptions);
   }
 
-  public unblock(jmbg: string) {
-    return this.http.post(`/server/authentication/unblock/${jmbg}`, httpOptions);
+  public unblock(id: number) {
+    return this.http.post<boolean>(`/server/authentication/unblock/${id}`, httpOptions);
   }
 }
