@@ -4,41 +4,41 @@ import java.time.LocalDateTime;
 
 public class BookingDTO {
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Long advertisementID;
+    private LocalDateTime timeFrom;
+    private LocalDateTime timeTo;
+    private Long advertisementId;
 
-    public BookingDTO(LocalDateTime startTime, LocalDateTime endTime, Long advertisementID) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.advertisementID = advertisementID;
+    public BookingDTO(LocalDateTime timeFrom, LocalDateTime timeTo, Long advertisementId) {
+        this.timeFrom = timeFrom;
+        this.timeTo = timeTo;
+        this.advertisementId = advertisementId;
     }
 
     public BookingDTO() {
     }
 
-    public LocalDateTime getStartTime() {
-        return this.startTime;
+    public LocalDateTime getTimeFrom() {
+        return this.timeFrom;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
+    public void setTimeFrom(LocalDateTime timeFrom) {
+        this.timeFrom = timeFrom;
     }
 
-    public LocalDateTime getEndTime() {
-        return this.endTime;
+    public LocalDateTime getTimeTo() {
+        return this.timeTo;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
+    public void setTimeTo(LocalDateTime timeTo) {
+        this.timeTo = timeTo;
     }
 
-    public Long getAdvertisementID() {
-        return this.advertisementID;
+    public Long getAdvertisementId() {
+        return this.advertisementId;
     }
 
-    public void setAdvertisementID(Long advertisementID) {
-        this.advertisementID = advertisementID;
+    public void setAdvertisementId(Long advertisementId) {
+        this.advertisementId = advertisementId;
     }
 
 }

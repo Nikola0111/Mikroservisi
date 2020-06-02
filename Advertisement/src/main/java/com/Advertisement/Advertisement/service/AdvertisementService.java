@@ -7,6 +7,8 @@ import com.Advertisement.Advertisement.repository.*;
 import com.Advertisement.Advertisement.service.*;
 import com.netflix.ribbon.RequestTemplate;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
@@ -299,14 +302,14 @@ public class AdvertisementService {
 		return advertisementRepository.save(advertisement);
 	}
 
-	public List<Advertisement> filterAds(FilterAdsDTO filterAdsDTO) {
+	public List<AdvertisementCreationDTO> filterAds(FilterAdsDTO filterAdsDTO) {
 		List<Advertisement> allAds = advertisementRepository.findAll();
 		List<Advertisement> filteredAds = new ArrayList<Advertisement>();
 		List<Advertisement> filteredAvailableAds = new ArrayList<Advertisement>();
 
-		/*
-		 * List<ListaZakazanihTermina> zakazani
-		 */
+		List<BookingDTO> bookedTimes = restTemplate.exchange("http://booking/getAllBookings", HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<BookingDTO>>() {
+				}).getBody();
 
 		for (Advertisement ad : allAds) {
 			if ((ad.getFuelType().getName() == filterAdsDTO.getFuelType() || filterAdsDTO.getFuelType() == null)
@@ -323,23 +326,46 @@ public class AdvertisementService {
 
 		}
 
-		/*
-		 * int taken = 0; LocalDateTime timeFrom =
-		 * LocalDateTime.parse(filterAdsDTO.getTimeFrom()); LocalDateTime timeTo =
-		 * LocalDateTime.parse(filterAdsDTO.getTimeTo()); for(Advertisement ad :
-		 * filteredAds) { taken = 0; if(filterAdsDTO.getTimeFrom() == null ||
-		 * filterAdsDTO.getTimeTo() == null) { for (Termin termin : zakazaniTermini) {
-		 * if (termin.Ad.getID == ad.getId()) { if(filterAdsDTO.getTimeFrom() != null) {
-		 * if (timeFrom.isAfter(zakazaniTermin.getStartTime) &&
-		 * timeFrom.isBefore(zakazaniTermin.getEndTime())) { taken = 1; } }
-		 * if(filterAdsDTO.getTimeTo() != null) { if
-		 * (timeTo.isAfter(zakazaniTermin.getStartTime) &&
-		 * timeTo.isBefore(zakazaniTermin.getEndTime())) { taken = 1; } } } } } if(taken
-		 * == 0) { filteredAvailableAds.add(ad); } }
-		 */
+		int taken = 0;
+
+		LocalDateTime timeFrom = filterAdsDTO.getTimeFrom();
+		LocalDateTime timeTo = filterAdsDTO.getTimeTo();
+		for (Advertisement ad : filteredAds) {
+			taken = 0;
+			if (filterAdsDTO.getTimeFrom() == null || filterAdsDTO.getTimeTo() == null) {
+				for (BookingDTO bookingDTO : bookedTimes) {
+
+					if (bookingDTO.getAdvertisementId() == ad.getId()) {
+						if (filterAdsDTO.getTimeFrom() != null) {
+							if (timeFrom.isAfter(bookingDTO.getTimeFrom())
+									&& timeFrom.isBefore(bookingDTO.getTimeTo())) {
+								taken = 1;
+							}
+						}
+
+						if (filterAdsDTO.getTimeTo() != null) {
+							if (timeTo.isAfter(bookingDTO.getTimeFrom()) && timeTo.isBefore(bookingDTO.getTimeTo())) {
+								taken = 1;
+							}
+						}
+					}
+				}
+			}
+			if (taken == 0) {
+				filteredAvailableAds.add(ad);
+			}
+		}
 
 		// KAD SE OTKOMENTARISE, VRACACE FILTEREDAVAILABLEADS
-		return filteredAds;
+
+		List<AdvertisementCreationDTO> filteredAdsDTOs = new ArrayList<AdvertisementCreationDTO>();
+		AdvertisementCreationDTO temp;
+		for (Advertisement ad : filteredAvailableAds) {
+			temp = new AdvertisementCreationDTO(ad);
+			filteredAdsDTOs.add(temp);
+		}
+
+		return filteredAdsDTOs;
 	}
 
 	// public void saveCommentAndGrade(CommentDTO commentDTO){
