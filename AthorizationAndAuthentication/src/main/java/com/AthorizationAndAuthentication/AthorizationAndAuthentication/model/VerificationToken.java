@@ -12,9 +12,9 @@ public class VerificationToken {
     @Column
     private String token;
 
-    @OneToOne(targetEntity = EntityUser.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id")
-    private EndUser user;
+    @OneToOne(targetEntity = EndUser.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "enduser_id")
+    private EndUser endUser;
 
     public VerificationToken(){
 
@@ -22,7 +22,7 @@ public class VerificationToken {
 
     public VerificationToken(String token, EndUser user) {
         this.token = token;
-        this.user = user;
+        this.endUser = user;
     }
 
     public String getToken() {
@@ -33,11 +33,11 @@ public class VerificationToken {
         this.token = token;
     }
 
-    public EndUser getUser() {
-        return user;
+    public EndUser getEndUser() {
+        return endUser;
     }
 
-    public void setUser(EndUser user) {
-        this.user = user;
+    public void setEndUser(EndUser user) {
+        this.endUser = user;
     }
 }

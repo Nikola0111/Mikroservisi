@@ -8,19 +8,19 @@
         <div class = "zahtev">
           <div class="card-body">
             <div class="row">
-              <p>E-mail adress: {{enduser.loginInfo.email}}</p>
+              <p>E-mail adress: {{enduser.user.loginInfo.email}}</p>
             </div>
             <div class="row">
-              <p>Username: {{enduser.loginInfo.username}} </p>
+              <p>Username: {{enduser.user.loginInfo.username}} </p>
             </div>
             <div class="row">
-              <p>JMBG: {{enduser.jmbg}} </p>
+              <p>JMBG: {{enduser.user.jmbg}} </p>
             </div>
             <div class="clearfix"></div>
           </div>
           <div class="button-class">
-            <button class = "btn btn-success buttons" (click)="accept(enduser)" >Prihvati</button>
-            <button class = "btn btn-danger buttons" (click)="reject(enduser)" >Odbij</button>
+            <button style="margin-left: 50px" class = "btn btn-success buttons" (click)="accept(enduser)" >Prihvati</button>
+            <button style="margin-top:10px; margin-left: 50px" class = "btn btn-danger buttons" (click)="reject(enduser)" >Odbij</button>
           </div>
         </div>
       </div>

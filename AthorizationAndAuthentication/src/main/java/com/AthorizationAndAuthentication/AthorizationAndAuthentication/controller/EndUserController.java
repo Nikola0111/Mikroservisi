@@ -105,15 +105,17 @@ public class EndUserController {
     @PostMapping(value = "/accept", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> acceptRegistration(@RequestBody Long id){
         EndUser endUser = endUserService.changeAdminActivated(id);
+        System.out.println("Prosao aktiviranje od admina");
+        System.out.println(endUser);
         VerificationToken verificationToken = verificationTokenService.findByUser(endUser);
+        System.out.println("Nasao je token: " + verificationToken.getToken());
 
-        try {
-            mailSenderService.sendSimpleMessage(endUser.getUser().getLoginInfo().getEmail(), "Aktivacioni link",
-                    "Vaša registracija je prihvaćena! Kliknite na link da bi aktivirali vaš nalog i koristili usluge našeg servisa!\n\n"
-                            + "http://localhost:4200/registrationConfirm.html?token=" + verificationToken.getToken());
-        }catch (Exception e){
-            System.out.println("Slanje mail-a nije uspelo!");
-        }
+        
+        mailSenderService.sendSimpleMessage(endUser.getUser().getLoginInfo().getEmail(), "Aktivacioni link",
+            "Vaša registracija je prihvaćena! Kliknite na link da bi aktivirali vaš nalog i koristili usluge našeg servisa!\n\n"
+                + "http://localhost:4200/registrationConfirm.html?token=" + verificationToken.getToken());
+        
+       
 
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
@@ -137,7 +139,7 @@ public class EndUserController {
 
         //iz nekog razloga ne vraca nista na front, servis se nikad ne izvrsi na frontu i ne ode na homepage, vecno se zaglavi u ucitavanju
 
-        EndUser endUser = verificationToken.getUser();
+        EndUser endUser = verificationToken.getEndUser();
         endUserService.acceptRegistration(endUser.getId());
         verificationTokenService.delete(endUser.getId());
         return new ResponseEntity(0, HttpStatus.OK);

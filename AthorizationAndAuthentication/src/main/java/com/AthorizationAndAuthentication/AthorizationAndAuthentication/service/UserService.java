@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -138,46 +139,46 @@ public class UserService {
     }
 */
 
-public void saveNewUser(EntityUser entityUser){
+    public void saveNewUser(EntityUser entityUser){
 
-    String salt=makeSalt();      
+        String salt=makeSalt();      
 
-    System.out.println("Naso ga je lepo"+ findOneByid(entityUser.getId()));
+        System.out.println("Naso ga je lepo"+ findOneByid(entityUser.getId()));
 
-    System.out.println("HESOVAN PASSWORD == "+hashIt(entityUser.getPassword(),salt));
+        System.out.println("HESOVAN PASSWORD == "+hashIt(entityUser.getPassword(),salt));
 
-    LoginInfo loginInfo=new LoginInfo(
-    entityUser.getUsername(),
-    entityUser.getPassword(), 
-    entityUser.getLoginInfo().getEmail(),
-   // salt,
-  //  ApplicationUserRole.ENDUSER.getGrantedAuthorities(),
-    true,
-    true,
-    true,
-    true);
+        LoginInfo loginInfo=new LoginInfo(
+        entityUser.getUsername(),
+        entityUser.getPassword(), 
+        entityUser.getLoginInfo().getEmail(),
+    // salt,
+    //  ApplicationUserRole.ENDUSER.getGrantedAuthorities(),
+        true,
+        true,
+        true,
+        true);
 
-    loginInfoService.save(loginInfo);
+        loginInfoService.save(loginInfo);
 
-    entityUser.setLoginInfo(loginInfoService.findOneById(loginInfo.getId()));
+        entityUser.setLoginInfo(loginInfoService.findOneById(loginInfo.getId()));
 
-        //cuvanje u bazi
-    saveInDatabase(entityUser);
+            //cuvanje u bazi
+        saveInDatabase(entityUser);
 
-    EndUser endUser=new EndUser();
+        EndUser endUser=new EndUser();
+        
+        endUser.setNumber_of_requests(0);
+        endUser.setAccount_activated(false);
+        endUser.setAdminApproved(false);
+        endUser.setUser(findOneByid(entityUser.getId()));
+
+        
+        endUserService.save(endUser);
+
+        String verificationToken = UUID.randomUUID().toString();
+        verificationTokenService.save(endUser, verificationToken);
+    }
     
-    endUser.setNumber_of_requests(0);
-    endUser.setAccount_activated(false);
-    endUser.setAdminApproved(false);
-    endUser.setUser(findOneByid(entityUser.getId()));
-
-    
-    endUserService.save(endUser);
-
-
-  //  String verificationToken = UUID.randomUUID().toString();
-  //  verificationTokenService.save(endUser, verificationToken);
-}
     private String hashIt(String password, String salt){
         
         String passwordPlusSalt=password+salt;
