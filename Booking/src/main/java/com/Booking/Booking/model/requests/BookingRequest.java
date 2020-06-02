@@ -1,4 +1,5 @@
 package com.Booking.Booking.model.requests;
+
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -10,47 +11,41 @@ import javax.persistence.ManyToOne;
 
 import com.Booking.Booking.enums.RequestStates;
 
-
 @Entity
-public class BookingRequest{
-    
+public class BookingRequest {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    //onaj ko je objavio
+    // onaj ko je objavio
     private Long userForId;
 
-    //onaj ko podnosi
+    // onaj ko podnosi
     private Long userToId;
 
     private RequestStates stateOfRequest;
 
-    
     private Long advertisementId;
 
     private Long groupId;
 
-   
     private boolean together;
 
-  
     private LocalDateTime timeFrom;
 
     private LocalDateTime timeTo;
 
-  
-
-    public BookingRequest(Long userForId,Long userToId,Long groupId, 
-     RequestStates stateOfRequest, Long advertisementId, boolean together,LocalDateTime timeFrom, LocalDateTime timeTo) {
+    public BookingRequest(Long userForId, Long userToId, Long groupId, RequestStates stateOfRequest,
+            Long advertisementId, boolean together, LocalDateTime timeFrom, LocalDateTime timeTo) {
         this.userForId = userForId;
-        this.userToId=userToId;
-        this.groupId=groupId;
+        this.userToId = userToId;
+        this.groupId = groupId;
         this.stateOfRequest = stateOfRequest;
-        this.advertisementId=advertisementId;
-        this.together=together;
-        this.timeFrom=timeFrom;
-        this.timeTo=timeTo;
+        this.advertisementId = advertisementId;
+        this.together = together;
+        this.timeFrom = timeFrom;
+        this.timeTo = timeTo;
     }
 
     public BookingRequest() {
@@ -96,7 +91,6 @@ public class BookingRequest{
         this.together = together;
     }
 
-    
     public Long getUserToId() {
         return this.userToId;
     }
