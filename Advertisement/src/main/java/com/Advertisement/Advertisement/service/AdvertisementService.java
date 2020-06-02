@@ -61,7 +61,8 @@ public class AdvertisementService {
 	@Autowired
 	TransmissionTypeRepository transmissionTypeRepository;
 
-	RestTemplate restTemplate = new RestTemplate();
+	@Autowired
+	RestTemplate restTemplate;
 
 	// @Autowired
 	// EndUserRepository endUserRepository;
@@ -307,9 +308,18 @@ public class AdvertisementService {
 		List<Advertisement> filteredAds = new ArrayList<Advertisement>();
 		List<Advertisement> filteredAvailableAds = new ArrayList<Advertisement>();
 
-		List<BookingDTO> bookedTimes = restTemplate.exchange("http://booking/getAllBookings", HttpMethod.GET, null,
+		// Long id = restTemplate
+		// .exchange("http://book/getAllBookings", HttpMethod.GET, null, new
+		// ParameterizedTypeReference<Long>() {
+		// }).getBody();
+
+		// System.out.println("OVO JE OVO IZ BOOKA " + id);
+
+		List<BookingDTO> bookedTimes = restTemplate.exchange("http://book/getAllBookings", HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<BookingDTO>>() {
 				}).getBody();
+
+		System.out.println("OVO SU BUKINZI =========================" + bookedTimes.size());
 
 		for (Advertisement ad : allAds) {
 			if ((ad.getFuelType().getName() == filterAdsDTO.getFuelType() || filterAdsDTO.getFuelType() == null)

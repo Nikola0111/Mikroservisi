@@ -112,6 +112,21 @@ public class BookingRequestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // @GetMapping(value = "/getAllBookings")
+    // public ResponseEntity<List<BookingRequest>> getAllBookings() {
+    // List<BookingRequest> booked = new ArrayList<BookingRequest>();
+    // List<BookingRequest> all = bookingRequestService.findAll();
+
+    // for (BookingRequest request : all) {
+    // if ((request.getStateOfRequest().name().equals("RESERVED")
+    // || request.getStateOfRequest().name().equals("PAID"))
+    // && request.getTimeFrom().isAfter(LocalDateTime.now())) {
+    // booked.add(request);
+    // }
+    // }
+    // return new ResponseEntity<>(booked, HttpStatus.OK);
+    // }
+
     @GetMapping(value = "/getAllBookings")
     public ResponseEntity<List<BookingRequest>> getAllBookings() {
         List<BookingRequest> booked = new ArrayList<BookingRequest>();
