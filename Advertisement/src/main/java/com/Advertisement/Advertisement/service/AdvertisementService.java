@@ -225,17 +225,31 @@ public class AdvertisementService {
 		return true;
 	}
 	
-	public List<Advertisement> findAll() {
+	public List<AdvertisementCreationDTO> findAll() {
 		List<Advertisement> advertisements = advertisementRepository.findAll();
+		
+		List<AdvertisementCreationDTO> sending = new ArrayList<AdvertisementCreationDTO>();
+		AdvertisementCreationDTO temp;
 		for(int i = 0; i < advertisements.size(); i++) {
 			advertisements.get(i).setGrade(gradeService.calculateGradeForAd(advertisements.get(i).getId()));
+			Advertisement tempad = advertisements.get(i);
+
+			temp = new AdvertisementCreationDTO(tempad.getId(), tempad.getName(), tempad.getModel().getName(), tempad.getBrand().getName(),
+			tempad.getFuelType().getName(), tempad.getTransmissionType().getName(), tempad.getCarClass().getName(), tempad.getTravelled(),
+			tempad.getCarSeats(), tempad.getPrice(), tempad.getDiscount(), tempad.getPriceWithDiscount(), tempad.getPictures(),
+			tempad.getGrade());
+
+			sending.add(temp);
 		}
+
+		//String name, String model, String brand, String fuelType, String transType, String carClass, int travelled, 
+		//int carSeats, double price, double discount, double priceWithDiscount, ArrayList<String> pictures, double grade
 
 		// loggerService.doLog("neka funkcija", "neki rezultat", "WARNING");		//TIPOVI LOGOVA : WARNING, ERROR, INFO
 		// loggerService.doLog("neka funkcija", "neki rezultat", "ERROR");		    //FUNKCIJE : NAPRAVIO OGLAS, POSLAO ZAHTEV ZA OGLAS, ODOBRIO ZAHTEV, OTKAZAO ZAHTEV, ODBIO ZAHTEV, OBRISAO OGLAS
 		// loggerService.doLog("neka funkcija", "neki rezultat", "INFO");			//REZULTATI: ID OGLASA/NEUSPESNO, ID ZAHTEVA/NEUSPESNO, ID ZAHTEVA/NEUSPESNO, ID ZAHTEVA/NEUSPESNO, ID OGLASA/NEUSPESNO
 
-		return advertisements;
+		return sending;
 	}
 
 	public List<Advertisement> findAllByIds(ArrayList<Long> ids) {
@@ -355,38 +369,38 @@ public class AdvertisementService {
 
 
     
-	// public AdvertisementDTO findAdAndComments(Long id) {
-	// 	Advertisement ad = advertisementRepository.findOneByid(id);                     //OVA
+	public AdvertisementCreationDTO findAdAndComments(Long id) {
+		Advertisement ad = advertisementRepository.findOneByid(id);                     //OVA
 
-	// 	List<Comment> db = commentRepository.findByAd_Id(id);
+		// List<Comment> db = commentRepository.findByAd_Id(id);
 
-	// 	//sredjivanje komentara
-	// 	List<CommentPreviewDTO> comments = new ArrayList<CommentPreviewDTO>();
-	// 	for(int i = 0;i < db.size();i++) {
-	// 		CommentPreviewDTO temp = new CommentPreviewDTO(db.get(i).getValue(), db.get(i).getEndUser().getUser().getLoginInfo().getEmail(),
-	// 				db.get(i).getGrade(), db.get(i).getDate());
-	// 		temp.setId(db.get(i).getId());
+		// //sredjivanje komentara
+		// List<CommentPreviewDTO> comments = new ArrayList<CommentPreviewDTO>();
+		// for(int i = 0;i < db.size();i++) {
+		// 	CommentPreviewDTO temp = new CommentPreviewDTO(db.get(i).getValue(), db.get(i).getEndUser().getUser().getLoginInfo().getEmail(),
+		// 			db.get(i).getGrade(), db.get(i).getDate());
+		// 	temp.setId(db.get(i).getId());
 
 
-	// 		if(db.get(i).getReply() != null) {
-	// 			ReplyDTO replyDTO = new ReplyDTO();
-	// 			replyDTO.setComment(db.get(i).getReply().getComment());
-	// 			replyDTO.setAgentMail(db.get(i).getReply().getAgent().getUser().getLoginInfo().getEmail());	
+		// 	if(db.get(i).getReply() != null) {
+		// 		ReplyDTO replyDTO = new ReplyDTO();
+		// 		replyDTO.setComment(db.get(i).getReply().getComment());
+		// 		replyDTO.setAgentMail(db.get(i).getReply().getAgent().getUser().getLoginInfo().getEmail());	
 
-	// 			temp.setReplyDTO(replyDTO);
-	// 		}
-	// 		System.out.println(temp);
+		// 		temp.setReplyDTO(replyDTO);
+		// 	}
+		// 	System.out.println(temp);
 
-	// 		comments.add(temp);
-	// 	}
+		// 	comments.add(temp);
+		// }
 
-	// 	AdvertisementDTO adDTO = new AdvertisementDTO(ad);
+		AdvertisementCreationDTO adDTO = new AdvertisementCreationDTO(ad);
 
-	// 	adDTO.setGrade(gradeService.calculateGradeForAd(id));
+		adDTO.setGrade(gradeService.calculateGradeForAd(id));
 
-	// 	adDTO.setComments(comments);
-	// 	return adDTO;
-	// }
+		// adDTO.setComments(comments);
+		return adDTO;
+	}
 
 	// public List<Long> getRentedCars(Long userId){
 	// 	Optional obj = endUserRepository.findById(userId);                  //treba dobiti usera po id

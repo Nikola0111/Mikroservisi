@@ -49,7 +49,7 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
       data => {
         this.itemsInCart = data;
         this.sameOwner= data;
-        
+
         this.sameOwner.forEach(same => {
             this.itemsInCart.forEach(element => {
               this.getAdvertisementsId.push(element.advertisementId);
@@ -62,7 +62,7 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
             });
         });
 
-        
+
 
         this.advertisementService.getAllByIds(this.getAdvertisementsId).subscribe(
           data => {
@@ -70,27 +70,27 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
           }
         );
 
-        this.dataSource = new ShoppingCartDataSource(this.advertisements);
+        // this.dataSource = new ShoppingCartDataSource(this.advertisements);
       }
-      
 
-   
+
+
     )
 
-   
+
 
   }
 
-  
+
 
 
   sendRequest(){
     console.log("Pogodio dugme u ts");
-   
+
     this.dataSource = new ShoppingCartDataSource(null);
     this.shopingCartService.sentRequests(this.sameOwner).subscribe(
       data => {
-    
+
         this.dataSource.data = data;
         this.table.dataSource = this.dataSource;
         this.dataSource.sort = this.sort;
@@ -107,7 +107,7 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
     this.dataSource = new ShoppingCartDataSource(null);
     this.shopingCartService.removeFromCart(itemInCart).subscribe(
       data => {
-    
+
         this.dataSource.data = data;
         this.table.dataSource = this.dataSource;
         this.dataSource.sort = this.sort;
@@ -118,7 +118,7 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
 
     );
 
- 
+
   }
 
 

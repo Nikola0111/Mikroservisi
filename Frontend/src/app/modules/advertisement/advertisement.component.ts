@@ -80,21 +80,19 @@ export class AdvertisementComponent implements OnInit {
   }
 
   onSubmit() {
-
-
-
     this.advertisement.fuelType = this.fuelType;
     this.advertisement.carClass = this.carClass;
     this.advertisement.transType = this.transType;
     this.advertisement.brand = this.brand;
     this.advertisement.model = this.model;
 
-    this.advertisement.pictures = this.slike;
-
+    // this.advertisement.pictures = this.slike;
     // tslint:disable-next-line:prefer-for-of
-    for (let i=0; i<this.selectedFiles.length;i++){
-      this.advertisementService.upload(this.selectedFiles[i]).subscribe();
-    }
+    // if(this.selectedFiles.length !== undefined) {
+    //   for (let i = 0; i < this.selectedFiles.length; i++) {
+    //     this.advertisementService.upload(this.selectedFiles[i]).subscribe();
+    //   }
+    // }
 
     console.log(this.advertisement);
     this.advertisementService.save(this.advertisement).subscribe();

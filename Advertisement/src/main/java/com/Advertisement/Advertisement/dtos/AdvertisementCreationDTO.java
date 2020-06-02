@@ -3,7 +3,11 @@ package com.Advertisement.Advertisement.dtos;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.Advertisement.Advertisement.model.Advertisement;
+
 public class AdvertisementCreationDTO {
+    private Long id;
+
     private String name;
 
     private String model;
@@ -27,6 +31,48 @@ public class AdvertisementCreationDTO {
     private double priceWithDiscount;
 
     private ArrayList<String> pictures;
+
+    public AdvertisementCreationDTO(Long id, String name, String model, String brand, String fuelType, String transType, String carClass, int travelled, int carSeats, double price, double discount, double priceWithDiscount, ArrayList<String> pictures, double grade) {
+        this.id = id;
+        this.name = name;
+        this.model = model;
+        this.brand = brand;
+        this.fuelType = fuelType;
+        this.transType = transType;
+        this.carClass = carClass;
+        this.travelled = travelled;
+        this.carSeats = carSeats;
+        this.price = price;
+        this.discount = discount;
+        this.priceWithDiscount = priceWithDiscount;
+        this.pictures = pictures;
+        this.grade = grade;
+    }
+
+    public AdvertisementCreationDTO(Advertisement ad){
+        this.id = ad.getId();
+        this.name = ad.getName();
+        this.model = ad.getModel().getName();
+        this.brand = ad.getBrand().getName();
+        this.fuelType = ad.getFuelType().getName();
+        this.transType = ad.getTransmissionType().getName();
+        this.carClass = ad.getCarClass().getName();
+        this.pictures = ad.getPictures();
+        this.price = ad.getPrice();
+        this.carSeats = ad.getCarSeats();
+        this.discount = ad.getDiscount();
+        this.grade = ad.getGrade();
+        this.travelled = ad.getTravelled();
+        this.priceWithDiscount = ad.getPriceWithDiscount();
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public ArrayList<String> getPictures() {
         return this.pictures;

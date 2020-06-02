@@ -64,8 +64,8 @@ public class AdvertisementController {
 
 	//@PreAuthorize("hasAnyRole('ROLE_ENDUSER', 'ROLE_AGENT')")	
     @GetMapping(value = "/all")
-    public ResponseEntity<List<Advertisement>> getAll() {
-        List<Advertisement> advertisements = advertisementService.findAll();
+    public ResponseEntity<List<AdvertisementCreationDTO>> getAll() {
+        List<AdvertisementCreationDTO> advertisements = advertisementService.findAll();
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
 	}
 
@@ -135,17 +135,23 @@ public class AdvertisementController {
 
 		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
-/*
+
+	// @GetMapping(value = "/getRentedCars/{id}", produces = MediaType.APPLICATION_JSON_VALUE,  consumes= MediaType.APPLICATION_JSON_VALUE)
+	// public ResponseEntity<List<Long>> getRentedCars(@PathVariable Long id) {
+	// 	List<Long> rentedCars = advertisementService.getRentedCars(id);
+	// 	return new ResponseEntity<>(rentedCars, HttpStatus.OK);
+	// }
+
 	@GetMapping(value = "/preview/{id}", produces = MediaType.APPLICATION_JSON_VALUE,  consumes= MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AdvertisementDTO> getAdvertisementPreview(@PathVariable Long id) {
-		AdvertisementDTO advertisementDTO = advertisementService.findAdAndComments(id);
+	public ResponseEntity<AdvertisementCreationDTO> getAdvertisementPreview(@PathVariable Long id) {
+		AdvertisementCreationDTO advertisementDTO = advertisementService.findAdAndComments(id);
 		if(advertisementDTO == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		System.out.println(advertisementDTO.getGrade());
 		return new ResponseEntity<>(advertisementDTO, HttpStatus.OK);
 	}
-	
+/*	
 
 	@GetMapping(value = "/getAllComments/{id}", produces = MediaType.APPLICATION_JSON_VALUE,  consumes= MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CommentPreviewDTO>> getAllComments(@PathVariable Long id) {
@@ -158,15 +164,6 @@ public class AdvertisementController {
 		System.out.println(advertisementDTO.getComments());
 		return new ResponseEntity<>(advertisementDTO.getComments(), HttpStatus.OK);
 	}
-	
-
-
-	@GetMapping(value = "/getRentedCars/{id}", produces = MediaType.APPLICATION_JSON_VALUE,  consumes= MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Long>> getRentedCars(@PathVariable Long id) {
-		List<Long> rentedCars = advertisementService.getRentedCars(id);
-		return new ResponseEntity<>(rentedCars, HttpStatus.OK);
-	}
-
 
 	@GetMapping(value = "/getAllByPostedBy/{id}", produces = MediaType.APPLICATION_JSON_VALUE,  consumes= MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Advertisement>> getAllByPostedBy(@PathVariable Long id) {
