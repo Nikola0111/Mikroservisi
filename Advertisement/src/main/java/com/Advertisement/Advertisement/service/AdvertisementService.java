@@ -319,7 +319,6 @@ public class AdvertisementService {
 				new ParameterizedTypeReference<List<BookingDTO>>() {
 				}).getBody();
 
-
 		for (BookingDTO bookDTO : bookedTimes) {
 			System.out.println("OVO SU BUKINZI =========================" + bookDTO.getTimeFrom() + "========"
 					+ bookDTO.getTimeTo());
