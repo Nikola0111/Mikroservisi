@@ -377,11 +377,11 @@ public class AdvertisementService {
 							taken = 1;
 						}
 
-						if (bookingDTO.getTimeFrom().isAfter(timeFrom) && bookingDTO.getTimeTo().isBefore(timeFrom)) {
+						if (bookingDTO.getTimeFrom().isAfter(timeFrom) && bookingDTO.getTimeFrom().isBefore(timeTo)) {
 							taken = 1;
 						}
 
-						if (bookingDTO.getTimeFrom().isAfter(timeTo) && bookingDTO.getTimeTo().isBefore(timeTo)) {
+						if (bookingDTO.getTimeTo().isAfter(timeFrom) && bookingDTO.getTimeTo().isBefore(timeTo)) {
 							taken = 1;
 						}
 					}
