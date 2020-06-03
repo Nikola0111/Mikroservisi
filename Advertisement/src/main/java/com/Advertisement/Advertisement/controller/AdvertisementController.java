@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.message.callback.SecretKeyCallback.Request;
+
 @RestController
 // @RequestMapping(value = "advertisement")
 public class AdvertisementController {
@@ -67,6 +69,53 @@ public class AdvertisementController {
 		List<AdvertisementCreationDTO> advertisements = advertisementService.findAll();
 		return new ResponseEntity<>(advertisements, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/getAllAdvertisementsForCart")
+    public ResponseEntity<List<AdvertisementCreationDTO>> getAllBookings() {
+	   
+	/*	List<AdvertisementCreationDTO> advertisementsForCart=new ArrayList<AdvertisementCreationDTO>();
+
+		for (AdvertisementCreationDTO advertisement : advertisementService.findAll()) {
+			
+			for (Long id : ids) {
+
+				if(advertisement.getId().equals(id)){
+
+					advertisementsForCart.add(advertisement);
+				}
+				
+			}
+
+		}
+		*/
+
+
+        return new ResponseEntity<>(advertisementService.findAll(),HttpStatus.OK);
+	}
+	
+
+	@PostMapping(value = "/getAllAdvertisementsForCart2")
+    public ResponseEntity<List<AdvertisementCreationDTO>> getAllBookings2(@RequestBody ArrayList<Long> ids) {
+	   
+	/*	List<AdvertisementCreationDTO> advertisementsForCart=new ArrayList<AdvertisementCreationDTO>();
+
+		for (AdvertisementCreationDTO advertisement : advertisementService.findAll()) {
+			
+			for (Long id : ids) {
+
+				if(advertisement.getId().equals(id)){
+
+					advertisementsForCart.add(advertisement);
+				}
+				
+			}
+
+		}
+		*/
+
+
+        return new ResponseEntity<>(advertisementService.findAll(),HttpStatus.OK);
+    }
 
 	@PostMapping(value = "/allByIds", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AdvertisementCreationDTO>> getAllByIds(@RequestBody ArrayList<Long> ids) {

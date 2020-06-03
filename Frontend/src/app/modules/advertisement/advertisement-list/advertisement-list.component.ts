@@ -105,27 +105,27 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
   public filter(filterAdsDTO: FilterAdsDTO) {
 
     if (this.fuelType === 'Gasoline') {
-      this.filterAdsDTO.fuelType = 0;
+      //this.filterAdsDTO.fuelType = 0;
     } else if (this.fuelType === 'Gas') {
-      this.filterAdsDTO.fuelType = 1;
+    //  this.filterAdsDTO.fuelType = 1;
     } else if (this.fuelType === 'Diesel') {
-      this.filterAdsDTO.fuelType = 2;
+   //   this.filterAdsDTO.fuelType = 2;
     }
 
     if (this.transmissionType === 'Manual') {
-      this.filterAdsDTO.transmissionType = 0;
+  //    this.filterAdsDTO.transmissionType = 0;
     } else if (this.transmissionType === 'Automatic') {
-      this.filterAdsDTO.transmissionType = 1;
+  //    this.filterAdsDTO.transmissionType = 1;
     } else if (this.transmissionType === 'Semi-Automatic') {
-      this.filterAdsDTO.transmissionType = 2;
+  //    this.filterAdsDTO.transmissionType = 2;
     }
 
     if (this.carClass === 'Old-Timer') {
-      this.filterAdsDTO.carClass = 0;
+ //     this.filterAdsDTO.carClass = 0;
     } else if (this.carClass === 'City-Car') {
-      this.filterAdsDTO.carClass = 1;
+ //     this.filterAdsDTO.carClass = 1;
     } else if (this.carClass === 'SUV') {
-      this.filterAdsDTO.carClass = 2;
+ //     this.filterAdsDTO.carClass = 2;
     }
 
     this.itemInCart.timeFrom = this.filterAdsDTO.timeFrom;
