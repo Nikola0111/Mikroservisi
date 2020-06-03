@@ -70,54 +70,53 @@ public class AdvertisementController {
 		return new ResponseEntity<>(advertisements, HttpStatus.OK);
 	}
 
-
 	@GetMapping(value = "/getAllAdvertisementsForCart")
-    public ResponseEntity<List<AdvertisementCreationDTO>> getAllBookings() {
-	   
-	/*	List<AdvertisementCreationDTO> advertisementsForCart=new ArrayList<AdvertisementCreationDTO>();
+	public ResponseEntity<List<AdvertisementCreationDTO>> getAllBookings() {
 
-		for (AdvertisementCreationDTO advertisement : advertisementService.findAll()) {
-			
-			for (Long id : ids) {
+		/*
+		 * List<AdvertisementCreationDTO> advertisementsForCart=new
+		 * ArrayList<AdvertisementCreationDTO>();
+		 * 
+		 * for (AdvertisementCreationDTO advertisement : advertisementService.findAll())
+		 * {
+		 * 
+		 * for (Long id : ids) {
+		 * 
+		 * if(advertisement.getId().equals(id)){
+		 * 
+		 * advertisementsForCart.add(advertisement); }
+		 * 
+		 * }
+		 * 
+		 * }
+		 */
 
-				if(advertisement.getId().equals(id)){
-
-					advertisementsForCart.add(advertisement);
-				}
-				
-			}
-
-		}
-		*/
-
-
-        return new ResponseEntity<>(advertisementService.findAll(),HttpStatus.OK);
+		return new ResponseEntity<>(advertisementService.findAll(), HttpStatus.OK);
 	}
-	
 
 	@PostMapping(value = "/getAllAdvertisementsForCart2")
-    public ResponseEntity<List<AdvertisementCreationDTO>> getAllBookings2(@RequestBody ArrayList<Long> ids) {
-	   
-	/*	List<AdvertisementCreationDTO> advertisementsForCart=new ArrayList<AdvertisementCreationDTO>();
+	public ResponseEntity<List<AdvertisementCreationDTO>> getAllBookings2(@RequestBody ArrayList<Long> ids) {
 
-		for (AdvertisementCreationDTO advertisement : advertisementService.findAll()) {
-			
-			for (Long id : ids) {
+		/*
+		 * List<AdvertisementCreationDTO> advertisementsForCart=new
+		 * ArrayList<AdvertisementCreationDTO>();
+		 * 
+		 * for (AdvertisementCreationDTO advertisement : advertisementService.findAll())
+		 * {
+		 * 
+		 * for (Long id : ids) {
+		 * 
+		 * if(advertisement.getId().equals(id)){
+		 * 
+		 * advertisementsForCart.add(advertisement); }
+		 * 
+		 * }
+		 * 
+		 * }
+		 */
 
-				if(advertisement.getId().equals(id)){
-
-					advertisementsForCart.add(advertisement);
-				}
-				
-			}
-
-		}
-		*/
-
-
-        return new ResponseEntity<>(advertisementService.findAll(),HttpStatus.OK);
-    }
-
+		return new ResponseEntity<>(advertisementService.findAll(), HttpStatus.OK);
+	}
 
 	@PostMapping(value = "/allByIds", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AdvertisementCreationDTO>> getAllByIds(@RequestBody ArrayList<Long> ids) {
@@ -197,6 +196,18 @@ public class AdvertisementController {
 		System.out.println(advertisementDTO.getGrade());
 		return new ResponseEntity<>(advertisementDTO, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/getAllByUser", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Advertisement>> getAllByUser() {
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+                }).getBody();
+
+        List<Advertisement> ads = advertisementService.getAllByUser(id);
+
+        return new ResponseEntity<>(ads, HttpStatus.OK);
+    }
+
 	/*
 	 * 
 	 * @GetMapping(value = "/getAllComments/{id}", produces =

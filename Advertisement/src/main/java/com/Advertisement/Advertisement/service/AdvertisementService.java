@@ -319,7 +319,6 @@ public class AdvertisementService {
 				new ParameterizedTypeReference<List<BookingDTO>>() {
 				}).getBody();
 
-
 		for (BookingDTO bookDTO : bookedTimes) {
 			System.out.println("OVO SU BUKINZI =========================" + bookDTO.getTimeFrom() + "========"
 					+ bookDTO.getTimeTo());
@@ -375,6 +374,14 @@ public class AdvertisementService {
 						}
 
 						if (timeTo.isAfter(bookingDTO.getTimeFrom()) && timeTo.isBefore(bookingDTO.getTimeTo())) {
+							taken = 1;
+						}
+
+						if (bookingDTO.getTimeFrom().isAfter(timeFrom) && bookingDTO.getTimeTo().isBefore(timeFrom)) {
+							taken = 1;
+						}
+
+						if (bookingDTO.getTimeFrom().isAfter(timeTo) && bookingDTO.getTimeTo().isBefore(timeTo)) {
 							taken = 1;
 						}
 					}
@@ -450,6 +457,17 @@ public class AdvertisementService {
 
 		// adDTO.setComments(comments);
 		return adDTO;
+	}
+
+	public List<Advertisement> getAllByUser(Long id) {
+		List<Advertisement> all = advertisementRepository.findAll();
+		List<Advertisement> usersAds = new ArrayList<Advertisement>();
+		for (Advertisement advertisement : all) {
+			if (advertisement.getPostedByID().equals(id)) {
+				usersAds.add(advertisement);
+			}
+		}
+		return usersAds;
 	}
 
 	// public List<Long> getRentedCars(Long userId){

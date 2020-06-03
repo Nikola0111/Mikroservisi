@@ -1,5 +1,6 @@
 package com.Booking.Booking.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import com.Booking.Booking.dtos.AdvertisementCreationDTO;
 import com.Booking.Booking.dtos.BookingRequestFrontDTO;
 import com.Booking.Booking.dtos.ItemInCartDTO;
+import com.Booking.Booking.dtos.ReservationDTO;
 import com.Booking.Booking.enums.RequestStates;
 import com.Booking.Booking.model.requests.BookingRequest;
 import com.Booking.Booking.repository.BookingRequestRepository;
@@ -311,6 +313,37 @@ public class BookingRequestService {
         System.out.println("Nasao je id="+id);
     
         return id;
+    }
+
+    public void saveReserve(ReservationDTO reservationDTO){
+        BookingRequest toBook = new BookingRequest(getLogedUserId(),reservationDTO.getAdvertisementId(), reservationDTO.getTimeFrom(), reservationDTO.getTimeTo(),RequestStates.PAID);
+
+
+
+        List<BookingRequest>bookedTimes=bookingRequestRepository.findAll();
+        
+        LocalDateTime timeFrom = toBook.getTimeFrom();
+        LocalDateTime timeTo = toBook.getTimeTo();
+        
+        for (BookingRequest booking : bookedTimes) {
+            if (booking.getAdvertisementId() == toBook.getAdvertisementId()) {
+        
+                if (timeFrom.isAfter(booking.getTimeFrom()) && timeFrom.isBefore(booking.getTimeTo())) {
+                    booking.setStateOfRequest(RequestStates.CANCELED);
+                    bookingRequestRepository.save(booking);
+
+                }
+        
+                if (timeTo.isAfter(booking.getTimeFrom()) && timeTo.isBefore(booking.getTimeTo())) {
+                    booking.setStateOfRequest(RequestStates.CANCELED);
+                    bookingRequestRepository.save(booking);
+                }
+            }
+        }
+        
+        bookingRequestRepository.save(toBook);
+
+
     }
 
 }

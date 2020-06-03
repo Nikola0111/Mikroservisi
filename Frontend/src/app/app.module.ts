@@ -55,6 +55,7 @@ import { AgentsAdvertisementsComponent } from './modules/agent/agents-advertisem
 import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from "@angular/material/select";
 import { AuthInterceptor } from './services/httpInterceptor.service';
+import { ReserveComponent } from './modules/reserve/reserve.component';
 
 
 
@@ -89,6 +90,7 @@ import { AuthInterceptor } from './services/httpInterceptor.service';
     ChangeDiscountDialogComponent,
     ImagesDialogComponent,
     AgentsAdvertisementsComponent,
+    ReserveComponent
 ],
   imports: [
     BrowserModule,
@@ -118,7 +120,8 @@ import { AuthInterceptor } from './services/httpInterceptor.service';
       {path: 'register', component: RegistracijaComponent},
       {path: 'conversation/:id', component: ConversationComponent},
       {path: 'statistics', component: StatisticsComponent},
-      {path: 'advertisement-details/:id', component: AdvertisementDetailsComponent}
+      {path: 'advertisement-details/:id', component: AdvertisementDetailsComponent},
+      {path: 'reserve', component: ReserveComponent}
     ]),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBcBUQxfS6JldNG0Ltoju5YxE_0-CKJsu4',

@@ -8,6 +8,7 @@ import {ReplyDTO} from '../../dtos/reply-dto';
 import {CommentPreviewDTO} from "../../dtos/comment-preview-dto";
 import {CarDetails} from '../../model/car-details';
 import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
+import { ReserveDTO } from 'src/app/dtos/reserveDTO';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type' : 'application/json'})
@@ -53,6 +54,24 @@ export class AdvertisementService {
     this.requestUrl='/server/advertisement/allByIds';
      const body = JSON.stringify(advertisementsIds);
     return this.http.post<Array<AdvertisementInCart>>(this.requestUrl,body, httpOptions);
+
+  }
+
+  public getAllByUser(){
+
+    this.requestUrl = '/server/advertisement/getAllByUser';
+    return this.http.get<Array<Advertisement>>(this.requestUrl, httpOptions);
+
+
+  }
+
+  public updateTime(reserve : ReserveDTO){
+
+    this.requestUrl='/server/booking/reserve';
+    const body = JSON.stringify(reserve);
+
+   return this.http.post<Array<AdvertisementInCart>>(this.requestUrl,body, httpOptions);
+
 
   }
 
