@@ -75,11 +75,11 @@ public class BookingRequest {
         this.stateOfRequest = stateOfRequest;
     }
 
-    public Long getAdvertisement() {
+    public Long getAdvertisementId() {
         return this.advertisementId;
     }
 
-    public void setAdvertisement(Long advertisementId) {
+    public void setAdvertisementId(Long advertisementId) {
         this.advertisementId = advertisementId;
     }
 

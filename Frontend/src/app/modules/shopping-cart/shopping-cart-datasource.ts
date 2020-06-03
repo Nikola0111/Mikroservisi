@@ -7,21 +7,15 @@ import { Advertisement } from 'src/app/model/advertisement';
 
 import { ItemInCart } from 'src/app/model/itemInCart';
 import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
+import { ItemInCartFront } from 'src/app/model/itemInCartFront';
 
 
 // TODO: Replace this with your own data model type
 export interface ShoppingCartItem  {
   id: number;
-  name: string;
-  model: string;
-  brand: string;
-  fuelType: string;
-  transType: string;
-  carClass: string;
-  travelled: number;
-  price: number;
-  carSeats: number;
-  postedBy: number;
+  advertisementCreationDTO: AdvertisementInCart;
+  timeFrom: Date;
+  timeTo: Date;
   owner: boolean;
   together:boolean;
 
@@ -39,11 +33,11 @@ const EXAMPLE_DATA: ShoppingCartItem [] = [
  * (including sorting, pagination, and filtering).
  */
 export class ShoppingCartDataSource extends DataSource<ShoppingCartItem > {
-  data: AdvertisementInCart[];
+  data: ItemInCartFront[];
   paginator: MatPaginator;
   sort: MatSort;
 
-  constructor(items: Array<AdvertisementInCart>) {
+  constructor(items: Array<ItemInCartFront>) {
     super();
     this.data = items;
   }

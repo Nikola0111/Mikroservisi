@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.Booking.Booking.dtos.ItemInCartDTO;
+import com.Booking.Booking.dtos.ItemInCartFrontDTO;
 import com.Booking.Booking.model.ItemInCart;
 import com.Booking.Booking.service.ItemInCartService;
 import com.Booking.Booking.service.ShoppingCartService;
@@ -42,10 +43,10 @@ public class ItemInCartController {
 	
 	
     @PostMapping(value="/remove", consumes= MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ItemInCart>> removeFromCart(@RequestBody ItemInCart itemInCart) {
+	public ResponseEntity<List<ItemInCartFrontDTO>> removeFromCart(@RequestBody ItemInCart itemInCart) {
 		
 		
-		List<ItemInCart> items=itemInCartService.remove(itemInCart);
+		List<ItemInCartFrontDTO> items=itemInCartService.remove(itemInCart);
 
 		return new ResponseEntity<>(items,HttpStatus.OK);
 	}

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HistoryService } from './history.component.service';
 import { BookingRequest } from 'src/app/model/requests/bookingRequest';
 import {RequestStates} from 'src/app/enums/requestStates';
+import { AdvertisementService } from 'src/app/services/advertisement.service/advertisement.service';
+import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
 
 
 @Component({
@@ -16,15 +18,18 @@ export class HistoryComponent implements OnInit {
   requestStatus: RequestStates;
   checker: number;
   status:string;
+  getAdvertisementsId: number[];
+  advertisements: AdvertisementInCart[];
+
   
 
-  constructor(private historyService : HistoryService) { 
+  constructor(private historyService : HistoryService, private advertisementService: AdvertisementService) { 
 
     this.requestStatus=RequestStates.PENDING;
   }
 
   ngOnInit() {
-    
+    this.getAdvertisementsId=[];
     console.log(this.requestStatus);
     this.historyService.getSpecificGroupsForCart( this.requestStatus).subscribe(
       
@@ -37,8 +42,10 @@ export class HistoryComponent implements OnInit {
     this.historyService.getAllSpecificRequests( this.requestStatus).subscribe(
       data => {
         this.requests = data;
+
+        console.log(data);
        
-        
+    
       }
       
     );

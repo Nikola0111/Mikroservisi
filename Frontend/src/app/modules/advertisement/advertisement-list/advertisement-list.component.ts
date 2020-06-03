@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -11,10 +11,12 @@ import { from, forkJoin } from 'rxjs';
 import { NavbarComponent } from 'src/app/navbar/navbar.component';
 import { FilterAdsDTO } from 'src/app/model/filterAdsDTO';
 import { ItemInCart } from 'src/app/model/itemInCart';
-import {AdvertisementDetailsComponent} from '../advertisement-details/advertisement-details.component';
-import {Router} from '@angular/router';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {SessionService} from '../../../services/SessionService/session.service';
+import { AdvertisementDetailsComponent } from '../advertisement-details/advertisement-details.component';
+import { Router } from '@angular/router';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SessionService } from '../../../services/SessionService/session.service';
+import { CarDetails } from '../../../model/car-details';
+import { CarDetailsService } from '../../../services/CarDetailsService/car-details.service';
 
 export interface DialogData {
   images: Array<String>;
@@ -26,9 +28,9 @@ export interface DialogData {
   styleUrls: ['./advertisement-list.component.css']
 })
 export class AdvertisementListComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
-  @ViewChild(MatTable, {static: false}) table: MatTable<AdvertisementListItem>;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatTable, { static: false }) table: MatTable<AdvertisementListItem>;
   dataSource: AdvertisementListDataSource;
   advertisements: Advertisement[];
   dialogData: Advertisement;
@@ -36,9 +38,21 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
 
   filterForm: FormGroup;
   filterAdsDTO: FilterAdsDTO = new FilterAdsDTO();
+  brand: string;
+  model: string;
   fuelType: string;
   transmissionType: string;
   carClass: string;
+
+
+  carDetails: CarDetails[];
+  carClasses: CarDetails[];
+  carFuels: CarDetails[];
+  carModels: CarDetails[];
+  carBrands: CarDetails[];
+  carGearshifts: CarDetails[];
+
+
   slikice: String[];
 
   itemInCart: ItemInCart;
@@ -51,8 +65,32 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
 
 
   constructor(private sessionService: SessionService, private formBuilder: FormBuilder, private advertisementService: AdvertisementService,
-              private router: Router, private dialog: MatDialog) {
+    private router: Router, private dialog: MatDialog) {
     this.itemInCart = new ItemInCart();
+    this.advertisementService.getAllDetails().subscribe(data => {
+      this.carDetails = data;
+      console.log(this.carDetails);
+      this.carClasses = this.carDetails.filter(item => {
+        console.log(item.type.toLowerCase());
+        return item.type.toLowerCase() === 'carclass';
+      });
+
+      this.carFuels = this.carDetails.filter(item => {
+        return item.type.toLowerCase() === 'fueltype';
+      });
+
+      this.carModels = this.carDetails.filter(item => {
+        return item.type.toLowerCase() === 'carmodel';
+      });
+
+      this.carBrands = this.carDetails.filter(item => {
+        return item.type.toLowerCase() === 'brand';
+      });
+
+      this.carGearshifts = this.carDetails.filter(item => {
+        return item.type.toLowerCase() === 'gearshift';
+      });
+    });
   }
 
 
@@ -95,38 +133,20 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
   public save(advertisement: Advertisement) {
 
     this.itemInCart.advertisementId = advertisement.id;
-    this.itemInCart.advertisementPostedById=advertisement.postedByID;
+    this.itemInCart.advertisementPostedById = advertisement.postedByID;
     console.log(this.itemInCart);
     this.advertisementService.addAd(this.itemInCart).subscribe();
-
 
   }
 
   public filter(filterAdsDTO: FilterAdsDTO) {
 
-    if (this.fuelType === 'Gasoline') {
-      this.filterAdsDTO.fuelType = 0;
-    } else if (this.fuelType === 'Gas') {
-      this.filterAdsDTO.fuelType = 1;
-    } else if (this.fuelType === 'Diesel') {
-      this.filterAdsDTO.fuelType = 2;
-    }
+    this.filterAdsDTO.brand = this.brand;
+    this.filterAdsDTO.model = this.model;
+    this.filterAdsDTO.fuelType = this.fuelType;
+    this.filterAdsDTO.carClass = this.carClass;
+    this.filterAdsDTO.transmissionType = this.transmissionType;
 
-    if (this.transmissionType === 'Manual') {
-      this.filterAdsDTO.transmissionType = 0;
-    } else if (this.transmissionType === 'Automatic') {
-      this.filterAdsDTO.transmissionType = 1;
-    } else if (this.transmissionType === 'Semi-Automatic') {
-      this.filterAdsDTO.transmissionType = 2;
-    }
-
-    if (this.carClass === 'Old-Timer') {
-      this.filterAdsDTO.carClass = 0;
-    } else if (this.carClass === 'City-Car') {
-      this.filterAdsDTO.carClass = 1;
-    } else if (this.carClass === 'SUV') {
-      this.filterAdsDTO.carClass = 2;
-    }
 
     this.itemInCart.timeFrom = this.filterAdsDTO.timeFrom;
     this.itemInCart.timeTo = this.filterAdsDTO.timeTo;
@@ -178,7 +198,7 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
 
   openDialog(s: string[]): void {
 
-    for(let i=0;i<s.length;i++){
+    for (let i = 0; i < s.length; i++) {
       console.log(s[i]);
     }
 
@@ -197,7 +217,7 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
 })
 export class ChangeDiscountDialogComponent {
   constructor(public dialogRef: MatDialogRef<ChangeDiscountDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data) {
+    @Inject(MAT_DIALOG_DATA) public data) {
   }
 
   onOkClick(): void {
@@ -212,15 +232,15 @@ export class ChangeDiscountDialogComponent {
 
 
 @Component({
-selector: 'app-images-dialog',
-templateUrl: 'images-dialog.component.html'
+  selector: 'app-images-dialog',
+  templateUrl: 'images-dialog.component.html'
 })
 export class ImagesDialogComponent {
   constructor(public dialogRef: MatDialogRef<ImagesDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
   onNoClick(): void {
-    this.data.images =new Array<String>();
+    this.data.images = new Array<String>();
     this.dialogRef.close();
 
   }

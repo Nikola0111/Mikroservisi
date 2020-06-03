@@ -10,6 +10,7 @@ import {SessionService} from '../../services/SessionService/session.service';
 
 import { ItemInCart } from 'src/app/model/itemInCart';
 import { AdvertisementService } from 'src/app/services/advertisement.service/advertisement.service';
+import { ItemInCartFront } from 'src/app/model/itemInCartFront';
 
 
 @Component({
@@ -27,11 +28,12 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
   advertisements: AdvertisementInCart[];
   dialogData: ItemInCart;
   selected: AdvertisementInCart;
-  getAdvertisementsId: number[];
-  sameOwnerAdvertisement: AdvertisementInCart[];
 
-  sameOwner: ItemInCart[];
-  itemsInCart: ItemInCart[];
+  vracamNaBek: ItemInCart[];
+
+
+  sameOwner: ItemInCartFront[];
+  itemsInCart: ItemInCartFront[];
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name', 'model', 'brand', 'fuelType', 'transType', 'carClass', "checkbox", "button"];
@@ -45,49 +47,32 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this.dataSource = new ShoppingCartDataSource(null);
 
-    this.getAdvertisementsId=[];
+ 
+  
     this.shopingCartService.getAllForCart().subscribe(
       data => {
         this.itemsInCart = data;
         this.sameOwner= data;
 
         this.sameOwner.forEach(same => {
+         
+         
             this.itemsInCart.forEach(element => {
-              this.getAdvertisementsId.push(element.advertisementId);
+              
               if(same.id!=element.id){
-
-              if(same.advertisementPostedById===element.advertisementPostedById){
+                
+              if(same.advertisementCreationDTO.postedByID===element.advertisementCreationDTO.postedByID){
                 same.owner=true;
               }
             }
             });
         });
 
+        
+        this.dataSource = new ShoppingCartDataSource(this.sameOwner);
 
 
-        this.advertisementService.getAllByIds(this.getAdvertisementsId).subscribe(
-          data => {
-            this.advertisements=data;
-            this.sameOwnerAdvertisement=data;
-
-            this.advertisements.forEach(same => {
-              this.sameOwnerAdvertisement.forEach(element => {
-                
-                if(same.id!=element.id){
-  
-                if(same.postedBy===element.postedBy){
-                  same.owner=true;
-                }
-              }
-              });
-          });
-
-           
-            this.dataSource = new ShoppingCartDataSource(data);
-            
-          }
-        );
-
+    
          
       }
 
@@ -105,22 +90,26 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
   sendRequest(){
     console.log("Pogodio dugme u ts");
 
-    this.advertisements.forEach(element => {
+    this.vracamNaBek=[];
+    this.sameOwner.forEach(same => {
       
-      this.sameOwner.forEach(itemInCart => {
-        
-        if(element.id===itemInCart.advertisementId){
-          itemInCart.together=element.together;
-        }
+      let newItem= new ItemInCart();
+      newItem.id=same.id;
+      newItem.advertisementId=same.advertisementCreationDTO.id;
 
-      });
+      console.log(same.advertisementCreationDTO);
+      newItem.advertisementPostedById=same.advertisementCreationDTO.postedByID;
+      newItem.owner=same.owner;
+      newItem.timeFrom=same.timeFrom;
+      newItem.timeTo=same.timeTo;
+      newItem.together=same.together;
 
+      this.vracamNaBek.push(newItem);
 
     });
 
-
     this.dataSource = new ShoppingCartDataSource(null);
-    this.shopingCartService.sentRequests(this.sameOwner).subscribe(
+    this.shopingCartService.sentRequests(this.vracamNaBek).subscribe(
       data => {
 
         //this.dataSource.data = data;
@@ -134,6 +123,8 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
     );
   }
 
+
+/*
   remove(itemInCart: ItemInCart){
     console.log("pogodi ga");
     this.dataSource = new ShoppingCartDataSource(null);
@@ -152,7 +143,7 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
 
 
   }
-
+*/
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
