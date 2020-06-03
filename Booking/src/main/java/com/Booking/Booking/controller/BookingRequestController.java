@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import com.Booking.Booking.dtos.BookingRequestFrontDTO;
 import com.Booking.Booking.dtos.ItemInCartDTO;
+import com.Booking.Booking.dtos.ItemInCartFrontDTO;
 import com.Booking.Booking.enums.RequestStates;
 import com.Booking.Booking.model.ItemInCart;
 import com.Booking.Booking.model.requests.BookingRequest;
@@ -43,7 +46,9 @@ public class BookingRequestController {
     }
 
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ItemInCart>> Login(@RequestBody List<ItemInCartDTO> lista) {
+
+    public ResponseEntity<List<ItemInCartFrontDTO>> Login(@RequestBody List<ItemInCartDTO> lista) {
+
 
         System.out.println("Pogodio je back");
 
@@ -85,9 +90,11 @@ public class BookingRequestController {
     }
 
     @PostMapping(value = "/getAllSpecificForBuyer")
-    public ResponseEntity<List<BookingRequest>> getAllSpecificForBuyer(@RequestBody RequestStates state) {
 
-        List<BookingRequest> requests = bookingRequestService.getAllSpecificForBuyer(state);
+    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForBuyer(@RequestBody RequestStates state) {
+
+        List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForBuyer(state);
+
 
         System.out.println("pogodio je kontroler, broj oglasa vraca==" + requests.size());
 

@@ -319,6 +319,7 @@ public class AdvertisementService {
 				new ParameterizedTypeReference<List<BookingDTO>>() {
 				}).getBody();
 
+
 		for (BookingDTO bookDTO : bookedTimes) {
 			System.out.println("OVO SU BUKINZI =========================" + bookDTO.getTimeFrom() + "========"
 					+ bookDTO.getTimeTo());
@@ -347,7 +348,7 @@ public class AdvertisementService {
 			taken = 0;
 			if (filterAdsDTO.getTimeFrom() == null || filterAdsDTO.getTimeTo() == null) {
 				for (BookingDTO bookingDTO : bookedTimes) {
-					System.out.println("OVO JE ID ============ " + bookingDTO.getAdvertisementId());
+
 					if (bookingDTO.getAdvertisementId() == ad.getId()) {
 						if (filterAdsDTO.getTimeFrom() != null) {
 							if (timeFrom.isAfter(bookingDTO.getTimeFrom())
@@ -363,6 +364,7 @@ public class AdvertisementService {
 						}
 					}
 				}
+
 			} else {
 				for (BookingDTO bookingDTO : bookedTimes) {
 					System.out.println("OVO JE ID ============ " + bookingDTO.getAdvertisementId());
@@ -377,6 +379,7 @@ public class AdvertisementService {
 						}
 					}
 				}
+
 			}
 			if (taken == 0) {
 				filteredAvailableAds.add(ad);

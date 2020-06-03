@@ -147,6 +147,7 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
     this.filterAdsDTO.carClass = this.carClass;
     this.filterAdsDTO.transmissionType = this.transmissionType;
 
+
     this.itemInCart.timeFrom = this.filterAdsDTO.timeFrom;
     this.itemInCart.timeTo = this.filterAdsDTO.timeTo;
 

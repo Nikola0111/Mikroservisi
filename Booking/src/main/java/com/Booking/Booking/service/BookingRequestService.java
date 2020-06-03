@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.Booking.Booking.dtos.AdvertisementCreationDTO;
+import com.Booking.Booking.dtos.BookingRequestFrontDTO;
 import com.Booking.Booking.dtos.ItemInCartDTO;
 import com.Booking.Booking.enums.RequestStates;
 import com.Booking.Booking.model.requests.BookingRequest;
@@ -212,10 +214,16 @@ public class BookingRequestService {
 
     }
 
-    public List<BookingRequest> getAllSpecificForBuyer(RequestStates state){
+    public List<BookingRequestFrontDTO> getAllSpecificForBuyer(RequestStates state){
         List<BookingRequest> needed=new ArrayList<BookingRequest>();
+        List<BookingRequestFrontDTO> forFront=new ArrayList<BookingRequestFrontDTO>();
  
- 
+        List<AdvertisementCreationDTO> advertisements = restTemplate.exchange("http://advert/getAllAdvertisementsForCart", HttpMethod.GET, null,
+        new ParameterizedTypeReference<List<AdvertisementCreationDTO>>() {
+        }).getBody();
+
+
+
         for (BookingRequest bookingRequest : bookingRequestRepository.findByUserToId(getLogedUserId())) {
             
              System.out.println("STATE="+state);
@@ -225,9 +233,30 @@ public class BookingRequestService {
              if(bookingRequest.getStateOfRequest().equals(state)){
                  needed.add(bookingRequest);
              }
+
+            
  
         }
-         return needed;
+
+        for (AdvertisementCreationDTO advertisementCreationDTO : advertisements) {
+            
+            for (BookingRequest book : needed) {
+                
+                if(book.getAdvertisementId().equals(advertisementCreationDTO.getId())){
+
+                    BookingRequestFrontDTO novi=new BookingRequestFrontDTO(book.getId(),book.getUserForId(),book.getUserToId(),
+                    book.getGroupId(),book.getStateOfRequest(),advertisementCreationDTO,book.isTogether(),book.getTimeFrom(),
+                    book.getTimeTo());
+
+                    forFront.add(novi);
+                }
+
+            }
+
+        }
+
+
+         return forFront;
      }
  
 

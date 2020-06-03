@@ -14,7 +14,7 @@ export class AdvertisementInCart {
   travelled: number;
   price: number;
   carSeats: number;
-  postedBy: number;
+  postedByID: number;
   owner: boolean;
   together:boolean;
   

@@ -1,6 +1,7 @@
 package com.Booking.Booking.service;
 
 import com.Booking.Booking.dtos.ItemInCartDTO;
+import com.Booking.Booking.dtos.ItemInCartFrontDTO;
 import com.Booking.Booking.model.ItemInCart;
 import com.Booking.Booking.repository.ItemInCartRepository;
 import org.springframework.http.HttpMethod;
@@ -37,7 +38,7 @@ public class ItemInCartService {
 
     }
 
-    public List<ItemInCart> remove(ItemInCart itemInCart) {
+    public List<ItemInCartFrontDTO> remove(ItemInCart itemInCart) {
 
         //itemInCartRepository.delete(itemInCart);
         shoppingCartService.removeItemInCart(itemInCart.getId());
