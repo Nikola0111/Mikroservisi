@@ -451,6 +451,17 @@ public class AdvertisementService {
 		return adDTO;
 	}
 
+	public List<Advertisement> getAllByUser(Long id) {
+        List<Advertisement> all = advertisementRepository.findAll();
+        List<Advertisement> usersAds = new ArrayList<Advertisement>();
+        for (Advertisement advertisement : all) {
+            if (advertisement.getPostedByID().equals(id)) {
+                usersAds.add(advertisement);
+            }
+        }
+        return usersAds;
+    }
+
 	// public List<Long> getRentedCars(Long userId){
 	// Optional obj = endUserRepository.findById(userId); //treba dobiti usera po id
 	// List<Long> list = new ArrayList<>();

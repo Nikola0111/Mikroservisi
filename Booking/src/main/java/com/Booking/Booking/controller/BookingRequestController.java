@@ -7,6 +7,7 @@ import java.util.List;
 import com.Booking.Booking.dtos.BookingRequestFrontDTO;
 import com.Booking.Booking.dtos.ItemInCartDTO;
 import com.Booking.Booking.dtos.ItemInCartFrontDTO;
+import com.Booking.Booking.dtos.ReservationDTO;
 import com.Booking.Booking.enums.RequestStates;
 import com.Booking.Booking.model.ItemInCart;
 import com.Booking.Booking.model.requests.BookingRequest;
@@ -144,6 +145,17 @@ public class BookingRequestController {
             }
         }
         return new ResponseEntity<>(booked, HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/reserve")
+    public ResponseEntity<Long> reserve(@RequestBody ReservationDTO reservation) {
+
+        
+
+        bookingRequestService.saveReserve(reservation);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
