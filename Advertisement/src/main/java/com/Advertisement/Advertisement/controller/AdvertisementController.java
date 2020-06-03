@@ -70,6 +70,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(advertisements, HttpStatus.OK);
 	}
 
+
 	@GetMapping(value = "/getAllAdvertisementsForCart")
     public ResponseEntity<List<AdvertisementCreationDTO>> getAllBookings() {
 	   
@@ -116,6 +117,7 @@ public class AdvertisementController {
 
         return new ResponseEntity<>(advertisementService.findAll(),HttpStatus.OK);
     }
+
 
 	@PostMapping(value = "/allByIds", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AdvertisementCreationDTO>> getAllByIds(@RequestBody ArrayList<Long> ids) {
