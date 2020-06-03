@@ -197,6 +197,18 @@ public class AdvertisementController {
 		System.out.println(advertisementDTO.getGrade());
 		return new ResponseEntity<>(advertisementDTO, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/getAllByUser", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Advertisement>> getAllByUser() {
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+                }).getBody();
+
+        List<Advertisement> ads = advertisementService.getAllByUser(id);
+
+        return new ResponseEntity<>(ads, HttpStatus.OK);
+    }
+
 	/*
 	 * 
 	 * @GetMapping(value = "/getAllComments/{id}", produces =
