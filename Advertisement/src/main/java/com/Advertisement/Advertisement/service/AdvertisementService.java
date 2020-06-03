@@ -376,6 +376,14 @@ public class AdvertisementService {
 						if (timeTo.isAfter(bookingDTO.getTimeFrom()) && timeTo.isBefore(bookingDTO.getTimeTo())) {
 							taken = 1;
 						}
+
+						if (bookingDTO.getTimeFrom().isAfter(timeFrom) && bookingDTO.getTimeTo().isBefore(timeFrom)) {
+							taken = 1;
+						}
+
+						if (bookingDTO.getTimeFrom().isAfter(timeTo) && bookingDTO.getTimeTo().isBefore(timeTo)) {
+							taken = 1;
+						}
 					}
 				}
 
@@ -452,15 +460,15 @@ public class AdvertisementService {
 	}
 
 	public List<Advertisement> getAllByUser(Long id) {
-        List<Advertisement> all = advertisementRepository.findAll();
-        List<Advertisement> usersAds = new ArrayList<Advertisement>();
-        for (Advertisement advertisement : all) {
-            if (advertisement.getPostedByID().equals(id)) {
-                usersAds.add(advertisement);
-            }
-        }
-        return usersAds;
-    }
+		List<Advertisement> all = advertisementRepository.findAll();
+		List<Advertisement> usersAds = new ArrayList<Advertisement>();
+		for (Advertisement advertisement : all) {
+			if (advertisement.getPostedByID().equals(id)) {
+				usersAds.add(advertisement);
+			}
+		}
+		return usersAds;
+	}
 
 	// public List<Long> getRentedCars(Long userId){
 	// Optional obj = endUserRepository.findById(userId); //treba dobiti usera po id
