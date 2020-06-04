@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.security.auth.message.callback.SecretKeyCallback.Request;
-
 @RestController
-// @RequestMapping(value = "advertisement")
 public class AdvertisementController {
 
 	@Autowired
@@ -50,17 +48,26 @@ public class AdvertisementController {
 	}
 
 	@PostMapping(value = "/save")
-	public ResponseEntity<Long> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO) {
+	public ResponseEntity<Integer> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO) {
 		Long id;
 
 		System.out.println("Pogodio je ovaj SAVE");
-		id = restTemplate
-				.exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
-				}).getBody();
+		id = restTemplate.exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+			}).getBody();
 
+		HttpEntity<Long> request = new HttpEntity<>(id);
+		////////////////////////
+		Integer ret = restTemplate.postForEntity("http://auth/getNumberOfPostedAds", request,Integer.class, id).getBody();
+		
+		if(ret == 3){
+			return new ResponseEntity<>(ret, HttpStatus.OK);
+		}
+
+		restTemplate.postForEntity("http://auth/increaseNumberOfAdsPosted", request,Long.class, id);
+        
 		advertisementService.save(advertisementCreationDTO, id);
 
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
 
 	// @PreAuthorize("hasAnyRole('ROLE_ENDUSER', 'ROLE_AGENT')")

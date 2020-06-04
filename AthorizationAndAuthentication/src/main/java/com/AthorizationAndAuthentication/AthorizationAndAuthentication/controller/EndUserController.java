@@ -79,14 +79,12 @@ public class EndUserController {
         HttpEntity<Long> request = new HttpEntity<>(entityUser.getId());
         //restTemplate.postForLocation("http://book/createShoopingCart", HttpMethod.POST,request);
 
-         restTemplate.postForEntity("http://book/createShoopingCart", request,Long.class, entityUser.getId());
+        restTemplate.postForEntity("http://book/createShoopingCart", request,Long.class, entityUser.getId());
         
         //restTemplate.exchange("http://book/createShoopingCart", HttpMethod.POST, request);
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
-
-   
 
     @GetMapping(value = "/getUnregistered", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<EndUser>> getUnregistered(){
@@ -145,6 +143,8 @@ public class EndUserController {
         return new ResponseEntity(0, HttpStatus.OK);
     }
 
+
+
     @GetMapping(value = "/getRegisteredUsers", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<EndUser>> getRegisteredUsers(){
         List<EndUser> data = endUserService.getRegisteredUsers();
@@ -169,5 +169,16 @@ public class EndUserController {
         Boolean ret = endUserService.unblock(id);
 
         return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
+    ///////////////////////////////////////////////////
+    @PostMapping(value = "/getNumberOfPostedAds", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> getNumberOfPostedAds(@RequestBody Long id){
+        return new ResponseEntity<>(endUserService.getNumberOfPostedAds(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/increaseNumberOfAdsPosted", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> increaseNumberOfAdsPosted(@RequestBody Long id){
+        endUserService.increaseNumberOfAdsPosted(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

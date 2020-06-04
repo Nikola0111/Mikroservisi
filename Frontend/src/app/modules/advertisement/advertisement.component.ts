@@ -95,7 +95,11 @@ export class AdvertisementComponent implements OnInit {
     // }
 
     console.log(this.advertisement);
-    this.advertisementService.save(this.advertisement).subscribe();
+    this.advertisementService.save(this.advertisement).subscribe(data => {
+      if (data === 3) {
+        alert('Vec imate 3 objavljene reklame!');
+      }
+    });
   }
 
 

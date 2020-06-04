@@ -44,4 +44,8 @@ export class EndUserService {
   public unblock(id: number) {
     return this.http.post<boolean>(`/server/authentication/unblock/${id}`, httpOptions);
   }
+
+  public test() {
+    return this.http.get<number>('/server/authentication/test', httpOptions);
+  }
 }

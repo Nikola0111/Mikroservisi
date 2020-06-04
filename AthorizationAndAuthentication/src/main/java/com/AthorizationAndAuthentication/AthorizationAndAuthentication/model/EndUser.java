@@ -24,6 +24,9 @@ public class EndUser {
     @Column(name = "blocked")
     private boolean blocked;
 
+    @Column(name = "numberOfAds")
+    private int numberOfAds;
+
     // @ManyToMany
     // @JoinTable(name = "enduser_rented", joinColumns = @JoinColumn(name = "endentity_id"),
     //         inverseJoinColumns = @JoinColumn(name = "ad_id"))
@@ -118,5 +121,11 @@ public class EndUser {
         this.id = id;
     }
 
+    public int getNumberOfAds() {
+        return this.numberOfAds;
+    }
 
+    public void setNumberOfAds(int numberOfAds) {
+        this.numberOfAds = numberOfAds;
+    }
 }

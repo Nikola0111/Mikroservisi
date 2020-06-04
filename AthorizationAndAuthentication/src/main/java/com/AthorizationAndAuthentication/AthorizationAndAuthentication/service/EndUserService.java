@@ -27,9 +27,9 @@ public class EndUserService {
 
    // @Autowired
    // private ShoppingCartService shoppingCartService;
-
+//////////////////////////////////////
     public void save(EndUser endUser) {
-
+        endUser.setNumberOfAds(0);
         endUserRepository.save(endUser);
       //  shoppingCartService.save(endUser.getId());
     }
@@ -141,4 +141,18 @@ public class EndUserService {
 
         return true;
     } 
+    //////////////////////////////
+    public int getNumberOfPostedAds(Long id){
+        EndUser endUser = endUserRepository.findOneById(id);
+
+        return endUser.getNumberOfAds();
+    }
+
+    @Transactional
+    public void increaseNumberOfAdsPosted(Long id){
+        EndUser endUser = endUserRepository.findOneById(id);
+
+        endUser.setNumberOfAds(endUser.getNumberOfAds() + 1);
+        endUserRepository.save(endUser);
+    }
 }
