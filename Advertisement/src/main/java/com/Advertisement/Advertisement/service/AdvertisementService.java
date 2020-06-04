@@ -307,7 +307,7 @@ public class AdvertisementService {
 		List<Advertisement> allAds = advertisementRepository.findAll();
 		List<Advertisement> filteredAds = new ArrayList<Advertisement>();
 		List<Advertisement> filteredAvailableAds = new ArrayList<Advertisement>();
-
+		List<AdvertisementCreationDTO> filteredAdsDTOs = new ArrayList<AdvertisementCreationDTO>();
 		// Long id = restTemplate
 		// .exchange("http://book/getAllBookings", HttpMethod.GET, null, new
 		// ParameterizedTypeReference<Long>() {
@@ -343,6 +343,11 @@ public class AdvertisementService {
 
 		LocalDateTime timeFrom = filterAdsDTO.getTimeFrom();
 		LocalDateTime timeTo = filterAdsDTO.getTimeTo();
+
+		if (timeFrom.isBefore(LocalDateTime.now().plusDays(2))) {
+			return filteredAdsDTOs;
+		}
+
 		for (Advertisement ad : filteredAds) {
 			taken = 0;
 			if (filterAdsDTO.getTimeFrom() == null || filterAdsDTO.getTimeTo() == null) {
@@ -395,7 +400,6 @@ public class AdvertisementService {
 
 		// KAD SE OTKOMENTARISE, VRACACE FILTEREDAVAILABLEADS
 
-		List<AdvertisementCreationDTO> filteredAdsDTOs = new ArrayList<AdvertisementCreationDTO>();
 		AdvertisementCreationDTO temp;
 		for (Advertisement ad : filteredAvailableAds) {
 			temp = new AdvertisementCreationDTO(ad);
