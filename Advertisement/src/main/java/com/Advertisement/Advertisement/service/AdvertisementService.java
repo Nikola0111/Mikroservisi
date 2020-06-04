@@ -344,7 +344,7 @@ public class AdvertisementService {
 		LocalDateTime timeFrom = filterAdsDTO.getTimeFrom();
 		LocalDateTime timeTo = filterAdsDTO.getTimeTo();
 
-		if (timeFrom.isBefore(LocalDateTime.now().plusDays(2))) {
+		if (timeFrom.isBefore(LocalDateTime.now().plusDays(2)) || timeTo.isBefore(LocalDateTime.now().plusDays(2))) {
 			return filteredAdsDTOs;
 		}
 
