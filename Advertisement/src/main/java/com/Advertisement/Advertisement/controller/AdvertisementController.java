@@ -58,8 +58,24 @@ public class AdvertisementController {
 				.exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
 				}).getBody();
 
-		advertisementService.save(advertisementCreationDTO, id);
+		EndUserNumberOfAdsDTO endUser = restTemplate.exchange("http://auth/getLoggedEndUser", HttpMethod.GET, null,
+				new ParameterizedTypeReference<EndUserNumberOfAdsDTO>() {
+				}).getBody();
 
+		if (endUser != null) {
+			if (endUser.getNumberOfAds() > 2) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+		}
+
+		Advertisement createdAd = advertisementService.save(advertisementCreationDTO, id);
+		if (endUser != null) {
+			if (createdAd != null) {
+				restTemplate.exchange("http://auth/increaseEndUsersNumberOfAds", HttpMethod.GET, null,
+						new ParameterizedTypeReference<Long>() {
+						}).getBody();
+			}
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -198,15 +214,15 @@ public class AdvertisementController {
 	}
 
 	@GetMapping(value = "/getAllByUser", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Advertisement>> getAllByUser() {
-        Long id = restTemplate
-                .exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
-                }).getBody();
+	public ResponseEntity<List<Advertisement>> getAllByUser() {
+		Long id = restTemplate
+				.exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+				}).getBody();
 
-        List<Advertisement> ads = advertisementService.getAllByUser(id);
+		List<Advertisement> ads = advertisementService.getAllByUser(id);
 
-        return new ResponseEntity<>(ads, HttpStatus.OK);
-    }
+		return new ResponseEntity<>(ads, HttpStatus.OK);
+	}
 
 	/*
 	 * 

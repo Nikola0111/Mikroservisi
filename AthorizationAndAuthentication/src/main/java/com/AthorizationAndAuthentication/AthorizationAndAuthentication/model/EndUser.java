@@ -24,36 +24,35 @@ public class EndUser {
     @Column(name = "blocked")
     private boolean blocked;
 
-    // @ManyToMany
-    // @JoinTable(name = "enduser_rented", joinColumns = @JoinColumn(name = "endentity_id"),
-    //         inverseJoinColumns = @JoinColumn(name = "ad_id"))
-    // private List<Advertisement> rentedCars;
+    @Column(name = "numberOfAds")
+    private int numberOfAds;
 
     @ManyToOne
     @JoinColumn
     private EntityUser user;
 
-   
-
-
-    public  EndUser() {
+    public EndUser() {
 
     }
 
     public EndUser(String name, String surname, LoginInfo loginInfo, String jmbg, String phoneNumber, UserType ut,
-                   int number_of_requests, boolean activity, boolean adminApproved, boolean blocked) {
+            int number_of_requests, boolean activity, boolean adminApproved, boolean blocked, int numberOfAds) {
         this.numberOfRequestsCanceled = number_of_requests;
         this.activity = activity;
         this.adminApproved = adminApproved;
         this.blocked = blocked;
+        this.numberOfAds = numberOfAds;
     }
 
-    // public EndUser(String name, String surname, LoginInfo loginInfo, String jmbg, String phoneNumber, UserType ut, int numberOfRequestsCanceled, boolean activity, boolean adminApproved, boolean blocked, List<Advertisement> rentedCars) {
-    //     this.numberOfRequestsCanceled = numberOfRequestsCanceled;
-    //     this.activity = activity;
-    //     this.adminApproved = adminApproved;
-    //     this.blocked = blocked;
-    //     this.rentedCars = rentedCars;
+    // public EndUser(String name, String surname, LoginInfo loginInfo, String jmbg,
+    // String phoneNumber, UserType ut, int numberOfRequestsCanceled, boolean
+    // activity, boolean adminApproved, boolean blocked, List<Advertisement>
+    // rentedCars) {
+    // this.numberOfRequestsCanceled = numberOfRequestsCanceled;
+    // this.activity = activity;
+    // this.adminApproved = adminApproved;
+    // this.blocked = blocked;
+    // this.rentedCars = rentedCars;
     // }
 
     @Override
@@ -93,14 +92,6 @@ public class EndUser {
         this.blocked = blocked;
     }
 
-    // public List<Advertisement> getRentedCars() {
-    //     return rentedCars;
-    // }
-
-    // public void setRentedCars(List<Advertisement> rentedCars) {
-    //     this.rentedCars = rentedCars;
-    // }
-
     public EntityUser getUser() {
         return this.user;
     }
@@ -109,13 +100,20 @@ public class EndUser {
         this.user = user;
     }
 
-    
     public Long getId() {
         return this.id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getNumberOfAds() {
+        return this.numberOfAds;
+    }
+
+    public void setNumberOfAds(int numberOfAds) {
+        this.numberOfAds = numberOfAds;
     }
 
 }

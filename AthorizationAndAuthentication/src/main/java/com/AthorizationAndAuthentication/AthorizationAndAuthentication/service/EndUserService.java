@@ -25,13 +25,13 @@ public class EndUserService {
     @Autowired
     private UserRepository userRepository;
 
-   // @Autowired
-   // private ShoppingCartService shoppingCartService;
+    // @Autowired
+    // private ShoppingCartService shoppingCartService;
 
     public void save(EndUser endUser) {
 
         endUserRepository.save(endUser);
-      //  shoppingCartService.save(endUser.getId());
+        // shoppingCartService.save(endUser.getId());
     }
 
     public LoginInfo findByEmail(String email) {
@@ -100,41 +100,32 @@ public class EndUserService {
         }
     }
 
-    public List<EndUser> getRegisteredUsers(){
+    public List<EndUser> getRegisteredUsers() {
         return endUserRepository.findAllByActivity(true);
     }
 
-  /*  @Transactional
-    public Integer deactivate(String jmbg){
-        return endUserRepository.deleteByJmbg(jmbg);
-    }
-
-    @Transactional
-    public Boolean block(String jmbg){
-        EndUser endUser = endUserRepository.findByJmbg(jmbg);
-
-        if(endUser == null){
-            return false;
-        }
-
-        endUser.setBlocked(true);
-
-        endUserRepository.save(endUser);
-
-        return true;
-    }
-
-    @Transactional
-    public Boolean unblock(String jmbg){
-        EndUser endUser = endUserRepository.findByJmbg(jmbg);
-
-        if(endUser == null){
-            return false;
-        }
-
-        endUser.setBlocked(false);
-        endUserRepository.save(endUser);
-
-        return true;
-    } */
+    /*
+     * @Transactional public Integer deactivate(String jmbg){ return
+     * endUserRepository.deleteByJmbg(jmbg); }
+     * 
+     * @Transactional public Boolean block(String jmbg){ EndUser endUser =
+     * endUserRepository.findByJmbg(jmbg);
+     * 
+     * if(endUser == null){ return false; }
+     * 
+     * endUser.setBlocked(true);
+     * 
+     * endUserRepository.save(endUser);
+     * 
+     * return true; }
+     * 
+     * @Transactional public Boolean unblock(String jmbg){ EndUser endUser =
+     * endUserRepository.findByJmbg(jmbg);
+     * 
+     * if(endUser == null){ return false; }
+     * 
+     * endUser.setBlocked(false); endUserRepository.save(endUser);
+     * 
+     * return true; }
+     */
 }

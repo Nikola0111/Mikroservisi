@@ -344,32 +344,16 @@ public class AdvertisementService {
 		LocalDateTime timeFrom = filterAdsDTO.getTimeFrom();
 		LocalDateTime timeTo = filterAdsDTO.getTimeTo();
 
-		if (timeFrom.isBefore(LocalDateTime.now().plusDays(2)) || timeTo.isBefore(LocalDateTime.now().plusDays(2))) {
-			return filteredAdsDTOs;
-		}
-
 		for (Advertisement ad : filteredAds) {
 			taken = 0;
 			if (filterAdsDTO.getTimeFrom() == null || filterAdsDTO.getTimeTo() == null) {
-				for (BookingDTO bookingDTO : bookedTimes) {
-
-					if (bookingDTO.getAdvertisementId() == ad.getId()) {
-						if (filterAdsDTO.getTimeFrom() != null) {
-							if (timeFrom.isAfter(bookingDTO.getTimeFrom())
-									&& timeFrom.isBefore(bookingDTO.getTimeTo())) {
-								taken = 1;
-							}
-						}
-
-						if (filterAdsDTO.getTimeTo() != null) {
-							if (timeTo.isAfter(bookingDTO.getTimeFrom()) && timeTo.isBefore(bookingDTO.getTimeTo())) {
-								taken = 1;
-							}
-						}
-					}
-				}
-
+				return filteredAdsDTOs;
 			} else {
+
+				if (timeFrom.isBefore(LocalDateTime.now().plusDays(2))
+						|| timeTo.isBefore(LocalDateTime.now().plusDays(2))) {
+					return filteredAdsDTOs;
+				}
 				for (BookingDTO bookingDTO : bookedTimes) {
 					System.out.println("OVO JE ID ============ " + bookingDTO.getAdvertisementId());
 					if (bookingDTO.getAdvertisementId() == ad.getId()) {
