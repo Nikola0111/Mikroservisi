@@ -108,6 +108,13 @@ public class UserService {
         return endUser.getNumberOfAds();
     }
 
+    public List<EntityUser> getAll(){
+
+
+
+        return userRepository.findAll();
+    }
+
     public Long increaseEndUsersNumberOfAds() {
         EndUser endUser = getLoggedEndUser();
         endUser.setNumberOfAds(endUser.getNumberOfAds() + 1);

@@ -5,6 +5,7 @@ import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
 import { BookingRequest } from 'src/app/model/requests/bookingRequest';
 import { User } from 'src/app/model/user';
 import { MessageDTO } from 'src/app/model/messageDTO';
+import { UserMessageDTO } from 'src/app/dtos/userMessageDTO';
 
 const httpOptions = {
     headers: new HttpHeaders({'Content-Type' : 'application/json'})
@@ -21,7 +22,7 @@ const httpOptions = {
     //
       public getAllUsers() {
       this.requestUrl = '/server/inbox/allUsers';
-      return this.http.get<Array<User>>(this.requestUrl, httpOptions);
+      return this.http.get<Array<UserMessageDTO>>(this.requestUrl, httpOptions);
       }
 
       

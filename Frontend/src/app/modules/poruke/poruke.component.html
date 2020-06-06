@@ -21,7 +21,7 @@
       
     Primalac: <select [(ngModel)] ="message.email" formControlName="email" style="width: 450px;"  id="orders">
         
-        <option *ngFor="let user of users;" [value]="user.loginInfo.email">
+        <option *ngFor="let user of dropdownUsers" [value]="user.loginInfo.email">
           {{user.loginInfo.email}}
         </option>
       </select>

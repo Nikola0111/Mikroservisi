@@ -129,6 +129,8 @@ export class HistoryComponent implements OnInit {
       )
     }
     else if(event.target.value==="PAID"){
+      console.log("USAO U PAID")
+      this.requestStatus=RequestStates.PAID;
       this.historyService.getSpecificGroupsForCart(this.requestStatus).subscribe(
        
         data=>{
