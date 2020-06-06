@@ -1,9 +1,9 @@
 --LOGININFO
 INSERT INTO LOGIN_INFO (ID, EMAIL, IS_ACCOUNT_NON_EXPIRED, IS_ACCOUNT_NON_LOCKED, IS_CREDENTIALS_NON_EXPIRED, IS_ENABLED,  PASSWORD, USERNAME) 
-VALUES (1, 'admin@gmail.com', true, true, true, true, 'Admin12345!', 'Admin');
+VALUES (1, 'admin@gmail.com', true, true, true, true, 'Susa$k0njina', 'admin');
 
 INSERT INTO LOGIN_INFO (ID, EMAIL, IS_ACCOUNT_NON_EXPIRED, IS_ACCOUNT_NON_LOCKED, IS_CREDENTIALS_NON_EXPIRED, IS_ENABLED,  PASSWORD, USERNAME) 
-VALUES (2, 'user@gmail.com', true, true, true, true, 'User12345!', 'UserUser');
+VALUES (2, 'user@gmail.com', true, true, true, true, 'Susa$k0njina', 'user');
 
 INSERT INTO LOGIN_INFO (ID, EMAIL, IS_ACCOUNT_NON_EXPIRED, IS_ACCOUNT_NON_LOCKED, IS_CREDENTIALS_NON_EXPIRED, IS_ENABLED,  PASSWORD, USERNAME) 
 VALUES (3, 'kajza@gmail.com', true, true, true, true, 'Susa$k0njina', 'kajza');
