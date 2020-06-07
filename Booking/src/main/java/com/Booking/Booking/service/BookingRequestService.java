@@ -307,7 +307,7 @@ public class BookingRequestService {
         LocalDateTime timeTo = toBook.getTimeTo();
 
         for (BookingRequest booking : bookedTimes) {
-            if (booking.getAdvertisementId() == toBook.getAdvertisementId()) {
+            if (booking.getAdvertisementId() == toBook.getAdvertisementId() && !booking.getGroupId().equals(null)) {
 
                 if (timeFrom.isAfter(booking.getTimeFrom()) && timeFrom.isBefore(booking.getTimeTo())) {
 
