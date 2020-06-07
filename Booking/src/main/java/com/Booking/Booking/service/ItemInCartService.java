@@ -30,7 +30,9 @@ public class ItemInCartService {
 
         for (ItemInCart item : all) {
             if (item.getUserId().equals(getLogedUserId())
-                    && item.getAdvertisementId().equals(itemInCartDTO.getAdvertisementId())) {
+                    && item.getAdvertisementId().equals(itemInCartDTO.getAdvertisementId())
+                    && item.getTimeFrom().equals(itemInCartDTO.getTimeFrom())
+                    && item.getTimeTo().equals(itemInCartDTO.getTimeTo())) {
                 return 0;
             }
         }
