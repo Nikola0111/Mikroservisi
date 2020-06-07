@@ -1,6 +1,6 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.controller;
 
-import com.AthorizationAndAuthentication.AthorizationAndAuthentication.dtos.UserDTO;
+
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.EndUser;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.EntityUser;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.LoginInfo;
@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.util.*;
 
 @RestController
 public class UserController {
@@ -116,6 +114,14 @@ public class UserController {
     public ResponseEntity<Long> increaseEndUsersNumberOfAds() {
 
         return new ResponseEntity<>(userService.increaseEndUsersNumberOfAds(), HttpStatus.OK);
+    }
+
+    @GetMapping(value= "/getAll")
+    public ResponseEntity<List<EntityUser>> getAllUsers(){
+
+
+        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
+
     }
 
     // @PostMapping(value = "/passwordChange", produces =

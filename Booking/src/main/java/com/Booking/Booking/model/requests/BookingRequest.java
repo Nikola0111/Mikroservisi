@@ -48,8 +48,8 @@ public class BookingRequest {
         this.timeTo = timeTo;
     }
 
-    public BookingRequest(Long userToId,Long advertisementId, LocalDateTime timeFrom, LocalDateTime timeTo,RequestStates stateOfRequest) {
-        this.userToId = userToId;
+    public BookingRequest(Long userForId,Long advertisementId, LocalDateTime timeFrom, LocalDateTime timeTo,RequestStates stateOfRequest) {
+        this.userForId = userForId;
         this.advertisementId=advertisementId;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
