@@ -308,29 +308,12 @@ public class AdvertisementService {
 		List<Advertisement> filteredAds = new ArrayList<Advertisement>();
 		List<Advertisement> filteredAvailableAds = new ArrayList<Advertisement>();
 		List<AdvertisementCreationDTO> filteredAdsDTOs = new ArrayList<AdvertisementCreationDTO>();
-		// Long id = restTemplate
-		// .exchange("http://book/getAllBookings", HttpMethod.GET, null, new
-		// ParameterizedTypeReference<Long>() {
-		// }).getBody();
-
-		// System.out.println("OVO JE OVO IZ BOOKA " + id);
 
 		List<BookingDTO> bookedTimes = restTemplate.exchange("http://book/getAllBookings", HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<BookingDTO>>() {
 				}).getBody();
 
-		for (BookingDTO bookDTO : bookedTimes) {
-			System.out.println("OVO SU BUKINZI =========================" + bookDTO.getTimeFrom() + "========"
-					+ bookDTO.getTimeTo());
-		}
-
-		System.out.println("OVO JE FUELTYPE ================ " + filterAdsDTO.getFuelType());
-
-		System.out.println("OVO JE FUELTYPE class ================ " + filterAdsDTO.getFuelType().getClass());
-
 		for (Advertisement ad : allAds) {
-			System.out.println("OVO JE OGLASOV FUELTYPE ================" + ad.getFuelType().getName().getClass());
-
 			if ((ad.getTransmissionType().getName().equals(filterAdsDTO.getTransmissionType())
 					|| filterAdsDTO.getTransmissionType() == null
 					|| filterAdsDTO.getTransmissionType().equals("Choose a gearshift type"))
@@ -348,8 +331,7 @@ public class AdvertisementService {
 					&& (ad.getTravelled() <= filterAdsDTO.getTravelledTo() || filterAdsDTO.getTravelledTo() == 0)
 					&& (ad.getPrice() >= filterAdsDTO.getPriceFrom() || filterAdsDTO.getPriceFrom() == 0)
 					&& (ad.getPrice() <= filterAdsDTO.getPriceTo() || filterAdsDTO.getPriceTo() == 0)) {
-				System.out.println(
-						"ISTI SU =======" + ad.getBrand().getName() + "=====I OVAJ=====" + filterAdsDTO.getBrand());
+
 				filteredAds.add(ad);
 			}
 
@@ -366,12 +348,11 @@ public class AdvertisementService {
 				return filteredAdsDTOs;
 			} else {
 
-				if (timeFrom.isBefore(LocalDateTime.now().plusDays(2))
-						|| timeTo.isBefore(LocalDateTime.now().plusDays(2))) {
+				if ((timeFrom.isBefore(LocalDateTime.now().plusDays(2))
+						|| timeTo.isBefore(LocalDateTime.now().plusDays(2))) || timeFrom.isAfter(timeTo)) {
 					return filteredAdsDTOs;
 				}
 				for (BookingDTO bookingDTO : bookedTimes) {
-					System.out.println("OVO JE ID ============ " + bookingDTO.getAdvertisementId());
 					if (bookingDTO.getAdvertisementId() == ad.getId()) {
 
 						if (timeFrom.isAfter(bookingDTO.getTimeFrom()) && timeFrom.isBefore(bookingDTO.getTimeTo())) {

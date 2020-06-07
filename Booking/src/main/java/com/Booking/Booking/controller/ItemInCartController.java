@@ -6,6 +6,7 @@ import java.util.List;
 import com.Booking.Booking.dtos.ItemInCartDTO;
 import com.Booking.Booking.dtos.ItemInCartFrontDTO;
 import com.Booking.Booking.model.ItemInCart;
+import com.Booking.Booking.repository.ItemInCartRepository;
 import com.Booking.Booking.service.ItemInCartService;
 import com.Booking.Booking.service.ShoppingCartService;
 
@@ -20,35 +21,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-//@RequestMapping(value = "itemInCart")
+// @RequestMapping(value = "itemInCart")
 public class ItemInCartController {
 
-
-    @Autowired
+	@Autowired
 	private ItemInCartService itemInCartService;
-    
 
+	@Autowired
+	private ItemInCartRepository itemInCartRepository;
 
-    
-
-
-    @PostMapping(value="/addItem", consumes= MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/addItem", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Long> addAdvToCart(@RequestBody ItemInCartDTO itemInCartDTO) {
-
 		System.out.println("POGODIO");
-		itemInCartService.save(itemInCartDTO);
-
-		return new ResponseEntity<>(HttpStatus.OK);
+		int indicator = itemInCartService.save(itemInCartDTO);
+		if (indicator == 1) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
 	}
-	
-	
-    @PostMapping(value="/remove", consumes= MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@PostMapping(value = "/remove", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ItemInCartFrontDTO>> removeFromCart(@RequestBody ItemInCart itemInCart) {
-		
-		
-		List<ItemInCartFrontDTO> items=itemInCartService.remove(itemInCart);
 
-		return new ResponseEntity<>(items,HttpStatus.OK);
+		List<ItemInCartFrontDTO> items = itemInCartService.remove(itemInCart);
+
+		return new ResponseEntity<>(items, HttpStatus.OK);
 	}
-	
+
 }

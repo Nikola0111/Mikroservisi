@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ItemInCartService {
@@ -25,48 +25,51 @@ public class ItemInCartService {
     @Autowired
     RestTemplate restTemplate;
 
-    public void save(ItemInCartDTO itemInCartDTO) {
+    public int save(ItemInCartDTO itemInCartDTO) {
+        List<ItemInCart> all = itemInCartRepository.findAll();
 
-        ItemInCart item = new ItemInCart(getLogedUserId(),itemInCartDTO.getAdvertisementPostedById(),itemInCartDTO.getAdvertisementId(), itemInCartDTO.getTimeFrom(),
-                itemInCartDTO.getTimeTo());
+        for (ItemInCart item : all) {
+            if (item.getUserId().equals(getLogedUserId())
+                    && item.getAdvertisementId().equals(itemInCartDTO.getAdvertisementId())) {
+                return 0;
+            }
+        }
+
+        ItemInCart item = new ItemInCart(getLogedUserId(), itemInCartDTO.getAdvertisementPostedById(),
+                itemInCartDTO.getAdvertisementId(), itemInCartDTO.getTimeFrom(), itemInCartDTO.getTimeTo());
         itemInCartRepository.save(item);
 
-
-        System.out.println("Item in cart id je="+item.getId());
-
         shoppingCartService.addAItemInCart(item.getId());
+
+        return 1;
 
     }
 
     public List<ItemInCartFrontDTO> remove(ItemInCart itemInCart) {
 
-        //itemInCartRepository.delete(itemInCart);
+        // itemInCartRepository.delete(itemInCart);
         shoppingCartService.removeItemInCart(itemInCart.getId());
 
         return shoppingCartService.fotCart();
 
     }
 
-    public void removeAll(){
+    public void removeAll() {
 
-        //itemInCartRepository.deleteAll();
+        // itemInCartRepository.deleteAll();
         shoppingCartService.removeAll();
 
-        
     }
 
- 
-public Long getLogedUserId(){
-    
+    public Long getLogedUserId() {
 
-    Long id = restTemplate.exchange("http://auth/getUserId", HttpMethod.GET, null, 
-    new ParameterizedTypeReference<Long>() {} ).getBody();
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+                }).getBody();
 
-    System.out.println("Nasao je id="+id);
+        System.out.println("Nasao je id=" + id);
 
-    return id;
-}
-
-
+        return id;
+    }
 
 }
