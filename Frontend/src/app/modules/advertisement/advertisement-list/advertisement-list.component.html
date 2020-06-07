@@ -7,15 +7,15 @@
     <ul>
 
       <li>
-        <select [(ngModel)]="this.brand" formControlName="brand" name="fuelType"
-          class="field-style field-full align-none" placeholder="Fuel Type">
+        <select [(ngModel)]="this.brand" formControlName="brand" name="brand" class="field-style field-full align-none"
+          placeholder="Brand">
           <option selected="selected">Choose a car brand</option>
           <option *ngFor="let carBrand of carBrands">{{carBrand.name}}</option>
         </select>
       </li>
       <li>
-        <select [(ngModel)]="this.model" formControlName="model" name="fuelType"
-          class="field-style field-full align-none" placeholder="Fuel Type">
+        <select [(ngModel)]="this.model" formControlName="model" name="model" class="field-style field-full align-none"
+          placeholder="Model">
           <option selected="selected">Choose a car model</option>
           <option *ngFor="let model of carModels">{{model.name}}</option>
         </select>
@@ -28,7 +28,7 @@
         </select>
       </li>
       <li>
-        <select [(ngModel)]="this.transType" formControlName="transType" name="transType"
+        <select [(ngModel)]="this.transmissionType" formControlName="transmissionType" name="transmissionType"
           class="field-style field-full align-none" placeholder="Transmission Type">
           <option selected="selected">Choose a gearshift type</option>
           <option *ngFor="let gearshift of carGearshifts">{{gearshift.name}}</option>

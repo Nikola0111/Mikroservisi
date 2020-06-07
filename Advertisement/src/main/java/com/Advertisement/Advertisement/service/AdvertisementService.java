@@ -324,16 +324,32 @@ public class AdvertisementService {
 					+ bookDTO.getTimeTo());
 		}
 
+		System.out.println("OVO JE FUELTYPE ================ " + filterAdsDTO.getFuelType());
+
+		System.out.println("OVO JE FUELTYPE class ================ " + filterAdsDTO.getFuelType().getClass());
+
 		for (Advertisement ad : allAds) {
-			if ((ad.getFuelType().getName() == filterAdsDTO.getFuelType() || filterAdsDTO.getFuelType() == null)
-					&& (ad.getTransmissionType().getName() == filterAdsDTO.getTransmissionType()
-							|| filterAdsDTO.getTransmissionType() == null)
-					&& (ad.getCarClass().getName() == filterAdsDTO.getCarClass() || filterAdsDTO.getCarClass() == null)
+			System.out.println("OVO JE OGLASOV FUELTYPE ================" + ad.getFuelType().getName().getClass());
+
+			if ((ad.getTransmissionType().getName().equals(filterAdsDTO.getTransmissionType())
+					|| filterAdsDTO.getTransmissionType() == null
+					|| filterAdsDTO.getTransmissionType().equals("Choose a gearshift type"))
+					&& (ad.getFuelType().getName().equals(filterAdsDTO.getFuelType())
+							|| filterAdsDTO.getFuelType() == null
+							|| filterAdsDTO.getFuelType().equals("Choose a fuel type"))
+					&& (ad.getCarClass().getName().equals(filterAdsDTO.getCarClass())
+							|| filterAdsDTO.getCarClass() == null
+							|| filterAdsDTO.getCarClass().equals("Choose a car class"))
+					&& (ad.getBrand().getName().equals(filterAdsDTO.getBrand()) || filterAdsDTO.getBrand() == null
+							|| filterAdsDTO.getBrand().equals("Choose a car brand"))
+					&& (ad.getModel().getName().equals(filterAdsDTO.getModel()) || filterAdsDTO.getModel() == null
+							|| filterAdsDTO.getModel().equals("Choose a car model"))
 					&& (ad.getTravelled() >= filterAdsDTO.getTravelledFrom() || filterAdsDTO.getTravelledFrom() == 0)
 					&& (ad.getTravelled() <= filterAdsDTO.getTravelledTo() || filterAdsDTO.getTravelledTo() == 0)
-					&& (ad.getFuelType().getName() == filterAdsDTO.getFuelType() || filterAdsDTO.getFuelType() == null)
 					&& (ad.getPrice() >= filterAdsDTO.getPriceFrom() || filterAdsDTO.getPriceFrom() == 0)
 					&& (ad.getPrice() <= filterAdsDTO.getPriceTo() || filterAdsDTO.getPriceTo() == 0)) {
+				System.out.println(
+						"ISTI SU =======" + ad.getBrand().getName() + "=====I OVAJ=====" + filterAdsDTO.getBrand());
 				filteredAds.add(ad);
 			}
 

@@ -97,6 +97,8 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
   ngOnInit() {
 
     this.filterForm = this.formBuilder.group({
+      brand: [''],
+      model: [''],
       fuelType: [''],
       transmissionType: [''],
       carClass: [''],

@@ -6,10 +6,10 @@ import javax.persistence.*;
 import com.Advertisement.Advertisement.model.*;
 
 @Entity
-public class Advertisement  {
+public class Advertisement {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -30,7 +30,7 @@ public class Advertisement  {
     private CarClass carClass;
 
     private int travelled;
-  
+
     private int carSeats;
 
     private double price;
@@ -40,17 +40,18 @@ public class Advertisement  {
     private double priceWithDiscount;
 
     private ArrayList<String> pictures;
-    
+
     private Long postedByID;
 
     private Double grade;
 
-   public Advertisement(){
+    public Advertisement() {
 
-   }
+    }
 
-
-    public Advertisement(String name, Model model, Brand brand, FuelType fuelType, TransmissionType transmissionType, CarClass carClass, int travelled, int carSeats, double price, Long postedByID, double discount, ArrayList<String> pictures, Double grade) {
+    public Advertisement(String name, Model model, Brand brand, FuelType fuelType, TransmissionType transmissionType,
+            CarClass carClass, int travelled, int carSeats, double price, Long postedByID, double discount,
+            ArrayList<String> pictures, Double grade) {
         this.name = name;
         this.model = model;
         this.brand = brand;
@@ -63,15 +64,13 @@ public class Advertisement  {
         this.postedByID = postedByID;
         this.discount = discount;
         this.priceWithDiscount = price - (this.price * this.discount / 100);
-        this.pictures=pictures;
+        this.pictures = pictures;
         this.grade = grade;
     }
 
-
-
     public Brand getBrand() {
-		return this.brand;
-	}
+        return this.brand;
+    }
 
     public void setBrand(Brand brand) {
         this.brand = brand;
@@ -86,7 +85,7 @@ public class Advertisement  {
     }
 
     public FuelType getFuelType() {
-        return fuelType;
+        return this.fuelType;
     }
 
     public void setFuelType(FuelType fuelType) {
@@ -94,7 +93,7 @@ public class Advertisement  {
     }
 
     public TransmissionType getTransmissionType() {
-        return transmissionType;
+        return this.transmissionType;
     }
 
     public void setTransmissionType(TransmissionType transmissionType) {
@@ -102,7 +101,7 @@ public class Advertisement  {
     }
 
     public CarClass getCarClass() {
-        return carClass;
+        return this.carClass;
     }
 
     public void setCarClass(CarClass carClass) {
@@ -125,7 +124,6 @@ public class Advertisement  {
         this.carSeats = carSeats;
     }
 
-
     public double getPrice() {
         return this.price;
     }
@@ -135,22 +133,21 @@ public class Advertisement  {
     }
 
     public Long getId() {
-		return this.id;
-	}
+        return this.id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
-    
+
     public Long getPostedByID() {
         return this.postedByID;
     }
@@ -183,7 +180,6 @@ public class Advertisement  {
         this.pictures = pictures;
     }
 
-
     public Double getGrade() {
         return grade;
     }
@@ -192,22 +188,11 @@ public class Advertisement  {
         this.grade = grade;
     }
 
-
     @Override
     public String toString() {
-        return "Advertisement{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", model='" + model + '\'' +
-                ", brand='" + brand + '\'' +
-                ", fuelType='" + fuelType + '\'' +
-                ", transType='" + transmissionType + '\'' +
-                ", carClass='" + carClass + '\'' +
-                ", travelled=" + travelled +
-                ", carSeats=" + carSeats +
-                ", price=" + price +
-                ", postedBy=" + postedByID +
-                ", grade=" + grade +
-                '}';
+        return "Advertisement{" + "id=" + id + ", name='" + name + '\'' + ", model='" + model + '\'' + ", brand='"
+                + brand + '\'' + ", fuelType='" + fuelType + '\'' + ", transType='" + transmissionType + '\''
+                + ", carClass='" + carClass + '\'' + ", travelled=" + travelled + ", carSeats=" + carSeats + ", price="
+                + price + ", postedBy=" + postedByID + ", grade=" + grade + '}';
     }
 }
