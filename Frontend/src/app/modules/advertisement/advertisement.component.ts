@@ -24,7 +24,6 @@ export class AdvertisementComponent implements OnInit {
   transType: string;
   carClass: string;
   brand: string;
-
   model: string;
   carDetails: CarDetails[];
   slike: String[];
@@ -36,34 +35,33 @@ export class AdvertisementComponent implements OnInit {
   carGearshifts: CarDetails[];
   selectedFiles: File[];
 
-  constructor(private formBuilder: FormBuilder,
-              private advertisementService: AdvertisementService, private carDetailsService: CarDetailsService) {
-                this.advertisement = new Advertisement();
-                this.carDetailsService.getAllDetails().subscribe(data => {
-                  this.carDetails = data;
+  constructor(private formBuilder: FormBuilder, private advertisementService: AdvertisementService, private carDetailsService: CarDetailsService) {
+    this.advertisement = new Advertisement();
+    this.advertisementService.getAllDetails().subscribe(data => {
+      this.carDetails = data;
+      console.log(this.carDetails);
+      this.carClasses = this.carDetails.filter(item => {
+        console.log(item.type.toLowerCase());
+        return item.type.toLowerCase() === 'carclass';
+      });
 
-                  this.carClasses = this.carDetails.filter(item => {
-                    console.log(item.type.toLowerCase());
-                    return item.type.toLowerCase() === 'carclass';
-                  });
+      this.carFuels = this.carDetails.filter(item => {
+        return item.type.toLowerCase() === 'fueltype';
+      });
 
-                  this.carFuels = this.carDetails.filter(item => {
-                    return item.type.toLowerCase() === 'fuel';
-                  });
+      this.carModels = this.carDetails.filter(item => {
+        return item.type.toLowerCase() === 'carmodel';
+      });
 
-                  this.carModels = this.carDetails.filter(item => {
-                    return item.type.toLowerCase() === 'carmodel';
-                  });
+      this.carBrands = this.carDetails.filter(item => {
+        return item.type.toLowerCase() === 'brand';
+      });
 
-                  this.carBrands = this.carDetails.filter(item => {
-                    return item.type.toLowerCase() === 'brand';
-                  });
-
-                  this.carGearshifts = this.carDetails.filter(item => {
-                    return item.type.toLowerCase() === 'gearshift';
-                  });
-                });
-               }
+      this.carGearshifts = this.carDetails.filter(item => {
+        return item.type.toLowerCase() === 'gearshift';
+      });
+    });
+  }
 
   ngOnInit(): void {
     this.forma = this.formBuilder.group({
@@ -73,32 +71,33 @@ export class AdvertisementComponent implements OnInit {
       fuelType: [''],
       transType: [''],
       carClass: [''],
+
       travelled: [''],
       price: [''],
+      discount:[''],
       carSeats: ['']
     });
   }
 
   onSubmit() {
-
-
-
     this.advertisement.fuelType = this.fuelType;
     this.advertisement.carClass = this.carClass;
     this.advertisement.transType = this.transType;
     this.advertisement.brand = this.brand;
     this.advertisement.model = this.model;
 
-    this.advertisement.pictures =this.slike;
-
+    // this.advertisement.pictures = this.slike;
     // tslint:disable-next-line:prefer-for-of
-    for (let i=0; i<this.selectedFiles.length;i++){
-      this.advertisementService.upload(this.selectedFiles[i]).subscribe();
-    }
+    // if(this.selectedFiles.length !== undefined) {
+    //   for (let i = 0; i < this.selectedFiles.length; i++) {
+    //     this.advertisementService.upload(this.selectedFiles[i]).subscribe();
+    //   }
+    // }
 
     console.log(this.advertisement);
     this.advertisementService.save(this.advertisement).subscribe();
   }
+
 
   onFileSelected(event) {
     console.log(event);

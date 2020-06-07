@@ -3,6 +3,7 @@ import { User } from 'src/app/model/user';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import { PorukeService } from './poruke.component.service';
 import {MessageDTO} from 'src/app/model/messageDTO';
+import { UserMessageDTO } from 'src/app/dtos/userMessageDTO';
 
 
 @Component({
@@ -11,7 +12,8 @@ import {MessageDTO} from 'src/app/model/messageDTO';
   styleUrls: ['./poruke.component.css']
 })
 export class PorukeComponent implements OnInit {
-  users: User[];
+  users: UserMessageDTO[];
+  dropdownUsers:UserMessageDTO[];
   message:MessageDTO = new MessageDTO();
   email: string;
   text: string;
@@ -27,6 +29,16 @@ export class PorukeComponent implements OnInit {
       
       data=>{
         this.users=data;
+        console.log(data);
+      }
+
+    )
+
+    this.porukeService.getAllUsersForDropdown().subscribe(
+
+      data=>{
+        this.dropdownUsers=data;
+
       }
 
     )

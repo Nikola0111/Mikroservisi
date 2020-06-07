@@ -53,14 +53,17 @@
           </tr>
         </div>
   
+        
         <div *ngFor="let request of requests">
-          <tr *ngIf="group == request.groupId " >
+         
+          <tr *ngIf="group == request.groupId"  >
             <td>
               {{ request.advertisement.name }}
             </td>
   
+            
             <td>
-              {{ request.advertisement.model }}
+              {{request.advertisement.model }}
             </td>
   
             <td>
@@ -92,6 +95,7 @@
             </td>
           </tr>
         </div>
+        
         <div>
           <button *ngIf="checker==0"
         style="background-color: red; color: white; height: 40px; width: 100px;"

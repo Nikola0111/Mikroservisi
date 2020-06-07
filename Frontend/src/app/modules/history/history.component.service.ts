@@ -4,6 +4,7 @@ import { Advertisement } from 'src/app/model/advertisement';
 import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
 import { BookingRequest } from 'src/app/model/requests/bookingRequest';
 import { RequestStates } from 'src/app/enums/requestStates';
+import { BookingRequestDTO } from 'src/app/dtos/bookingRequestDTO';
 
 const httpOptions = {
     headers: new HttpHeaders({'Content-Type' : 'application/json'})
@@ -22,7 +23,7 @@ const httpOptions = {
 
       public   getAllSpecificRequests(state: RequestStates) {
         this.requestUrl = '/server/booking/getAllSpecificForBuyer';
-        return this.http.post<Array<BookingRequest>>(this.requestUrl, state ,httpOptions);
+        return this.http.post<Array<BookingRequestDTO>>(this.requestUrl, state ,httpOptions);
         }
     
           

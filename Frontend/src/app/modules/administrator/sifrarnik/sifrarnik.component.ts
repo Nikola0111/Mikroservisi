@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CarDetails} from '../../../model/car-details';
 import {Data} from '../../../enums/data.enum';
 import {CarDetailsService} from '../../../services/CarDetailsService/car-details.service';
+import {AdvertisementService} from '../../../services/advertisement.service/advertisement.service';
 
 @Component({
   selector: 'app-sifrarnik',
@@ -13,8 +14,8 @@ export class SifrarnikComponent implements OnInit {
   helper: CarDetails[];
   typeOfData: string;
   newCarDetail: CarDetails = new CarDetails();
-  constructor(private carDetailsService: CarDetailsService) {
-    this.carDetailsService.getAllDetails().subscribe(data => {
+  constructor(private advertisementService: AdvertisementService) {
+    this.advertisementService.getAllDetails().subscribe(data => {
       this.datasource = data;
       this.helper = data;
       console.log(this.datasource);
@@ -48,9 +49,9 @@ export class SifrarnikComponent implements OnInit {
 
   delete(object: CarDetails){
     console.log(object);
-    this.carDetailsService.delete(object.code).subscribe(data => {
+    this.advertisementService.deleteCarDetail(object).subscribe(data => {
       this.datasource.splice(this.datasource.indexOf(object));
-      this.carDetailsService.getAllDetails().subscribe(newData =>
+      this.advertisementService.getAllDetails().subscribe(newData =>
         this.helper = newData);
     });
   }
@@ -61,7 +62,7 @@ export class SifrarnikComponent implements OnInit {
     } else if(this.newCarDetail.type === 'Car Class'){
       this.newCarDetail.type = 'CarClass';
     }
-    this.carDetailsService.save(this.newCarDetail).subscribe(data => {
+    this.advertisementService.saveCarDetail(this.newCarDetail).subscribe(data => {
       this.datasource.push(this.newCarDetail);
       this.newCarDetail = new CarDetails();
     },

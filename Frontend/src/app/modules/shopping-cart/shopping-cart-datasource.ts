@@ -6,16 +6,20 @@ import { Observable, of as observableOf, merge } from 'rxjs';
 import { Advertisement } from 'src/app/model/advertisement';
 
 import { ItemInCart } from 'src/app/model/itemInCart';
+import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
+import { ItemInCartFront } from 'src/app/model/itemInCartFront';
 
 
 // TODO: Replace this with your own data model type
 export interface ShoppingCartItem  {
-id:number;
- advertisement:Advertisement;
- timeFrom: Date;
- timeTo: Date;
- owner:boolean;
- together:boolean;
+  id: number;
+  advertisementCreationDTO: AdvertisementInCart;
+  timeFrom: Date;
+  timeTo: Date;
+  owner: boolean;
+  together:boolean;
+
+  
 
 }
 
@@ -29,11 +33,11 @@ const EXAMPLE_DATA: ShoppingCartItem [] = [
  * (including sorting, pagination, and filtering).
  */
 export class ShoppingCartDataSource extends DataSource<ShoppingCartItem > {
-  data: ItemInCart[];
+  data: ItemInCartFront[];
   paginator: MatPaginator;
   sort: MatSort;
 
-  constructor(items: Array<ItemInCart>) {
+  constructor(items: Array<ItemInCartFront>) {
     super();
     this.data = items;
   }

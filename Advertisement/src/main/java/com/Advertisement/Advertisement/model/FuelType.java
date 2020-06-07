@@ -14,6 +14,16 @@ public class FuelType {
 
     private String name;
 
+    private String code;
+
+    public String getCode() {
+        return this.code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public Long getID(){
         return this.id;
     }
