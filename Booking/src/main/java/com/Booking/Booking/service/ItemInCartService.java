@@ -31,15 +31,19 @@ public class ItemInCartService {
         for (ItemInCart item : all) {
             if (item.getUserId().equals(getLogedUserId())
                     && item.getAdvertisementId().equals(itemInCartDTO.getAdvertisementId())
-                    && (item.getTimeFrom().isAfter(itemInCartDTO.getTimeFrom())
-                            && item.getTimeFrom().isBefore(itemInCartDTO.getTimeTo())
-                            || item.getTimeTo().isAfter(itemInCartDTO.getTimeFrom())
-                                    && item.getTimeTo().isBefore(itemInCartDTO.getTimeTo())
-                            || itemInCartDTO.getTimeFrom().isAfter(item.getTimeFrom())
-                                    && itemInCartDTO.getTimeFrom().isBefore(item.getTimeTo())
-                            || itemInCartDTO.getTimeTo().isAfter(item.getTimeFrom())
+                    && ((item.getTimeFrom().isAfter(itemInCartDTO.getTimeFrom())
+                            && item.getTimeFrom().isBefore(itemInCartDTO.getTimeTo()))
+                            || (item.getTimeTo().isAfter(itemInCartDTO.getTimeFrom())
+                                    && item.getTimeTo().isBefore(itemInCartDTO.getTimeTo()))
+                            || (itemInCartDTO.getTimeFrom().isAfter(item.getTimeFrom())
+                                    && itemInCartDTO.getTimeFrom().isBefore(item.getTimeTo()))
+                            || (itemInCartDTO.getTimeTo().isAfter(item.getTimeFrom())
                                     && itemInCartDTO.getTimeTo().isBefore(item.getTimeTo()))
-                    && item.getTimeTo().equals(itemInCartDTO.getTimeTo())) {
+                            || (item.getTimeFrom().equals(itemInCartDTO.getTimeFrom())
+                                    || item.getTimeFrom().equals(itemInCartDTO.getTimeTo())
+                                    || item.getTimeTo().equals(itemInCartDTO.getTimeFrom())
+                                    || item.getTimeTo().equals(itemInCartDTO.getTimeTo()))
+                                    && item.getTimeTo().equals(itemInCartDTO.getTimeTo()))) {
                 return 0;
             }
         }
