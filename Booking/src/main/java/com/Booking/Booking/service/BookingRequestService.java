@@ -147,17 +147,45 @@ public class BookingRequestService {
 
     }
 
-    public List<BookingRequest> getAllSpecificForAgent(RequestStates state) {
+    public List<BookingRequestFrontDTO> getAllSpecificForAgent(RequestStates state) {
         List<BookingRequest> needed = new ArrayList<BookingRequest>();
+        List<BookingRequestFrontDTO> forFront = new ArrayList<BookingRequestFrontDTO>();
+
+        List<AdvertisementCreationDTO> advertisements = restTemplate
+                .exchange("http://advert/getAllAdvertisementsForCart", HttpMethod.GET, null,
+                        new ParameterizedTypeReference<List<AdvertisementCreationDTO>>() {
+                        })
+                .getBody();
 
         for (BookingRequest bookingRequest : bookingRequestRepository.findByUserForId(getLogedUserId())) {
+
+            System.out.println("STATE=" + state);
+            System.out.println("bookingState=" + bookingRequest.getStateOfRequest());
 
             if (bookingRequest.getStateOfRequest().equals(state)) {
                 needed.add(bookingRequest);
             }
 
         }
-        return needed;
+
+        for (AdvertisementCreationDTO advertisementCreationDTO : advertisements) {
+
+            for (BookingRequest book : needed) {
+
+                if (book.getAdvertisementId().equals(advertisementCreationDTO.getId())) {
+
+                    BookingRequestFrontDTO novi = new BookingRequestFrontDTO(book.getId(), book.getUserForId(),
+                            book.getUserToId(), book.getGroupId(), book.getStateOfRequest(), advertisementCreationDTO,
+                            book.isTogether(), book.getTimeFrom(), book.getTimeTo());
+
+                    forFront.add(novi);
+                }
+
+            }
+
+        }
+
+        return forFront;
     }
 
     public List<Long> getSpecificGroupsForAgent(RequestStates state) {
@@ -174,6 +202,8 @@ public class BookingRequestService {
                 }
             }
         }
+
+        
 
         return group;
 

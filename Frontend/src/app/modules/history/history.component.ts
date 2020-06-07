@@ -4,6 +4,7 @@ import { BookingRequest } from 'src/app/model/requests/bookingRequest';
 import {RequestStates} from 'src/app/enums/requestStates';
 import { AdvertisementService } from 'src/app/services/advertisement.service/advertisement.service';
 import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
+import { BookingRequestDTO } from 'src/app/dtos/bookingRequestDTO';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
 export class HistoryComponent implements OnInit {
 
   groups: number[];
-  requests: BookingRequest[];
+  requests: BookingRequestDTO[];
   requestStatus: RequestStates;
   checker: number;
   status:string;

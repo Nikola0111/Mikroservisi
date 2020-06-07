@@ -59,9 +59,9 @@ public class BookingRequestController {
     }
 
     @PostMapping(value = "/getAllForAgent")
-    public ResponseEntity<List<BookingRequest>> getAllSpecificForAgent(@RequestBody RequestStates state) {
+    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForAgent(@RequestBody RequestStates state) {
 
-        List<BookingRequest> requests = bookingRequestService.getAllSpecificForAgent(state);
+        List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForAgent(state);
 
         System.out.println("pogodio je kontroler, broj oglasa vraca==" + requests.size());
 
