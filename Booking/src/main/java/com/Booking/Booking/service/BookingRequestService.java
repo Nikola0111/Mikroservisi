@@ -203,8 +203,6 @@ public class BookingRequestService {
             }
         }
 
-        
-
         return group;
 
     }
@@ -312,28 +310,39 @@ public class BookingRequestService {
             if (booking.getAdvertisementId() == toBook.getAdvertisementId()) {
 
                 if (timeFrom.isAfter(booking.getTimeFrom()) && timeFrom.isBefore(booking.getTimeTo())) {
-                    booking.setStateOfRequest(RequestStates.CANCELED);
-                    bookingRequestRepository.save(booking);
+
+                    cancelInSameGroup(bookedTimes, booking.getGroupId());
+
                 }
 
                 if (timeTo.isAfter(booking.getTimeFrom()) && timeTo.isBefore(booking.getTimeTo())) {
-                    booking.setStateOfRequest(RequestStates.CANCELED);
-                    bookingRequestRepository.save(booking);
+                    cancelInSameGroup(bookedTimes, booking.getGroupId());
                 }
 
                 if (booking.getTimeFrom().isAfter(timeFrom) && booking.getTimeFrom().isBefore(timeTo)) {
-                    booking.setStateOfRequest(RequestStates.CANCELED);
-                    bookingRequestRepository.save(booking);
+                    cancelInSameGroup(bookedTimes, booking.getGroupId());
                 }
 
                 if (booking.getTimeTo().isAfter(timeFrom) && booking.getTimeTo().isBefore(timeTo)) {
-                    booking.setStateOfRequest(RequestStates.CANCELED);
-                    bookingRequestRepository.save(booking);
+                    cancelInSameGroup(bookedTimes, booking.getGroupId());
                 }
             }
         }
 
         bookingRequestRepository.save(toBook);
+
+    }
+
+    private void cancelInSameGroup(List<BookingRequest> svi, Long groupId) {
+
+        for (BookingRequest booked : svi) {
+
+            if (booked.getGroupId().equals(groupId)) {
+                booked.setStateOfRequest(RequestStates.CANCELED);
+                bookingRequestRepository.save(booked);
+
+            }
+        }
 
     }
 
