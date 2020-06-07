@@ -10,8 +10,7 @@ import {SessionService} from '../../services/SessionService/session.service';
 
 import { ItemInCart } from 'src/app/model/itemInCart';
 import { AdvertisementService } from 'src/app/services/advertisement.service/advertisement.service';
-import { ItemInCartFront } from 'src/app/model/itemInCartFront';
-
+import {ItemInCartFront} from '../../model/ItemInCartFront'
 
 @Component({
   selector: 'app-shopping-cart',
@@ -112,7 +111,7 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
     this.shopingCartService.sentRequests(this.vracamNaBek).subscribe(
       data => {
 
-        //this.dataSource.data = data;
+        this.dataSource.data = data;
         this.table.dataSource = this.dataSource;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -124,14 +123,14 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
   }
 
 
-/*
+
   remove(itemInCart: ItemInCart){
     console.log("pogodi ga");
     this.dataSource = new ShoppingCartDataSource(null);
     this.shopingCartService.removeFromCart(itemInCart).subscribe(
       data => {
 
-      //  this.dataSource.data = data;
+        this.dataSource.data = data;
         this.table.dataSource = this.dataSource;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -143,7 +142,7 @@ export class ShoppingCartComponent implements AfterViewInit, OnInit {
 
 
   }
-*/
+
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;

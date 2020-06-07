@@ -30,14 +30,14 @@ const httpOptions = {
     
       public sentRequests(itemsInCart :ItemInCart[]){
         const body = JSON.stringify(itemsInCart);
-        return this.http.post<ItemInCart[]>('/server/booking/save', body, httpOptions);
+        return this.http.post<ItemInCartFront[]>('/server/booking/save', body, httpOptions);
         
       }
 
       public removeFromCart(itemInCart : ItemInCart){
 
         const body=JSON.stringify(itemInCart);
-        return this.http.post<ItemInCart []>('/server/itemInCart/remove',body,httpOptions);
+        return this.http.post<ItemInCartFront[]>('/server/booking/remove',body,httpOptions);
 
       }
 
