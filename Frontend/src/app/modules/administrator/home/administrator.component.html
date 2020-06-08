@@ -33,7 +33,7 @@
     <app-zahtevi-registracija *ngIf="sessionService.requests"></app-zahtevi-registracija>
     <app-agent-register style = "float:right; margin-right: 60%;width: 150px" *ngIf="sessionService.agentreg"></app-agent-register>
     <app-sifrarnik *ngIf="sessionService.codebook"></app-sifrarnik>
-    <app-user-managment style="float:right; margin-right: 30%" *ngIf="sessionService.manageUsers" ></app-user-managment>
+    <app-user-managment *ngIf="sessionService.manageUsers" ></app-user-managment>
     <div *ngIf="sessionService.adminhome" class = "content">
       Nesto
     </div>
