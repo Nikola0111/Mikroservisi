@@ -104,7 +104,7 @@ public class BookingRequestService {
                     lastGroupId++;
                     bookingRequestRepository.save(new BookingRequest(ItemInCartDTO2.getAdvertisementPostedById(),
                             getLogedUserId(), lastGroupId, RequestStates.PENDING, ItemInCartDTO2.getAdvertisementId(),
-                            ItemInCartDTO2.isTogether(), ItemInCartDTO2.getTimeFrom(), ItemInCartDTO2.getTimeTo()));
+                            ItemInCartDTO2.isTogether(), ItemInCartDTO2.getTimeFrom(), ItemInCartDTO2.getTimeTo(),null));
 
                 }
                 seprate.clear();
@@ -121,7 +121,7 @@ public class BookingRequestService {
 
                     bookingRequestRepository.save(new BookingRequest(ItemInCartDTO.getAdvertisementPostedById(),
                             getLogedUserId(), lastGroupId, RequestStates.PENDING, ItemInCartDTO.getAdvertisementId(),
-                            ItemInCartDTO.isTogether(), ItemInCartDTO.getTimeFrom(), ItemInCartDTO.getTimeTo()));
+                            ItemInCartDTO.isTogether(), ItemInCartDTO.getTimeFrom(), ItemInCartDTO.getTimeTo(),null));
 
                 }
 
@@ -190,21 +190,62 @@ public class BookingRequestService {
 
     public List<Long> getSpecificGroupsForAgent(RequestStates state) {
         List<Long> group = new ArrayList<Long>();
+        List<Long> groupsToRemove = new ArrayList<Long>();
         System.out.println(getLogedUserId());
 
         for (BookingRequest bookingRequest : bookingRequestRepository.findByUserForId(getLogedUserId())) {
 
-            if (!group.contains(bookingRequest.getGroupId())) {
-
-                if (bookingRequest.getStateOfRequest().equals(state)) {
-
+            if (bookingRequest.getStateOfRequest().equals(state)
+                    && !checkIfBookingRequestHasReservedTwin(bookingRequest)) {
+                if (!group.contains(bookingRequest.getGroupId())) {
                     group.add(bookingRequest.getGroupId());
+                    System.out.println("Dodao je grupu=="+bookingRequest.getGroupId());
                 }
+            } else if (bookingRequest.getStateOfRequest().equals(state)
+                    && checkIfBookingRequestHasReservedTwin(bookingRequest)) {
+                System.out.println("DODAO NEKU GRUPU ZA UKLANJANJE=="+bookingRequest.getGroupId());
+                groupsToRemove.add(bookingRequest.getGroupId());
+            }
+
+        }
+
+        for (Long groupToRemove : groupsToRemove) {
+            if (group.contains(groupToRemove)) {
+                group.remove(groupToRemove);
+
+                System.out.println("Usao u uklanjanje grupe==" + groupToRemove);
             }
         }
 
         return group;
 
+    }
+
+    public boolean checkIfBookingRequestHasReservedTwin(BookingRequest bookingRequest) {
+        List<BookingRequest> all = bookingRequestRepository.findByUserForId(getLogedUserId());
+
+        for (BookingRequest booking : all) {
+            if ((booking.getStateOfRequest() == RequestStates.RESERVED)
+                    && (bookingRequest.getStateOfRequest() == RequestStates.PENDING)
+                    && booking.getAdvertisementId().equals(bookingRequest.getAdvertisementId())
+                    && ((booking.getTimeFrom().isAfter(bookingRequest.getTimeFrom())
+                            && booking.getTimeFrom().isBefore(bookingRequest.getTimeTo()))
+                            || (booking.getTimeTo().isAfter(bookingRequest.getTimeFrom())
+                                    && booking.getTimeTo().isBefore(bookingRequest.getTimeTo()))
+                            || (bookingRequest.getTimeFrom().isAfter(booking.getTimeFrom())
+                                    && bookingRequest.getTimeFrom().isBefore(booking.getTimeTo()))
+                            || (bookingRequest.getTimeTo().isAfter(booking.getTimeFrom())
+                                    && bookingRequest.getTimeTo().isBefore(booking.getTimeTo()))
+                            || (booking.getTimeFrom().equals(bookingRequest.getTimeFrom())
+                                    || booking.getTimeFrom().equals(bookingRequest.getTimeTo())
+                                    || booking.getTimeTo().equals(bookingRequest.getTimeFrom())
+                                    || booking.getTimeTo().equals(bookingRequest.getTimeTo()))
+                                    && booking.getTimeTo().equals(bookingRequest.getTimeTo()))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public List<BookingRequestFrontDTO> getAllSpecificForBuyer(RequestStates state) {
@@ -280,6 +321,7 @@ public class BookingRequestService {
         for (BookingRequest request : bookingRequestRepository.findAllByGroupId(grupa)) {
 
             request.setStateOfRequest(RequestStates.RESERVED);
+            request.setTimeAccepted(LocalDateTime.now());
 
             bookingRequestRepository.save(request);
 

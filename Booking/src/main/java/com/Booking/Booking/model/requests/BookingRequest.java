@@ -36,8 +36,13 @@ public class BookingRequest {
 
     private LocalDateTime timeTo;
 
+    private LocalDateTime timeAccepted;
+
+   
+
     public BookingRequest(Long userForId, Long userToId, Long groupId, RequestStates stateOfRequest,
-            Long advertisementId, boolean together, LocalDateTime timeFrom, LocalDateTime timeTo) {
+            Long advertisementId, boolean together, LocalDateTime timeFrom, LocalDateTime timeTo, 
+            LocalDateTime timeAccepted) {
         this.userForId = userForId;
         this.userToId = userToId;
         this.groupId = groupId;
@@ -46,6 +51,7 @@ public class BookingRequest {
         this.together = together;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
+        this.timeAccepted = timeAccepted;
     }
 
     public BookingRequest(Long userForId,Long advertisementId, LocalDateTime timeFrom, LocalDateTime timeTo,RequestStates stateOfRequest) {
@@ -131,4 +137,11 @@ public class BookingRequest {
         this.timeTo = timeTo;
     }
 
+    public LocalDateTime getTimeAccepted() {
+        return this.timeAccepted;
+    }
+
+    public void setTimeAccepted(LocalDateTime timeAccepted) {
+        this.timeAccepted = timeAccepted;
+    }
 }
