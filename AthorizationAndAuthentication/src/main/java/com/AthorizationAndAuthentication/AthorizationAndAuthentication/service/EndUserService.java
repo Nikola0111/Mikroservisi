@@ -104,28 +104,37 @@ public class EndUserService {
         return endUserRepository.findAllByActivity(true);
     }
 
-    /*
-     * @Transactional public Integer deactivate(String jmbg){ return
-     * endUserRepository.deleteByJmbg(jmbg); }
-     * 
-     * @Transactional public Boolean block(String jmbg){ EndUser endUser =
-     * endUserRepository.findByJmbg(jmbg);
-     * 
-     * if(endUser == null){ return false; }
-     * 
-     * endUser.setBlocked(true);
-     * 
-     * endUserRepository.save(endUser);
-     * 
-     * return true; }
-     * 
-     * @Transactional public Boolean unblock(String jmbg){ EndUser endUser =
-     * endUserRepository.findByJmbg(jmbg);
-     * 
-     * if(endUser == null){ return false; }
-     * 
-     * endUser.setBlocked(false); endUserRepository.save(endUser);
-     * 
-     * return true; }
-     */
+    
+    @Transactional public void deactivate(Long id){ 
+        endUserRepository.deleteById(id);
+    }
+    
+    @Transactional public Boolean block(Long id){
+        EndUser endUser = endUserRepository.findOneById(id);
+    
+        if(endUser == null){ 
+            return false; 
+        }
+    
+        endUser.setBlocked(true);
+     
+        endUserRepository.save(endUser);
+        
+        return true;
+    }
+     
+    @Transactional 
+    public Boolean unblock(Long id){ 
+        EndUser endUser = endUserRepository.findOneById(id);
+     
+        if(endUser == null){
+            return false;
+        }
+     
+        endUser.setBlocked(false); 
+        endUserRepository.save(endUser);
+     
+        return true;
+    }
+     
 }

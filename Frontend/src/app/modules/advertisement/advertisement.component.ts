@@ -8,6 +8,7 @@ import {TransmissionType} from '../../enums/transmissionType';
 import {CarClass} from '../../enums/carClass';
 import {CarDetails} from '../../model/car-details';
 import {CarDetailsService} from '../../services/CarDetailsService/car-details.service';
+import {SessionService} from '../../services/SessionService/session.service';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class AdvertisementComponent implements OnInit {
   carGearshifts: CarDetails[];
   selectedFiles: File[];
 
-  constructor(private formBuilder: FormBuilder, private advertisementService: AdvertisementService, private carDetailsService: CarDetailsService) {
+  constructor(private formBuilder: FormBuilder, private advertisementService: AdvertisementService,
+              private carDetailsService: CarDetailsService) {
     this.advertisement = new Advertisement();
     this.advertisementService.getAllDetails().subscribe(data => {
       this.carDetails = data;
