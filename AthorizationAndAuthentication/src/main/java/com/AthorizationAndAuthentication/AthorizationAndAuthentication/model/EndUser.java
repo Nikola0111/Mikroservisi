@@ -27,7 +27,7 @@ public class EndUser {
     @Column(name = "numberOfAds")
     private int numberOfAds;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn
     private EntityUser user;
 
@@ -60,11 +60,11 @@ public class EndUser {
         return "EndUser{}";
     }
 
-    public int getNumber_of_requests() {
+    public int getNumberOfRequestsCanceled() {
         return numberOfRequestsCanceled;
     }
 
-    public void setNumber_of_requests(int number_of_requests) {
+    public void setNumberOfRequestsCanceled(int number_of_requests) {
         this.numberOfRequestsCanceled = number_of_requests;
     }
 

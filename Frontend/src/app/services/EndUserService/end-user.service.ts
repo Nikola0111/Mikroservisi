@@ -14,34 +14,34 @@ export class EndUserService {
 
   public getUnregistered() {
     console.log('getuje neregistrovane');
-    return this.http.get<EndUser[]>('server/enduser/getUnregistered', httpOptions);
+    return this.http.get<EndUser[]>('server/authentication/getUnregistered', httpOptions);
   }
 
   public getAdminUnregistered(){
-    return this.http.get<EndUser[]>('server/enduser/getAdminUnregistered', httpOptions);
+    return this.http.get<EndUser[]>('server/authentication/getAdminUnregistered', httpOptions);
   }
 
   public confirm(id: number){
-    return this.http.post<string>('server/enduser/accept', id, httpOptions);
+    return this.http.post<string>('server/authentication/accept', id, httpOptions);
   }
 
   public reject(id: number) {
-    return this.http.post<string>('server/enduser/reject', id, httpOptions);
+    return this.http.post<string>('server/authentication/reject', id, httpOptions);
   }
 
   public getRegisteredUsers() {
-    return this.http.get<EndUser[]>('/server/enduser/getRegisteredUsers', httpOptions);
+    return this.http.get<EndUser[]>('/server/authentication/getRegisteredUsers', httpOptions);
   }
 
-  public deactivate(jmbg: string) {
-    return this.http.post(`/server/enduser/deactivate/${jmbg}`, httpOptions);
+  public deactivate(id: number) {
+    return this.http.post(`/server/authentication/deactivate/${id}`, httpOptions);
   }
 
-  public block(jmbg: string) {
-    return this.http.post(`/server/enduser/block/${jmbg}`, httpOptions);
+  public block(id: number) {
+    return this.http.post(`/server/authentication/block/${id}`, httpOptions);
   }
 
-  public unblock(jmbg: string) {
-    return this.http.post(`/server/enduser/unblock/${jmbg}`, httpOptions);
+  public unblock(id: number) {
+    return this.http.post(`/server/authentication/unblock/${id}`, httpOptions);
   }
 }
