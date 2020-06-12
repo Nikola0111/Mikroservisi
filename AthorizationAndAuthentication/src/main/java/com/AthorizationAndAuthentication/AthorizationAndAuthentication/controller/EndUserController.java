@@ -4,6 +4,8 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.End
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.LoginInfo;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.EntityUser;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.VerificationToken;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.repository.AgentRepository;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.AgentService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.EndUserService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.MailSenderService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.UserService;
@@ -48,7 +50,10 @@ public class EndUserController {
     private UserService userService;
 
     @Autowired
-	private RestTemplate restTemplate;
+    private RestTemplate restTemplate;
+    
+    @Autowired
+    private AgentService agentService;
 
  
 
@@ -167,5 +172,20 @@ public class EndUserController {
         Boolean ret = endUserService.unblock(id);
 
         return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getRentedCars/{id}", produces =
+	MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Long>> getRentedCars(@PathVariable Long id) {
+		List<Long> rentedCars = endUserService.getRentedCars(id);
+		return new ResponseEntity<>(rentedCars, HttpStatus.OK);
+    }
+    
+    @PostMapping(value = "/getEmail", produces = 
+    MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getEmail(@RequestBody Long id){
+        String email = endUserService.getEmail(id);
+
+        return new ResponseEntity<>(email, HttpStatus.OK);
     }
 }

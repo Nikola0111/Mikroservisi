@@ -30,6 +30,12 @@ public class Comment {
     @OneToOne
     private Reply reply;
 
+    @Column
+    private Boolean approved;
+
+    @Column
+    private Boolean deleted;
+
     public Comment(){
 
     }
@@ -109,6 +115,22 @@ public class Comment {
 
     public void setReply(Reply reply) {
         this.reply = reply;
+    }
+
+    public Boolean getApproved() {
+        return this.approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public Boolean getDeleted() {
+        return this.deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

@@ -189,7 +189,7 @@ public class UserService {
 
         EndUser endUser = new EndUser();
 
-        endUser.setNumber_of_requests(0);
+        endUser.setNumberOfRequestsCanceled(0);
         endUser.setAccount_activated(false);
         endUser.setAdminApproved(false);
         endUser.setUser(findOneByid(entityUser.getId()));

@@ -4,16 +4,15 @@ import com.Advertisement.Advertisement.dtos.AdvertisementDTO;
 import com.Advertisement.Advertisement.model.*;
 import com.Advertisement.Advertisement.dtos.*;
 import com.Advertisement.Advertisement.repository.*;
-import com.Advertisement.Advertisement.service.*;
-import com.netflix.ribbon.RequestTemplate;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.netflix.client.http.HttpRequest;
 
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -390,57 +389,74 @@ public class AdvertisementService {
 		return filteredAdsDTOs;
 	}
 
-	// public void saveCommentAndGrade(CommentDTO commentDTO){
-	// Advertisement ad = advertisementRepository.findOneByid(commentDTO.getAd());
-	// Grade grade = new Grade(commentDTO.getGrade(), ad); //OVDE TREBA DOBITI
-	// ENDUSERA PO ID
+	public void saveCommentAndGrade(CommentDTO commentDTO){
+	 	Advertisement ad = advertisementRepository.findOneByid(commentDTO.getAd());
+	 	Grade grade = new Grade(commentDTO.getGrade(), ad); //OVDE TREBA DOBITI ENDUSERA PO ID
 
-	// gradeService.save(grade);
+	 	gradeService.save(grade);
 
-	// Optional obj = endUserRepository.findById(commentDTO.getUserId());
+		EndUserNumberOfAdsDTO endUser = restTemplate.exchange("http://auth/getLoggedEndUser", HttpMethod.GET, null,
+				new ParameterizedTypeReference<EndUserNumberOfAdsDTO>() {
+				}).getBody();
 
-	// if(obj.isPresent()) {
-	// Date date = new Date();
-	// System.out.println(date);
+	 	Date date = new Date();
+	 	System.out.println(date);
 
-	// Comment comment = new Comment(commentDTO.getMessage(), date, ad, (EndUser)
-	// obj.get(), commentDTO.getGrade());
-
-	// commentRepository.save(comment);
-	// }
-	// //sacuvaj komentar
-	// }
+		Comment comment = new Comment(commentDTO.getMessage(), date, ad,
+	 	endUser.getId(), commentDTO.getGrade());
+		comment.setApproved(false);
+		comment.setDeleted(false);
+	 	commentRepository.save(comment);
+	 	//sacuvaj komentar
+	 }
 
 	public AdvertisementCreationDTO findAdAndComments(Long id) {
 		Advertisement ad = advertisementRepository.findOneByid(id); // OVA
 
-		// List<Comment> db = commentRepository.findByAd_Id(id);
+		List<Comment> db = commentRepository.findByAd_Id(id);
 
 		// //sredjivanje komentara
-		// List<CommentPreviewDTO> comments = new ArrayList<CommentPreviewDTO>();
-		// for(int i = 0;i < db.size();i++) {
-		// CommentPreviewDTO temp = new CommentPreviewDTO(db.get(i).getValue(),
-		// db.get(i).getEndUser().getUser().getLoginInfo().getEmail(),
-		// db.get(i).getGrade(), db.get(i).getDate());
-		// temp.setId(db.get(i).getId());
+		List<CommentPreviewDTO> comments = new ArrayList<CommentPreviewDTO>();
+		for(int i = 0;i < db.size();i++) {
+			
+			HttpEntity<Long> request = new HttpEntity<>(db.get(i).getEndUserID());
+			String email = 
+			restTemplate.postForEntity("http://auth/getEmail", request,String.class, db.get(i).getEndUserID()).getBody();
 
-		// if(db.get(i).getReply() != null) {
-		// ReplyDTO replyDTO = new ReplyDTO();
-		// replyDTO.setComment(db.get(i).getReply().getComment());
-		// replyDTO.setAgentMail(db.get(i).getReply().getAgent().getUser().getLoginInfo().getEmail());
+			String commentValue;
 
-		// temp.setReplyDTO(replyDTO);
-		// }
-		// System.out.println(temp);
+			if(db.get(i).getDeleted() == true){
+				commentValue = "Komentar je obrisan od strane administratora";
+			}else {
+				commentValue = db.get(i).getValue();
+			}
 
-		// comments.add(temp);
-		// }
+			CommentPreviewDTO temp = new CommentPreviewDTO(commentValue,
+			email,
+			db.get(i).getGrade(), db.get(i).getDate());
+			temp.setId(db.get(i).getId());
+
+			if(db.get(i).getReply() != null) {
+				request = new HttpEntity<>(db.get(i).getReply().getAgentID());
+				String agentMail = restTemplate.postForEntity("http://auth/getAgentEmail", request,String.class, db.get(i).getReply().getAgentID()).getBody();
+
+
+				ReplyDTO replyDTO = new ReplyDTO();
+				replyDTO.setComment(db.get(i).getReply().getComment());
+				replyDTO.setAgentMail(agentMail);
+
+				temp.setReplyDTO(replyDTO);
+			}
+			System.out.println(temp);
+
+			comments.add(temp);
+		}
 
 		AdvertisementCreationDTO adDTO = new AdvertisementCreationDTO(ad);
 
 		adDTO.setGrade(gradeService.calculateGradeForAd(id));
 
-		// adDTO.setComments(comments);
+		adDTO.setComments(comments);
 		return adDTO;
 	}
 
@@ -455,31 +471,55 @@ public class AdvertisementService {
 		return usersAds;
 	}
 
-	// public List<Long> getRentedCars(Long userId){
-	// Optional obj = endUserRepository.findById(userId); //treba dobiti usera po id
-	// List<Long> list = new ArrayList<>();
-	// if(obj.isPresent()){
-	// EndUser endUser = (EndUser) obj.get();
+	public List<Advertisement> getAllByPostedBy(Long id) {
+		// salje sa fronta id usera, ne id agenta, i zato ne prikazuje formu za reply
+		HttpEntity<Long> request = new HttpEntity<>(id);
+		Long agentID = restTemplate.postForEntity("http://auth/getAgentIDByUserID", request,Long.class, id).getBody();
+		System.out.println("ID AGENTA? " + id);
+		return advertisementRepository.findAllByPostedByID(agentID);
+	}
+	
+	public void saveReply(ReplyDTO replyDTO){ 
+		HttpEntity<String> request = new HttpEntity<>(replyDTO.getAgentMail());
+		//Long agentID = restTemplate.postForEntity("http://auth/getAgentIDByMail", request, Long.class).getBody();
+		Long agentID = restTemplate.exchange("http://auth/getAgentIDByMail", HttpMethod.POST, request, 
+		new ParameterizedTypeReference<Long>() {
+		}).getBody();
+		
+		Comment comment = commentRepository.findOneByid(replyDTO.getId());
+		Reply reply = new Reply(replyDTO.getComment(), comment, agentID); 
+		comment.setReply(reply); 
+		replyRepository.save(reply);
+		commentRepository.save(comment);
+	} 
 
-	// for(int i = 0;i < endUser.getRentedCars().size(); i++){
-	// list.add(endUser.getRentedCars().get(i).getId());
-	// }
-	// }
+	public List<CommentPreviewDTO> getUnapprovedComments(){
+		List<Comment> list = commentRepository.findByApproved(false);
+		List<CommentPreviewDTO> comments = new ArrayList<>();
 
-	// return list;
-	// }
+		String email;
+		for (Comment temp : list) {
+			HttpEntity<Long> request = new HttpEntity<>(temp.getEndUserID());
+			email = restTemplate.postForEntity("http://auth/getEmail", request, String.class, temp.getEndUserID()).getBody();
+			System.out.println("Email komentara: " + email);
+			comments.add(new CommentPreviewDTO(temp.getId(), temp.getValue(), email, gradeService.calculateGradeForAd(temp.getId()), temp.getDate()));
+		}
 
-	// public List<Advertisement> getAllByPostedBy(Long id) {
-	// return advertisementRepository.findAllByPostedBy_Id(id);
-	// }
-	// Agent sadrzi polje User koje sadrzi polje login info koje sadrzi email. Tako
-	// pronadji
-	/*
-	 * public void saveReply(ReplyDTO replyDTO){ Agent agent =
-	 * agentRepository.findByLoginInfo_Email(replyDTO.getAgentMail()); Optional opt
-	 * = commentRepository.findById(replyDTO.getId()); Reply reply = new
-	 * Reply(replyDTO.getComment(), (Comment) opt.get(), agent); ((Comment)
-	 * opt.get()).setReply(reply); replyRepository.save(reply);
-	 * commentRepository.save((Comment) opt.get()); }
-	 */
+		return comments;
+	}
+
+	public void approveComment(Long id){
+		Comment comment = commentRepository.findOneByid(id);
+
+		comment.setApproved(true);
+		commentRepository.save(comment);
+	}
+
+	public void deleteComment(Long id){
+		Comment comment = commentRepository.findOneByid(id);
+
+		comment.setApproved(true);
+		comment.setDeleted(true);
+		commentRepository.save(comment);
+	}
 }

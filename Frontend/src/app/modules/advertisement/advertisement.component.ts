@@ -41,9 +41,7 @@ export class AdvertisementComponent implements OnInit {
     this.advertisement = new Advertisement();
     this.advertisementService.getAllDetails().subscribe(data => {
       this.carDetails = data;
-      console.log(this.carDetails);
       this.carClasses = this.carDetails.filter(item => {
-        console.log(item.type.toLowerCase());
         return item.type.toLowerCase() === 'carclass';
       });
 

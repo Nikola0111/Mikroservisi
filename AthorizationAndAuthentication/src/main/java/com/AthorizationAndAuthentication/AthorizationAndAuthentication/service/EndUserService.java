@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,5 +138,23 @@ public class EndUserService {
      
         return true;
     }
-     
+
+    public List<Long> getRentedCars(Long userId){
+        System.out.println(userId + "ID ENDUSERA");
+		EntityUser user = userRepository.findOneByid(userId); //treba dobiti usera po id
+		List<Long> list = new ArrayList<>();
+		EndUser endUser = endUserRepository.findByUser(user);
+
+		for(int i = 0;i < endUser.getRentedCars().size(); i++){
+			list.add(endUser.getRentedCars().get(i));
+		}
+
+		return list;
+    }
+    
+    public String getEmail(Long id){
+        EndUser endUser = endUserRepository.findOneById(id);
+
+        return endUser.getUser().getLoginInfo().getEmail();
+    }
 }

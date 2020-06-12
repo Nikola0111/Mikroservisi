@@ -46,17 +46,17 @@ this.loginService.loginToken().subscribe();
             console.log(this.sessionService.isAdmin + ' Admin registrovan');
             this.router.navigate(['/administrator']);
           } else if (user.userType.toString() === 'AGENT') {
-            this.agentService.checkPasswordChanged().subscribe(isChanged =>{
-              if (isChanged === false) {
-                this.sessionService.pwChanging = true;
-                this.router.navigate(['/izmenaLozinke']);
-              } else {
+            // this.agentService.checkPasswordChanged().subscribe(isChanged =>{
+            //   if (isChanged === false) {
+            //     this.sessionService.pwChanging = true;
+            //     this.router.navigate(['/izmenaLozinke']);
+            //   } else {
                 this.sessionService.isAgent = true;
                 this.sessionService.isAdmin = false;
                 this.sessionService.isEndUser = false;
                 this.router.navigate(['/agent']);
-              }
-            });
+              // }
+            // });
 
           } else if (user.userType.toString() === 'ENDUSER') {
             this.sessionService.isEndUser = true;

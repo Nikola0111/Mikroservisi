@@ -32,6 +32,8 @@ public class AdvertisementCreationDTO {
 
     private double priceWithDiscount;
 
+    private List<CommentPreviewDTO> comments;
+
     private ArrayList<String> pictures;
 
     public AdvertisementCreationDTO(Long id, String name, String model, String brand, String fuelType, String transType, String carClass, int travelled, int carSeats, double price,Long postedByID, double discount, double priceWithDiscount, ArrayList<String> pictures, double grade) {
@@ -65,7 +67,6 @@ public class AdvertisementCreationDTO {
         this.carSeats = ad.getCarSeats();
         this.discount = ad.getDiscount();
         this.postedByID=ad.getPostedByID();
-        this.grade = ad.getGrade();
         this.travelled = ad.getTravelled();
         this.priceWithDiscount = ad.getPriceWithDiscount();
     }
@@ -191,5 +192,14 @@ public class AdvertisementCreationDTO {
     public void setPostedByID(Long postedByID) {
         this.postedByID = postedByID;
     }
+
+    public List<CommentPreviewDTO> getComments() {
+        return this.comments;
+    }
+
+    public void setComments(List<CommentPreviewDTO> comments) {
+        this.comments = comments;
+    }
+    
 
 }
