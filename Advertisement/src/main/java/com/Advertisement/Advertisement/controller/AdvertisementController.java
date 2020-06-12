@@ -66,6 +66,10 @@ public class AdvertisementController {
 			if (endUser.getNumberOfAds() > 2) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
+
+			if(endUser.isBlocked()){
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
 		}
 
 		Advertisement createdAd = advertisementService.save(advertisementCreationDTO, id);

@@ -23,7 +23,7 @@ public class Agent {
     @Column(name ="business_registration_number")
     private String bsregnum;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn
     private EntityUser user;
 
