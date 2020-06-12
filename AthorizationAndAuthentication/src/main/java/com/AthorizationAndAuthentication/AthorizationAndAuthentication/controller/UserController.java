@@ -4,6 +4,7 @@ package com.AthorizationAndAuthentication.AthorizationAndAuthentication.controll
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.EndUser;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.EntityUser;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.LoginInfo;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.AgentService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.LoginInfoService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class UserController {
 
     @Autowired
     private LoginInfoService loginInfoService;
+
+    @Autowired
+    private AgentService agentService;
 
     @GetMapping("/hello")
     public ResponseEntity<?> get() {
@@ -122,6 +126,16 @@ public class UserController {
 
         return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
 
+    }
+
+    @PostMapping(value = "/getAgentIDByMail", produces = MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<Long> getAgentIDByMail(@RequestBody String email){
+        return new ResponseEntity<>(agentService.getAgentIDByEmail(email), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/getAgentEmail", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> getAgentMail(@RequestBody Long id){
+        return new ResponseEntity<>(agentService.getAgentMail(id), HttpStatus.OK);
     }
 
     // @PostMapping(value = "/passwordChange", produces =

@@ -34,6 +34,7 @@
     <app-agent-register style = "float:right; margin-right: 60%;width: 150px" *ngIf="sessionService.agentreg"></app-agent-register>
     <app-sifrarnik *ngIf="sessionService.codebook"></app-sifrarnik>
     <app-user-managment *ngIf="sessionService.manageUsers" ></app-user-managment>
+    <app-comment-management *ngIf="sessionService.commentManagment"></app-comment-management>
     <div *ngIf="sessionService.adminhome" class = "content">
       Nesto
     </div>

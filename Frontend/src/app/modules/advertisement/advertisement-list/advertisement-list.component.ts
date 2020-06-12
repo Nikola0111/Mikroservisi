@@ -69,9 +69,7 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
     this.itemInCart = new ItemInCart();
     this.advertisementService.getAllDetails().subscribe(data => {
       this.carDetails = data;
-      console.log(this.carDetails);
       this.carClasses = this.carDetails.filter(item => {
-        console.log(item.type.toLowerCase());
         return item.type.toLowerCase() === 'carclass';
       });
 

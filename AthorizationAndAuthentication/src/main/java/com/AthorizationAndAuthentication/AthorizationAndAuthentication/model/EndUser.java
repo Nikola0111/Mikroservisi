@@ -27,6 +27,11 @@ public class EndUser {
     @Column(name = "numberOfAds")
     private int numberOfAds;
 
+    @ElementCollection
+    private List<Long> rentedCars;
+
+    
+
     @OneToOne
     @JoinColumn
     private EntityUser user;
@@ -42,6 +47,16 @@ public class EndUser {
         this.adminApproved = adminApproved;
         this.blocked = blocked;
         this.numberOfAds = numberOfAds;
+    }
+
+    public EndUser(String name, String surname, LoginInfo loginInfo, String jmbg, String phoneNumber, UserType ut,
+            int number_of_requests, boolean activity, boolean adminApproved, boolean blocked, int numberOfAds, List<Long> rentedCars) {
+        this.numberOfRequestsCanceled = number_of_requests;
+        this.activity = activity;
+        this.adminApproved = adminApproved;
+        this.blocked = blocked;
+        this.numberOfAds = numberOfAds;
+        this.rentedCars = rentedCars;
     }
 
     // public EndUser(String name, String surname, LoginInfo loginInfo, String jmbg,
@@ -114,6 +129,14 @@ public class EndUser {
 
     public void setNumberOfAds(int numberOfAds) {
         this.numberOfAds = numberOfAds;
+    }
+
+    public List<Long> getRentedCars() {
+        return this.rentedCars;
+    }
+
+    public void setRentedCars(List<Long> rentedCars) {
+        this.rentedCars = rentedCars;
     }
 
 }

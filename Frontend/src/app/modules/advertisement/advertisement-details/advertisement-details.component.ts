@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import {Advertisement} from '../../../model/advertisement';
+import {Component, OnInit} from '@angular/core';
 import {AdvertisementService} from '../../../services/advertisement.service/advertisement.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Grade} from '../../../model/grade';
 import {CommentDto} from '../../../dtos/comment-dto';
 import {CommentService} from '../../../services/CommentService/comment.service';
 import {SessionService} from '../../../services/SessionService/session.service';
 import {AdvertisementDTO} from '../../../dtos/advertisement-dto';
 import {CommentPreviewDTO} from '../../../dtos/comment-preview-dto';
 import {ReplyDTO} from '../../../dtos/reply-dto';
+import {EndUserService} from '../../../services/EndUserService/end-user.service';
+import {UserType} from '../../../enums/UserType';
 
 @Component({
   selector: 'app-advertisement-details',
@@ -26,19 +26,13 @@ export class AdvertisementDetailsComponent implements OnInit {
   replyDTO: ReplyDTO;
   replyText: string;
 
-  constructor(private messageService: CommentService, private advertisementService: AdvertisementService, private router: Router,
+  constructor(private endUserService: EndUserService,  private messageService: CommentService, private advertisementService: AdvertisementService, private router: Router,
               private activatedRoute: ActivatedRoute, private sessionService: SessionService) {
-    // this.advertisementService.getRentedCars(this.sessionService.ulogovaniKorisnik.id).subscribe(data => {
-    //   this.rentedCars = data;
-    //   console.log(this.rentedCars);
-    // });
-  }
-
-  ngOnInit() {
     this.activatedRoute.params.subscribe(
       params => {
-      this.id = params.id;
-    });
+        this.id = params.id;
+        console.log(this.id);
+      });
     this.advertisementService.getAdvertisementPreview(this.id).subscribe(
       data => {
         this.dataSource = data;
@@ -49,16 +43,26 @@ export class AdvertisementDetailsComponent implements OnInit {
           }
         });
 
-        // console.log(this.dataSource);
-        // const smth = this.rentedCars.filter(item => {
-        //   return item === this.dataSource.id;
-        // });
-        // if (smth.length !== 0) {
-        //   this.rented = true;
-        // } else {
-        //   this.rented = false;
-        // }
-    });
+        console.log(this.dataSource);
+        console.log('Komentari: ' + this.dataSource.comments);
+        if (this.sessionService.ulogovaniKorisnik.userType.toString() === 'ENDUSER') {
+          this.endUserService.getRentedCars(this.sessionService.ulogovaniKorisnik.id).subscribe(carIds => {
+            this.rentedCars = carIds;
+            console.log(this.rentedCars);
+
+            this.rentedCars.forEach(item => {
+              if (item.toString() === this.id.toString()) {
+                this.rented = true;
+                console.log('Rented: ' + this.rented);
+              }
+            });
+          });
+        }
+      });
+  }
+
+  ngOnInit() {
+
   }
 
   countStar(star) {
@@ -74,6 +78,10 @@ export class AdvertisementDetailsComponent implements OnInit {
       const listComment = new CommentPreviewDTO(this.comment,
         this.sessionService.ulogovaniKorisnik.loginInfo.email, this.selectedValue);
       listComment.replyDTO = reply;
+
+      if(this.dataSource.comments === undefined){
+        this.dataSource.comments = [] as CommentPreviewDTO[];
+      }
       this.dataSource.comments.push(listComment);
 
       this.comment = '';
@@ -90,6 +98,6 @@ export class AdvertisementDetailsComponent implements OnInit {
 
     comment.replyDTO = this.replyDTO;
 
-    this.advertisementService.sendReply(this.replyDTO).subscribe();
+    this.advertisementService.saveReply(this.replyDTO).subscribe();
   }
 }

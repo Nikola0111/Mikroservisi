@@ -5,7 +5,7 @@ import { FilterAdsDTO } from 'src/app/model/filterAdsDTO';
 import { ItemInCart } from 'src/app/model/itemInCart';
 import {AdvertisementDTO} from '../../dtos/advertisement-dto';
 import {ReplyDTO} from '../../dtos/reply-dto';
-import {CommentPreviewDTO} from "../../dtos/comment-preview-dto";
+import {CommentPreviewDTO} from '../../dtos/comment-preview-dto';
 import {CarDetails} from '../../model/car-details';
 import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
 import { ReserveDTO } from 'src/app/dtos/reserveDTO';
@@ -98,22 +98,18 @@ export class AdvertisementService {
   }
 
   public getAdvertisementPreview(id: number) {
-    this.requestUrl = '/server/advertisement/preview/' + id;
+    this.requestUrl = `/server/advertisement/preview/${id}` ;
     return this.http.get<AdvertisementDTO>(this.requestUrl, httpOptions);
   }
-
-  public getRentedCars(id: number) {
-    return this.http.get<number[]>('/server/advertisement/getRentedCars/' + id, httpOptions);
-  }
-  
 
   public getAllByPostedBy(id: number) {
       return this.http.get<Advertisement[]>('server/advertisement/getAllByPostedBy/' + id, httpOptions);
   }
 
-  public sendReply(replyDTO: ReplyDTO) {
+  public saveReply(replyDTO: ReplyDTO) {
       const body = JSON.stringify(replyDTO);
-      return this.http.post<number>('/server/advertisement/saveReply', body, httpOptions);
+      console.log(replyDTO);
+      return this.http.post<void>('/server/advertisement/saveReply', body, httpOptions);
   }
 
   public getAllComments(id: number) {

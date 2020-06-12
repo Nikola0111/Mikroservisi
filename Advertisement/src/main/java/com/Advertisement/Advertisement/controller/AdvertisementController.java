@@ -171,14 +171,6 @@ public class AdvertisementController {
 		}
 	}
 
-	@PostMapping(value = "/saveCommentAndGrade", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Long> saveCommentAndGrade(@RequestBody CommentDTO commentDTO) {
-		// advertisementService.saveCommentAndGrade(commentDTO);
-
-		return new ResponseEntity<>((long) 1, HttpStatus.OK);
-
-	}
-
 	@GetMapping(value = "/getAllDetails", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CarDetailsDTO>> getAllDetails() {
 		List<CarDetailsDTO> cardetails = advertisementService.getCarDetails();
@@ -199,13 +191,6 @@ public class AdvertisementController {
 
 		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
-
-	// @GetMapping(value = "/getRentedCars/{id}", produces =
-	// MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
-	// public ResponseEntity<List<Long>> getRentedCars(@PathVariable Long id) {
-	// List<Long> rentedCars = advertisementService.getRentedCars(id);
-	// return new ResponseEntity<>(rentedCars, HttpStatus.OK);
-	// }
 
 	@GetMapping(value = "/preview/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AdvertisementCreationDTO> getAdvertisementPreview(@PathVariable Long id) {
@@ -228,32 +213,16 @@ public class AdvertisementController {
 		return new ResponseEntity<>(ads, HttpStatus.OK);
 	}
 
-	/*
-	 * 
-	 * @GetMapping(value = "/getAllComments/{id}", produces =
-	 * MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
-	 * public ResponseEntity<List<CommentPreviewDTO>> getAllComments(@PathVariable
-	 * Long id) { System.out.println(id); AdvertisementDTO advertisementDTO =
-	 * advertisementService.findAdAndComments(id); if(advertisementDTO == null) {
-	 * return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
-	 * System.out.println(advertisementDTO.getName());
-	 * System.out.println(advertisementDTO.getComments()); return new
-	 * ResponseEntity<>(advertisementDTO.getComments(), HttpStatus.OK); }
-	 * 
-	 * @GetMapping(value = "/getAllByPostedBy/{id}", produces =
-	 * MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
-	 * public ResponseEntity<List<Advertisement>> getAllByPostedBy(@PathVariable
-	 * Long id) { List<Advertisement> advertisements =
-	 * advertisementService.getAllByPostedBy(id); return new
-	 * ResponseEntity<>(advertisements, HttpStatus.OK); }
-	 * 
-	 * @PostMapping(value = "/saveReply", produces =
-	 * MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
-	 * public ResponseEntity<Long> saveReply(@RequestBody ReplyDTO replyDTO){
-	 * 
-	 * //KAD RESIS U SERVISU SAMO ODKOMENTARISI
-	 * //advertisementService.saveReply(replyDTO);
-	 * 
-	 * return new ResponseEntity<>((long) 1, HttpStatus.OK); }
-	 */
+	
+	  
+	//  @GetMapping(value = "/getAllComments/{id}", produces =
+	//  MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
+	//  public ResponseEntity<List<CommentPreviewDTO>> getAllComments(@PathVariable
+	//  Long id) { System.out.println(id); AdvertisementDTO advertisementDTO =
+	//  advertisementService.findAdAndComments(id); if(advertisementDTO == null) {
+	//  return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
+	//  System.out.println(advertisementDTO.getName());
+	//  System.out.println(advertisementDTO.getComments()); return new
+	//  ResponseEntity<>(advertisementDTO.getComments(), HttpStatus.OK); }
+	
 }

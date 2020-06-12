@@ -23,6 +23,14 @@ public class CommentPreviewDTO {
         this.date = date;
     }
 
+    public CommentPreviewDTO(Long id, String comment, String userMail, Double grade, Date date) {
+        this.id = id;
+        this.comment = comment;
+        this.userMail = userMail;
+        this.grade = grade;
+        this.date = date;
+    }
+
     public String getComment() {
         return comment;
     }

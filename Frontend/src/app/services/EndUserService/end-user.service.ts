@@ -44,4 +44,8 @@ export class EndUserService {
   public unblock(id: number) {
     return this.http.post(`/server/authentication/unblock/${id}`, httpOptions);
   }
+
+  public getRentedCars(id: number) {
+    return this.http.get<number[]>('/server/authentication/getRentedCars/' + id, httpOptions);
+  }
 }

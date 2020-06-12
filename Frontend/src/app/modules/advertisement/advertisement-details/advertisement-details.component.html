@@ -52,7 +52,8 @@
     <form *ngFor="let comment of this.dataSource.comments" class="form-style-9">
       <div>
         <label style = "display: block">Posted by: {{comment.userMail}}</label>
-        <label style = "display: block">{{comment.comment}}</label>
+        <label *ngIf="comment.comment !== 'Komentar je obrisan od strane administratora'" style = "display: block">{{comment.comment}}</label>
+        <label *ngIf="comment.comment == 'Komentar je obrisan od strane administratora'" style = "display: block"><i>{{comment.comment}}</i></label>
         <label style = "display: block">It was rated with a: {{comment.grade}}</label>
         <hr>
         <div style="margin-left: 35%" *ngIf="this.sessionService.isAgent && this.comment.replyDTO === null">

@@ -14,7 +14,6 @@ public class Reply {
     @Column
     private String comment;
 
-  
     private Long agentID;
 
     public Reply(){
