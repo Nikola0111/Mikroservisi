@@ -62,13 +62,10 @@ export class AuthInterceptor implements HttpInterceptor {
           const cloneReq = req.clone({headers});
           
               return next.handle(cloneReq);
-
         }
         else {
             return next.handle(req);
         }
-
         */
     }
 }
-      

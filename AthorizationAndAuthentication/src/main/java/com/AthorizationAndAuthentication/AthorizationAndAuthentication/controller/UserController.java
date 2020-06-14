@@ -2,8 +2,14 @@ package com.AthorizationAndAuthentication.AthorizationAndAuthentication.controll
 
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.dtos.UserDTO;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.EntityUser;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.KeyPairClassService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.UserService;
+
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.Key;
+
 
 
 @RestController
@@ -22,6 +32,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    KeyPairClassService keyPairClassService;
 
 
     @GetMapping("/hello")
@@ -30,6 +45,9 @@ public class UserController {
 		
         return new ResponseEntity<>(String.format("NEMANJA TI SI GOVNOI i jebi se i pusi "), HttpStatus.OK);
     }
+
+
+
     
     @PostMapping(value = "/login")
     public String Login(){
@@ -37,7 +55,36 @@ public class UserController {
 
         System.out.println("PROSO PROSO");
 
+        String authorizationHeader =keyPairClassService.getPublicKey().toString();
+
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        
+        requestHeaders.add("publicKeyAttribute", authorizationHeader);
+
+        HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
+
+        ResponseEntity<?> responseEntity = restTemplate.exchange(
+            "http://advertisement/publicKey",
+            HttpMethod.GET,
+            requestEntity,
+            new ParameterizedTypeReference<ResponseEntity<?>>() {
+            }).getBody();
+
+
+
       return "proslo";
+    }
+
+    
+	@GetMapping(value = "/getPublicKey")
+    public ResponseEntity<String> getUserId() {
+
+
+
+		System.out.println("OVO JE poslati PUBLIC KEY="+keyPairClassService.getPublicKey().toString());
+
+        return new ResponseEntity<>(keyPairClassService.getPublicKey().toString(), HttpStatus.OK);
     }
 
 
@@ -46,6 +93,37 @@ public class UserController {
     
         System.out.println("POGODIO JE LOGIN TOKEN");
 
+
+
+        String publicK = Base64.encodeBase64String(keyPairClassService.getPublicKey().getEncoded());
+
+        System.out.println("PUBLIC KEY JE NA AUTH="+keyPairClassService.getPublicKey());
+
+        HttpEntity<String> request = new HttpEntity<>(publicK);
+
+        restTemplate
+        .exchange("http://advert/callMe", HttpMethod.POST, request, new ParameterizedTypeReference<Long>() {
+        }).getBody();
+
+     /*   String authorizationHeader =keyPairClassService.getPublicKey().toString();
+
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+
+      
+        requestHeaders.setContentType(MediaType.TEXT_PLAIN);
+        
+        requestHeaders.add("publicKeyAttribute", authorizationHeader);
+
+        HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
+
+        ResponseEntity<?> responseEntity = restTemplate.exchange(
+            "http://advert/publicKey",
+            HttpMethod.GET,
+            requestEntity,
+            new ParameterizedTypeReference<ResponseEntity<?>>() {
+            }).getBody();
+*/
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

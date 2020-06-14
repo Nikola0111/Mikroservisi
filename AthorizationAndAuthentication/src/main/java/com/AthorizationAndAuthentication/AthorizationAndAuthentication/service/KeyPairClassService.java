@@ -5,6 +5,8 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.repository.KeyPairClassRepository;
@@ -18,9 +20,9 @@ public class KeyPairClassService  {
 
 
   
-    private Key privateKey;
+    private PrivateKey privateKey;
 
-    private Key publicKey;
+    private PublicKey publicKey;
 
 
     
@@ -43,7 +45,7 @@ public class KeyPairClassService  {
         }
         
         catch(Exception e){
-            System.out.println("Popusio si kurac");
+            System.out.println("Ups");
         }
 
   }
@@ -52,7 +54,7 @@ public class KeyPairClassService  {
       return privateKey;
   }
 
-  public void setPrivateKey(Key privateKey) {
+  public void setPrivateKey(PrivateKey privateKey) {
       this.privateKey = privateKey;
   }
 
@@ -60,7 +62,7 @@ public class KeyPairClassService  {
       return publicKey;
   }
 
-  public void setPublicKey(Key publicKey) {
+  public void setPublicKey(PublicKey publicKey) {
       this.publicKey = publicKey;
   }
 
