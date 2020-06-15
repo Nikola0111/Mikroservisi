@@ -1,6 +1,7 @@
 package com.Advertisement.Advertisement.service;
 
 import java.security.Key;
+import java.security.PublicKey;
 
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class PublicKeyClassService {
     
 
-    private Key publicKey;
+    private PublicKey publicKey;
 
 
     public PublicKeyClassService(){
@@ -16,12 +17,12 @@ public class PublicKeyClassService {
 
     }
 
-    public void setPublicKeyClass(Key publicKey){
+    public void setPublicKeyClass(PublicKey publicKey){
 
         this.publicKey=publicKey;
     }
 
-    public Key getPublicKeyClass(){
+    public PublicKey getPublicKeyClass(){
         return this.publicKey;
     }
 

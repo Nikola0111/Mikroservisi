@@ -7,6 +7,8 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +24,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import java.io.IOException;
 import java.security.Key;
+import java.security.PublicKey;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,11 +36,14 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
     
 
-private final Key publicKey;
+private final PublicKey publicKey;
 
 
-public JwtTokenVerifier(Key publicKey){
+
+
+public JwtTokenVerifier(PublicKey publicKey){
     this.publicKey=publicKey;
+   
 }
 
 
@@ -84,6 +90,8 @@ public JwtTokenVerifier(Key publicKey){
                     null,
                     simpleGrantedAuthorities
             );
+
+            System.out.println("PROSAO SAM NEMANJA SMRADE SMRDLJIVI");
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
