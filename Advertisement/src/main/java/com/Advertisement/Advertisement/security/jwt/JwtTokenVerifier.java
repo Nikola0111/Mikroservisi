@@ -67,12 +67,12 @@ public JwtTokenVerifier(PublicKey publicKey){
 
           
 
-            
+            String secretKey = "securesecuresecuresecuresecuresecuresecuresecuresecure";
                                 
             Jws<Claims> claimsJws = Jwts.parser()
             
             
-                    .setSigningKey(publicKey)
+                    .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .parseClaimsJws(token);
 
             Claims body = claimsJws.getBody();

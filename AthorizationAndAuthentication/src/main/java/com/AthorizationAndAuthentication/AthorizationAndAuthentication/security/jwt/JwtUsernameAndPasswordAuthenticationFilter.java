@@ -68,6 +68,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                                             Authentication authResult) throws IOException, ServletException {
 
                                                 System.out.println("On udje gde treba da generise");
+
+        String secretKey = "securesecuresecuresecuresecuresecuresecuresecuresecure";
+
          String token = Jwts.builder()
         
                 .setSubject(authResult.getName())
@@ -75,7 +78,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(2)))
                 
-                .signWith(privateKey)
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 
                 .compact();
 

@@ -15,9 +15,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
         const jwt = localStorage.getItem("jwt");
 
-        const xsrfToken=localStorage.getItem("xsrfToken");
+        //const xsrfToken=localStorage.getItem("xsrfToken");
 
         console.log("Tokencic je ovaj=="+jwt);
+
+
+      const xsrfToken = this.getCookie('XSRF-TOKEN');
 
 
 
@@ -25,9 +28,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
         if (jwt) {
             const cloned = req.clone({
+
                 headers: req.headers.set("Authorization",
                       jwt)
-                      .set('X-XSRF-TOKEN', xsrfToken)
             });
             console.log("Pogodi prvi if!")
 
@@ -36,7 +39,7 @@ export class AuthInterceptor implements HttpInterceptor {
         else if(xsrfToken){
             const cloned = req.clone({
                 headers: req.headers
-                      .set('X-XSRF-TOKEN', xsrfToken)
+                      //.set('X-XSRF-TOKEN', xsrfToken)
             });
             console.log("Pogodi DRUGI IF");
             return next.handle(cloned);
@@ -44,28 +47,25 @@ export class AuthInterceptor implements HttpInterceptor {
         else {
             return next.handle(req);
         }
-        
-/*
-        if(xsrfToken && idToken){
-            const headers = new HttpHeaders({
-                'Authorization': idToken,
-                'X-XSRF-TOKEN':  xsrfToken
-              });
-          const cloneReq = req.clone({headers});
-          
-              return next.handle(cloneReq);
-        }
-        else if(xsrfToken){
-            const headers = new HttpHeaders({
-                'X-XSRF-TOKEN':  xsrfToken
-              });
-          const cloneReq = req.clone({headers});
-          
-              return next.handle(cloneReq);
-        }
-        else {
-            return next.handle(req);
-        }
-        */
+
     }
+
+
+ getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
 }
