@@ -1,11 +1,17 @@
 package com.Booking.Booking.service;
 
 import com.Booking.Booking.dtos.ItemInCartDTO;
+import com.Booking.Booking.dtos.ItemInCartFrontDTO;
 import com.Booking.Booking.model.ItemInCart;
 import com.Booking.Booking.repository.ItemInCartRepository;
+import org.springframework.http.HttpMethod;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+
+import java.util.*;
 
 @Service
 public class ItemInCartService {
@@ -16,31 +22,67 @@ public class ItemInCartService {
     @Autowired
     ItemInCartRepository itemInCartRepository;
 
-    public void save(ItemInCartDTO itemInCartDTO) {
+    @Autowired
+    RestTemplate restTemplate;
 
-        ItemInCart item = new ItemInCart(itemInCartDTO.getAdvertisement(), itemInCartDTO.getTimeFrom(),
-                itemInCartDTO.getTimeTo());
+    public int save(ItemInCartDTO itemInCartDTO) {
+        List<ItemInCart> all = itemInCartRepository.findAll();
+
+        for (ItemInCart item : all) {
+            if (item.getUserId().equals(getLogedUserId())
+                    && item.getAdvertisementId().equals(itemInCartDTO.getAdvertisementId())
+                    && ((item.getTimeFrom().isAfter(itemInCartDTO.getTimeFrom())
+                            && item.getTimeFrom().isBefore(itemInCartDTO.getTimeTo()))
+                            || (item.getTimeTo().isAfter(itemInCartDTO.getTimeFrom())
+                                    && item.getTimeTo().isBefore(itemInCartDTO.getTimeTo()))
+                            || (itemInCartDTO.getTimeFrom().isAfter(item.getTimeFrom())
+                                    && itemInCartDTO.getTimeFrom().isBefore(item.getTimeTo()))
+                            || (itemInCartDTO.getTimeTo().isAfter(item.getTimeFrom())
+                                    && itemInCartDTO.getTimeTo().isBefore(item.getTimeTo()))
+                            || (item.getTimeFrom().equals(itemInCartDTO.getTimeFrom())
+                                    || item.getTimeFrom().equals(itemInCartDTO.getTimeTo())
+                                    || item.getTimeTo().equals(itemInCartDTO.getTimeFrom())
+                                    || item.getTimeTo().equals(itemInCartDTO.getTimeTo()))
+                                    && item.getTimeTo().equals(itemInCartDTO.getTimeTo()))) {
+                return 0;
+            }
+        }
+
+        ItemInCart item = new ItemInCart(getLogedUserId(), itemInCartDTO.getAdvertisementPostedById(),
+                itemInCartDTO.getAdvertisementId(), itemInCartDTO.getTimeFrom(), itemInCartDTO.getTimeTo());
         itemInCartRepository.save(item);
 
         shoppingCartService.addAItemInCart(item.getId());
 
+        return 1;
+
     }
 
-    public List<ItemInCart> remove(ItemInCart itemInCart) {
+    public List<ItemInCartFrontDTO> remove(ItemInCart itemInCart) {
 
-        //itemInCartRepository.delete(itemInCart);
+        // itemInCartRepository.delete(itemInCart);
         shoppingCartService.removeItemInCart(itemInCart.getId());
 
         return shoppingCartService.fotCart();
 
     }
 
-    public void removeAll(){
+    public void removeAll() {
 
-        //itemInCartRepository.deleteAll();
+        // itemInCartRepository.deleteAll();
         shoppingCartService.removeAll();
 
-        
+    }
+
+    public Long getLogedUserId() {
+
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+                }).getBody();
+
+        System.out.println("Nasao je id=" + id);
+
+        return id;
     }
 
 }

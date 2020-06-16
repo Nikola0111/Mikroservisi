@@ -1,11 +1,13 @@
-import {FuelType} from '../enums/fuelType';
-import {TransmissionType} from '../enums/transmissionType';
-import {CarClass} from '../enums/carClass';
+import { FuelType } from '../enums/fuelType';
+import { TransmissionType } from '../enums/transmissionType';
+import { CarClass } from '../enums/carClass';
 
 export class FilterAdsDTO {
-  fuelType: FuelType;
-  transmissionType: TransmissionType;
-  carClass: CarClass;
+  brand: string;
+  model: string;
+  fuelType: string;
+  transmissionType: string;
+  carClass: string;
   travelledFrom: number;
   travelledTo: number;
   priceFrom: number;
@@ -13,8 +15,8 @@ export class FilterAdsDTO {
   carSeats: number;
   timeFrom: Date;
   timeTo: Date;
-  
-  
+
+
 
   constructor() {
 

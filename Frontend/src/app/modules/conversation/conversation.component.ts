@@ -30,6 +30,13 @@ export class ConversationComponent implements OnInit {
       
       data=>{
         this.messages=data;
+
+        this.messages.forEach(message => {
+          
+          message.replacedDate=message.timeSent.toString().replace("T"," ");
+
+        });
+        console.log(data);
       }
 
     )

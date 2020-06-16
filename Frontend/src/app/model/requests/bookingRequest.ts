@@ -10,7 +10,7 @@ export class BookingRequest {
 
     userToId: number;
 
-    advertisement:Advertisement;
+    advertisement:number;
 
     stateOfRequest: RequestStates;
 

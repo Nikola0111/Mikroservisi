@@ -3,6 +3,7 @@ package com.Booking.Booking.controller;
 import java.util.List;
 
 import com.Booking.Booking.dtos.ItemInCartDTO;
+import com.Booking.Booking.dtos.ItemInCartFrontDTO;
 import com.Booking.Booking.model.ItemInCart;
 import com.Booking.Booking.service.ShoppingCartService;
 
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "shoppingCart")
+//@RequestMapping(value = "shoppingCart")
 public class ShoppingCartController {
 
     @Autowired
@@ -26,7 +27,12 @@ public class ShoppingCartController {
 
     @PreAuthorize("hasAuthority('itemInCart:read')")
     @GetMapping(value = "/forCart")
-    public ResponseEntity<List<ItemInCart>> getAllForCart() {
+
+    public ResponseEntity<List<ItemInCartFrontDTO>> getAllForCart() {
+		
+	   
+		List<ItemInCartFrontDTO> items = shoppingCartService.fotCart();
+
 
         List<ItemInCart> items = shoppingCartService.fotCart();
 
@@ -34,5 +40,17 @@ public class ShoppingCartController {
 
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
+
+    @PostMapping(value = "/createShoopingCart")
+    public ResponseEntity<Long> createNewCart(@RequestBody Long userId) {
+		
+	   
+		
+		shoppingCartService.save(userId);
+        
+        return new ResponseEntity<Long>(userId,HttpStatus.OK);
+    }
+
+   
 
 }

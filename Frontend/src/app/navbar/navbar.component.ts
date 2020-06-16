@@ -33,6 +33,7 @@ export class NavbarComponent implements OnInit {
     this.sessionService.agentreg = false;
     this.sessionService.manageUsers = false;
     this.sessionService.codebook = false;
+    this.sessionService.commentManagment = false;
   }
 
   codebook() {
@@ -41,6 +42,7 @@ export class NavbarComponent implements OnInit {
     this.sessionService.agentreg = false;
     this.sessionService.manageUsers = false;
     this.sessionService.codebook = true;
+    this.sessionService.commentManagment = false;
   }
 
   showHome() {
@@ -49,6 +51,7 @@ export class NavbarComponent implements OnInit {
     this.sessionService.agentreg = false;
     this.sessionService.manageUsers = false;
     this.sessionService.codebook = false;
+    this.sessionService.commentManagment = false;
   }
 
   showAgentReg() {
@@ -57,6 +60,7 @@ export class NavbarComponent implements OnInit {
     this.sessionService.agentreg = true;
     this.sessionService.manageUsers = false;
     this.sessionService.codebook = false;
+    this.sessionService.commentManagment = false;
   }
 
   manageUsers() {
@@ -65,6 +69,16 @@ export class NavbarComponent implements OnInit {
     this.sessionService.agentreg = false;
     this.sessionService.manageUsers = true;
     this.sessionService.codebook = false;
+    this.sessionService.commentManagment = false;
+  }
+
+  manageComments(){
+    this.sessionService.adminhome = false;
+    this.sessionService.requests = false;
+    this.sessionService.agentreg = false;
+    this.sessionService.manageUsers = false;
+    this.sessionService.codebook = false;
+    this.sessionService.commentManagment = true;
   }
   // Admin components
 

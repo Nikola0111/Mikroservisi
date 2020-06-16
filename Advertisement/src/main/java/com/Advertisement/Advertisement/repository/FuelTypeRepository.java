@@ -11,4 +11,6 @@ public interface FuelTypeRepository extends JpaRepository<FuelType, Long> {
 
     public FuelType findOneByid(Long id);
     public List<FuelType> findAll();
+    public void deleteByCode(String code);
+    public FuelType findByName(String name);
 }

@@ -1,12 +1,16 @@
 import { User } from './user';
+import { UserMessageDTO } from '../dtos/userMessageDTO';
 
 
 export class ConversationMessage {
 
   id: number;
-  sender:User;
-  receiver:User;
+  sender:UserMessageDTO;
+  receiver:UserMessageDTO;
   text:string;
+  timeSent: Date;
+  replacedDate: string;
+  
   
   
 

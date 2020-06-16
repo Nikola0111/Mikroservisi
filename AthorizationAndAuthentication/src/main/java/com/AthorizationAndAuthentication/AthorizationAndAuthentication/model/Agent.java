@@ -23,7 +23,7 @@ public class Agent {
     @Column(name ="business_registration_number")
     private String bsregnum;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn
     private EntityUser user;
 
@@ -38,6 +38,14 @@ public class Agent {
 
     public Agent(){
 
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getNumber_ads() {

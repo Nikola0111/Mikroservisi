@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RepresentRequestsService } from './represent-requests.service';
 import { BookingRequest } from 'src/app/model/requests/bookingRequest';
 import { RequestStates } from 'src/app/enums/requestStates';
+import { BookingRequestDTO } from 'src/app/dtos/bookingRequestDTO';
 
 @Component({
   selector: 'app-repsresent-requests',
@@ -10,7 +11,7 @@ import { RequestStates } from 'src/app/enums/requestStates';
 })
 export class RepresentRequestsComponent implements OnInit {
   groups: number[];
-  requests: BookingRequest[];
+  requests: BookingRequestDTO[];
   napravioJedan: number;
   requestStatus: RequestStates;
   checker: number;
@@ -120,6 +121,7 @@ export class RepresentRequestsComponent implements OnInit {
       )
     }
     else if(event.target.value==="PAID"){
+      this.requestStatus=RequestStates.PAID;
       this.representRequestsService.getSpecificGroupsForCart(this.requestStatus).subscribe(
        
         data=>{

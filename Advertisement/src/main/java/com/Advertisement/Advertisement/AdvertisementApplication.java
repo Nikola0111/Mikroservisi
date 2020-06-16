@@ -17,8 +17,7 @@ public class AdvertisementApplication {
 	}
 
 	@Bean
-    @LoadBalanced
-    public RestTemplate restTemplate() { return new RestTemplate(); }
-
+	@LoadBalanced
+	public RestTemplate restTemplate() { return new RestTemplate(); }
 
 }

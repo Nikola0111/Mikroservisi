@@ -24,36 +24,50 @@ public class EndUser {
     @Column(name = "blocked")
     private boolean blocked;
 
-    // @ManyToMany
-    // @JoinTable(name = "enduser_rented", joinColumns = @JoinColumn(name = "endentity_id"),
-    //         inverseJoinColumns = @JoinColumn(name = "ad_id"))
-    // private List<Advertisement> rentedCars;
+    @Column(name = "numberOfAds")
+    private int numberOfAds;
 
-    @ManyToOne
+    @ElementCollection
+    private List<Long> rentedCars;
+
+    
+
+    @OneToOne
     @JoinColumn
     private EntityUser user;
 
-   
-
-
-    public  EndUser() {
+    public EndUser() {
 
     }
 
     public EndUser(String name, String surname, LoginInfo loginInfo, String jmbg, String phoneNumber, UserType ut,
-                   int number_of_requests, boolean activity, boolean adminApproved, boolean blocked) {
+            int number_of_requests, boolean activity, boolean adminApproved, boolean blocked, int numberOfAds) {
         this.numberOfRequestsCanceled = number_of_requests;
         this.activity = activity;
         this.adminApproved = adminApproved;
         this.blocked = blocked;
+        this.numberOfAds = numberOfAds;
     }
 
-    // public EndUser(String name, String surname, LoginInfo loginInfo, String jmbg, String phoneNumber, UserType ut, int numberOfRequestsCanceled, boolean activity, boolean adminApproved, boolean blocked, List<Advertisement> rentedCars) {
-    //     this.numberOfRequestsCanceled = numberOfRequestsCanceled;
-    //     this.activity = activity;
-    //     this.adminApproved = adminApproved;
-    //     this.blocked = blocked;
-    //     this.rentedCars = rentedCars;
+    public EndUser(String name, String surname, LoginInfo loginInfo, String jmbg, String phoneNumber, UserType ut,
+            int number_of_requests, boolean activity, boolean adminApproved, boolean blocked, int numberOfAds, List<Long> rentedCars) {
+        this.numberOfRequestsCanceled = number_of_requests;
+        this.activity = activity;
+        this.adminApproved = adminApproved;
+        this.blocked = blocked;
+        this.numberOfAds = numberOfAds;
+        this.rentedCars = rentedCars;
+    }
+
+    // public EndUser(String name, String surname, LoginInfo loginInfo, String jmbg,
+    // String phoneNumber, UserType ut, int numberOfRequestsCanceled, boolean
+    // activity, boolean adminApproved, boolean blocked, List<Advertisement>
+    // rentedCars) {
+    // this.numberOfRequestsCanceled = numberOfRequestsCanceled;
+    // this.activity = activity;
+    // this.adminApproved = adminApproved;
+    // this.blocked = blocked;
+    // this.rentedCars = rentedCars;
     // }
 
     @Override
@@ -61,11 +75,11 @@ public class EndUser {
         return "EndUser{}";
     }
 
-    public int getNumber_of_requests() {
+    public int getNumberOfRequestsCanceled() {
         return numberOfRequestsCanceled;
     }
 
-    public void setNumber_of_requests(int number_of_requests) {
+    public void setNumberOfRequestsCanceled(int number_of_requests) {
         this.numberOfRequestsCanceled = number_of_requests;
     }
 
@@ -93,14 +107,6 @@ public class EndUser {
         this.blocked = blocked;
     }
 
-    // public List<Advertisement> getRentedCars() {
-    //     return rentedCars;
-    // }
-
-    // public void setRentedCars(List<Advertisement> rentedCars) {
-    //     this.rentedCars = rentedCars;
-    // }
-
     public EntityUser getUser() {
         return this.user;
     }
@@ -109,13 +115,28 @@ public class EndUser {
         this.user = user;
     }
 
-    
     public Long getId() {
         return this.id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getNumberOfAds() {
+        return this.numberOfAds;
+    }
+
+    public void setNumberOfAds(int numberOfAds) {
+        this.numberOfAds = numberOfAds;
+    }
+
+    public List<Long> getRentedCars() {
+        return this.rentedCars;
+    }
+
+    public void setRentedCars(List<Long> rentedCars) {
+        this.rentedCars = rentedCars;
     }
 
 }

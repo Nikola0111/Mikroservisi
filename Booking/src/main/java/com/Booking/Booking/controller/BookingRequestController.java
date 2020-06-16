@@ -1,12 +1,17 @@
 package com.Booking.Booking.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.Booking.Booking.dtos.BookingRequestFrontDTO;
 import com.Booking.Booking.dtos.ItemInCartDTO;
+import com.Booking.Booking.dtos.ItemInCartFrontDTO;
+import com.Booking.Booking.dtos.ReservationDTO;
 import com.Booking.Booking.enums.RequestStates;
 import com.Booking.Booking.model.ItemInCart;
 import com.Booking.Booking.model.requests.BookingRequest;
+import com.Booking.Booking.repository.BookingRequestRepository;
 import com.Booking.Booking.service.BookingRequestService;
 import com.Booking.Booking.service.ItemInCartService;
 import com.Booking.Booking.service.ShoppingCartService;
@@ -41,9 +46,11 @@ public class BookingRequestController {
         return new ResponseEntity<>(String.format("OMMMMMMGMF"), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('booking:write')")
+ @PreAuthorize("hasAuthority('booking:write')")
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ItemInCart>> Login(@RequestBody List<ItemInCartDTO> lista) {
+
+    public ResponseEntity<List<ItemInCartFrontDTO>> Login(@RequestBody List<ItemInCartDTO> lista) {
+
 
         System.out.println("Pogodio je back");
 
@@ -56,14 +63,16 @@ public class BookingRequestController {
 
     @PreAuthorize("hasAuthority('booking:read')")
     @PostMapping(value = "/getAllForAgent")
-    public ResponseEntity<List<BookingRequest>> getAllSpecificForAgent(@RequestBody RequestStates state) {
 
-        List<BookingRequest> requests = bookingRequestService.getAllSpecificForAgent(state);
+    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForAgent(@RequestBody RequestStates state) {
+
+        List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForAgent(state);
 
         System.out.println("pogodio je kontroler, broj oglasa vraca==" + requests.size());
 
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
+
 
     @PreAuthorize("hasAuthority('booking:read')")
     @PostMapping(value = "/getGroupsForAgent")
@@ -75,6 +84,7 @@ public class BookingRequestController {
 
         return new ResponseEntity<>(groups, HttpStatus.OK);
     }
+
 
     @PreAuthorize("hasAuthority('booking:accept')")	
     @PostMapping(value = "/acceptRequest")
@@ -91,9 +101,16 @@ public class BookingRequestController {
     @PostMapping(value = "/getAllSpecificForBuyer")
     public ResponseEntity<List<BookingRequest>> getAllSpecificForBuyer(@RequestBody RequestStates state) {
 
-        List<BookingRequest> requests = bookingRequestService.getAllSpecificForBuyer(state);
+
+    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForBuyer(@RequestBody RequestStates state) {
+
+        List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForBuyer(state);
 
         System.out.println("pogodio je kontroler, broj oglasa vraca==" + requests.size());
+
+
+        System.out.println("pogodio je kontroler, broj oglasa vraca==" + requests.size());
+
 
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
@@ -116,6 +133,49 @@ public class BookingRequestController {
         bookingRequestService.cancelRequest(group);
 
         return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+    // @GetMapping(value = "/getAllBookings")
+    // public ResponseEntity<List<BookingRequest>> getAllBookings() {
+    // List<BookingRequest> booked = new ArrayList<BookingRequest>();
+    // List<BookingRequest> all = bookingRequestService.findAll();
+
+    // for (BookingRequest request : all) {
+    // if ((request.getStateOfRequest().name().equals("RESERVED")
+    // || request.getStateOfRequest().name().equals("PAID"))
+    // && request.getTimeFrom().isAfter(LocalDateTime.now())) {
+    // booked.add(request);
+    // }
+    // }
+    // return new ResponseEntity<>(booked, HttpStatus.OK);
+    // }
+
+    @GetMapping(value = "/getAllBookings")
+    public ResponseEntity<List<BookingRequest>> getAllBookings() {
+        List<BookingRequest> booked = new ArrayList<BookingRequest>();
+        List<BookingRequest> all = bookingRequestService.findAll();
+
+        for (BookingRequest request : all) {
+            if ((request.getStateOfRequest().name().equals("RESERVED")
+                    || request.getStateOfRequest().name().equals("PAID"))
+                    && request.getTimeFrom().isAfter(LocalDateTime.now())) {
+                booked.add(request);
+            }
+        }
+        return new ResponseEntity<>(booked, HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/reserve")
+    public ResponseEntity<Long> reserve(@RequestBody ReservationDTO reservation) {
+
+        
+
+        bookingRequestService.saveReserve(reservation);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
 }

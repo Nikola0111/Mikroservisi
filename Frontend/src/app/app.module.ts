@@ -55,6 +55,8 @@ import { AgentsAdvertisementsComponent } from './modules/agent/agents-advertisem
 import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from "@angular/material/select";
 import { AuthInterceptor } from './services/httpInterceptor.service';
+import { ReserveComponent } from './modules/reserve/reserve.component';
+import { CommentManagementComponent } from './modules/administrator/comment-management/comment-management.component';
 
 
 
@@ -89,6 +91,8 @@ import { AuthInterceptor } from './services/httpInterceptor.service';
     ChangeDiscountDialogComponent,
     ImagesDialogComponent,
     AgentsAdvertisementsComponent,
+    ReserveComponent,
+    CommentManagementComponent
 ],
   imports: [
     BrowserModule,
@@ -101,6 +105,7 @@ import { AuthInterceptor } from './services/httpInterceptor.service';
     RouterModule.forRoot([
       {path: 'registrationConfirm.html', component: RegisterConfirmComponent},
       {path: 'izmenaLozinke', component: IzmenaLozinkeComponent},
+      {path: 'sifrarnik', component: SifrarnikComponent},
       {path: 'report/:id', component: CreateReportComponent},
       {path: '', component: RegistracijaComponent},
       {path: 'agent', component: AgentComponent},
@@ -117,7 +122,8 @@ import { AuthInterceptor } from './services/httpInterceptor.service';
       {path: 'register', component: RegistracijaComponent},
       {path: 'conversation/:id', component: ConversationComponent},
       {path: 'statistics', component: StatisticsComponent},
-      {path: 'advertisement-details/:id', component: AdvertisementDetailsComponent}
+      {path: 'advertisement-details/:id', component: AdvertisementDetailsComponent},
+      {path: 'reserve', component: ReserveComponent}
     ]),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBcBUQxfS6JldNG0Ltoju5YxE_0-CKJsu4',
@@ -143,11 +149,11 @@ import { AuthInterceptor } from './services/httpInterceptor.service';
               ConversationService,
               HistoryService,
               EndUserService,
-              {
-                provide:HTTP_INTERCEPTORS,
-                useClass: AuthInterceptor,
-                multi:true
-              }
+            //  {
+             //   provide:HTTP_INTERCEPTORS,
+            //    useClass: AuthInterceptor,
+            //    multi:true
+            //  }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChangeDiscountDialogComponent, ImagesDialogComponent]

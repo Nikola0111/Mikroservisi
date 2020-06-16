@@ -26,6 +26,11 @@ public class AthorizationAndAuthenticationApplication {
 	
 	
 
+	@Bean
+	@LoadBalanced
+	public RestTemplate restTemplate() { return new RestTemplate(); }
+
+
 }
 
 

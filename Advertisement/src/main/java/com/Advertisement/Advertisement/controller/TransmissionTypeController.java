@@ -2,8 +2,8 @@ package com.Advertisement.Advertisement.controller;
 
 import java.util.List;
 
-import com.Advertisement.Advertisement.model.TransmissionType;
-import com.Advertisement.Advertisement.service.TransmissionTypeService;
+import com.Advertisement.Advertisement.model.*;
+import com.Advertisement.Advertisement.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

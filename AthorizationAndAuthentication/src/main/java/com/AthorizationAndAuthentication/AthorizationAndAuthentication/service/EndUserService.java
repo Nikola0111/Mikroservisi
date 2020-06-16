@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +27,13 @@ public class EndUserService {
     @Autowired
     private UserRepository userRepository;
 
-   // @Autowired
-   // private ShoppingCartService shoppingCartService;
+    // @Autowired
+    // private ShoppingCartService shoppingCartService;
 
     public void save(EndUser endUser) {
 
         endUserRepository.save(endUser);
-      //  shoppingCartService.save(endUser.getId());
+        // shoppingCartService.save(endUser.getId());
     }
 
     public LoginInfo findByEmail(String email) {
@@ -100,41 +102,59 @@ public class EndUserService {
         }
     }
 
-    public List<EndUser> getRegisteredUsers(){
+    public List<EndUser> getRegisteredUsers() {
         return endUserRepository.findAllByActivity(true);
     }
 
-  /*  @Transactional
-    public Integer deactivate(String jmbg){
-        return endUserRepository.deleteByJmbg(jmbg);
+    
+    @Transactional public void deactivate(Long id){ 
+        endUserRepository.deleteById(id);
     }
-
-    @Transactional
-    public Boolean block(String jmbg){
-        EndUser endUser = endUserRepository.findByJmbg(jmbg);
-
-        if(endUser == null){
-            return false;
+    
+    @Transactional public Boolean block(Long id){
+        EndUser endUser = endUserRepository.findOneById(id);
+    
+        if(endUser == null){ 
+            return false; 
         }
-
+    
         endUser.setBlocked(true);
-
+     
         endUserRepository.save(endUser);
-
+        
         return true;
     }
-
-    @Transactional
-    public Boolean unblock(String jmbg){
-        EndUser endUser = endUserRepository.findByJmbg(jmbg);
-
+     
+    @Transactional 
+    public Boolean unblock(Long id){ 
+        EndUser endUser = endUserRepository.findOneById(id);
+     
         if(endUser == null){
             return false;
         }
-
-        endUser.setBlocked(false);
+     
+        endUser.setBlocked(false); 
         endUserRepository.save(endUser);
-
+     
         return true;
-    } */
+    }
+
+    public List<Long> getRentedCars(Long userId){
+        System.out.println(userId + "ID ENDUSERA");
+		EntityUser user = userRepository.findOneByid(userId); //treba dobiti usera po id
+		List<Long> list = new ArrayList<>();
+		EndUser endUser = endUserRepository.findByUser(user);
+
+		for(int i = 0;i < endUser.getRentedCars().size(); i++){
+			list.add(endUser.getRentedCars().get(i));
+		}
+
+		return list;
+    }
+    
+    public String getEmail(Long id){
+        EndUser endUser = endUserRepository.findOneById(id);
+
+        return endUser.getUser().getLoginInfo().getEmail();
+    }
 }
