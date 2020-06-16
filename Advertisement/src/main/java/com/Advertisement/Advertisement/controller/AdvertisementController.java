@@ -1,10 +1,12 @@
 package com.Advertisement.Advertisement.controller;
 
+import SaveAdvertisementSoap.GetAdvertisementRequest;
 import com.Advertisement.Advertisement.dtos.*;
 import com.Advertisement.Advertisement.model.Advertisement;
 import com.Advertisement.Advertisement.model.Comment;
 import com.Advertisement.Advertisement.service.AdvertisementService;
 
+import com.Advertisement.Advertisement.service.SoapClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +27,9 @@ import javax.security.auth.message.callback.SecretKeyCallback.Request;
 @RestController
 // @RequestMapping(value = "advertisement")
 public class AdvertisementController {
+
+	@Autowired
+	private SoapClient soapClient;
 
 	@Autowired
 	private AdvertisementService advertisementService;
@@ -50,7 +56,8 @@ public class AdvertisementController {
 	}
 
 	@PostMapping(value = "/save")
-	public ResponseEntity<Long> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO) {
+	public ResponseEntity<Long> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO)
+			throws MalformedURLException {
 		Long id;
 
 		System.out.println("Pogodio je ovaj SAVE");
@@ -226,6 +233,10 @@ public class AdvertisementController {
 		List<Advertisement> ads = advertisementService.getAllByUser(id);
 
 		return new ResponseEntity<>(ads, HttpStatus.OK);
+	}
+	@PostMapping(value = "/saveAdvertisementSoap")
+	public AdvertisementSoapDTO invokeSoapClientSaveAdvertisement(@RequestBody GetAdvertisementRequest request){
+		return soapClient.getAdvertisement(request);
 	}
 
 	/*

@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.*;
 
 import javax.servlet.http.HttpSession;
+import javax.xml.namespace.QName;
 
 @Service
 public class AdvertisementService {
@@ -76,7 +79,7 @@ public class AdvertisementService {
 	// @Autowired
 	// SessionService sessionService;
 
-	public Advertisement save(AdvertisementCreationDTO advertisementCreationDTO, Long id) {
+	public Advertisement save(AdvertisementCreationDTO advertisementCreationDTO, Long id) throws MalformedURLException {
 
 		System.out.println("/////////////Advertisement service//////////////////////////////////////");
 		System.out.println(id);
@@ -100,6 +103,12 @@ public class AdvertisementService {
 				advertisementCreationDTO.getDiscount(), advertisementCreationDTO.getPictures(), 0.0);
 
 		// kada se kreira korisnik kreira mu se i korpa u koju ce moci da dodaje oglase!
+
+		URL wsdl = new URL("http://localhost:8080/vezbe-ws/services/AddressBook?wsdl");
+	    QName serviceName = new QName("http://informatika.ftn.ns.ac.yu/ws/address", "AdvertisementSoapService");
+	    QName portName = new QName("http://informatika.ftn.ns.ac.yu/ws/address", "AdvertisementPort");
+		
+		javax.xml.ws.Service service = javax.xml.ws.Service.create(wsdl, serviceName);
 
 		return advertisementRepository.save(ad);
 	}
