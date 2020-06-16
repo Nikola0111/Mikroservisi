@@ -95,15 +95,15 @@ public class UserController {
 
 
 
-        String publicK = Base64.encodeBase64String(keyPairClassService.getPublicKey().getEncoded());
+       // String publicK = Base64.encodeBase64String(keyPairClassService.getPublicKey().getEncoded());
 
-        System.out.println("PUBLIC KEY JE NA AUTH="+keyPairClassService.getPublicKey());
+      //  System.out.println("PUBLIC KEY JE NA AUTH="+keyPairClassService.getPublicKey());
 
-        HttpEntity<String> request = new HttpEntity<>(publicK);
+      //  HttpEntity<String> request = new HttpEntity<>(publicK);
 
-        restTemplate
-        .exchange("http://advert/callMe", HttpMethod.POST, request, new ParameterizedTypeReference<Long>() {
-        }).getBody();
+      //  restTemplate
+      //  .exchange("http://advert/callMe", HttpMethod.POST, request, new ParameterizedTypeReference<Long>() {
+      //  }).getBody();
 
      /*   String authorizationHeader =keyPairClassService.getPublicKey().toString();
 
