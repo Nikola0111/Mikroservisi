@@ -1,11 +1,11 @@
-package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security;
+package com.Booking.Booking.security;
 
 import com.google.common.collect.Sets;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Set;
 import java.util.stream.Collectors;
-import com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.*;
+import com.Booking.Booking.security.*;
 
 public enum ApplicationUserRole {
 ENDUSER(Sets.newHashSet(ApplicationUserPermission.ADVERTISEMENT_READ, ApplicationUserPermission.ADVERTISEMENT_WRITE, ApplicationUserPermission.BOOKING_REQUEST_READ, 
@@ -17,6 +17,7 @@ AGENT(Sets.newHashSet(ApplicationUserPermission.ADVERTISEMENT_READ, ApplicationU
     ApplicationUserPermission.COMMENT_READ,
     ApplicationUserPermission.COMMENT_WRITE, ApplicationUserPermission.STATISTIC_READ)),
 ADMIN(Sets.newHashSet(ApplicationUserPermission.ADVERTISEMENT_READ, ApplicationUserPermission.CAR_DETAILS_WRITE, ApplicationUserPermission.USER_READ, ApplicationUserPermission.USER_WRITE, ApplicationUserPermission.CAR_DETAILS_READ, ApplicationUserPermission.CAR_DETAILS_WRITE, ApplicationUserPermission.COMMENT_READ, ApplicationUserPermission.COMMENT_WRITE));
+
 
     private final Set<ApplicationUserPermission> permissions;
 

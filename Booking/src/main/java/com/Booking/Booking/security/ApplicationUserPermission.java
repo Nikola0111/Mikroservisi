@@ -1,4 +1,4 @@
-package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security;
+package com.Booking.Booking.security;
 
 public enum ApplicationUserPermission {
     ADVERTISEMENT_READ("advertisement:read"),

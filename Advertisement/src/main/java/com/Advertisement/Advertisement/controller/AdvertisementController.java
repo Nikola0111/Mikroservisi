@@ -226,3 +226,4 @@ public class AdvertisementController {
 	//  ResponseEntity<>(advertisementDTO.getComments(), HttpStatus.OK); }
 	
 }
+

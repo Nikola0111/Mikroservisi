@@ -1,8 +1,7 @@
-package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.jwt;
+package com.Advertisement.Advertisement.security.jwt;
 
 
-import com.AthorizationAndAuthentication.AthorizationAndAuthentication.repository.KeyPairClassRepository;
-import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.KeyPairClassService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -28,14 +27,14 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     private final AuthenticationManager authenticationManager;
 
-    private final Key privateKey;
+    
    
    
    
 
-    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager, Key privateKey) {
+    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        this.privateKey=privateKey;
+       
         
     }
 
@@ -44,18 +43,17 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                                                 HttpServletResponse response) throws AuthenticationException {
 
         try {
-            UsernameAndPasswordAuthenticationRequest authenticationRequest = new ObjectMapper()
-                    .readValue(request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);
-
+         
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    authenticationRequest.getUsername(),
-                    authenticationRequest.getPassword()
+                    "authenticationRequest.getUsername()",
+                    "authenticationRequest.getPassword()"
             );
 
             Authentication authenticate = authenticationManager.authenticate(authentication);
-            return authenticate;
+            authenticate.setAuthenticated(true);
+           return authenticate;
 
-        } catch (IOException e) {
+        } catch (io.jsonwebtoken.io.IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -67,22 +65,10 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
 
-                                                System.out.println("On udje gde treba da generise");
-
-        String secretKey = "securesecuresecuresecuresecuresecuresecuresecuresecure";
-
-         String token = Jwts.builder()
+                                                System.out.println("On udje U SUCESS");
         
-                .setSubject(authResult.getName())
-                .claim("authorities", authResult.getAuthorities())
-                .setIssuedAt(new Date())
-                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(2)))
-                
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
-                
-                .compact();
 
         
-        response.addHeader("Authorization", "Bearer " + token);
+        
     }
 }

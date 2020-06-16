@@ -1,12 +1,14 @@
-package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.jwt;
+package com.Booking.Booking.security.jwt;
 
-import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.KeyPairClassService;
+import com.Booking.Booking.*;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,33 +24,28 @@ import javax.xml.bind.DatatypeConverter;
 
 import java.io.IOException;
 import java.security.Key;
+import java.security.PublicKey;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class JwtTokenVerifier extends OncePerRequestFilter {
-    
-private KeyPairClassService keyPairClassService;
-
-    
-
-private final Key publicKey;
 
 
-public JwtTokenVerifier(Key publicKey){
-    this.publicKey=publicKey;
-}
 
+    public JwtTokenVerifier() {
+        
+
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         String authorizationHeader = request.getHeader("Authorization");
 
-        System.out.println("EVO GA="+authorizationHeader);
+        System.out.println("EVO GA=" + authorizationHeader);
 
         if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -59,15 +56,11 @@ public JwtTokenVerifier(Key publicKey){
 
         try {
 
-          
-
             String secretKey = "securesecuresecuresecuresecuresecuresecuresecuresecure";
-                                
+
             Jws<Claims> claimsJws = Jwts.parser()
-            
-            
-                    .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
-                    .parseClaimsJws(token);
+
+                    .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes())).parseClaimsJws(token);
 
             Claims body = claimsJws.getBody();
 
@@ -76,14 +69,12 @@ public JwtTokenVerifier(Key publicKey){
             List<Map<String, String>> authorities = (List<Map<String, String>>) body.get("authorities");
 
             Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
-                    .map(m -> new SimpleGrantedAuthority(m.get("authority")))
-                    .collect(Collectors.toSet());
+                    .map(m -> new SimpleGrantedAuthority(m.get("authority"))).collect(Collectors.toSet());
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    username,
-                    null,
-                    simpleGrantedAuthorities
-            );
+            Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
+                    simpleGrantedAuthorities);
+
+            System.out.println("PROSAO SAM NEMANJA SMRADE SMRDLJIVI");
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
