@@ -17,12 +17,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-<
 import java.util.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
@@ -91,7 +91,7 @@ public class UserController {
 
     
 	@GetMapping(value = "/getPublicKey")
-    public ResponseEntity<String> getUserId() {
+    public ResponseEntity<String> getPublicKey() {
 
 
 
@@ -164,6 +164,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getLoggedEndUser(), HttpStatus.OK);
     }
 
+
     @GetMapping(value = "/getUserByUsername/{username}")
     public ResponseEntity<EntityUser> getUserByUsername(@PathVariable("username") String username) {
 
@@ -172,12 +173,14 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+
     @GetMapping(value = "/increaseEndUsersNumberOfAds")
     public ResponseEntity<Long> increaseEndUsersNumberOfAds() {
 
         return new ResponseEntity<>(userService.increaseEndUsersNumberOfAds(), HttpStatus.OK);
     }
 
+   // @PreAuthorize("hasAuthority('user:read')")
     @GetMapping(value= "/getAll")
     public ResponseEntity<List<EntityUser>> getAllUsers(){
 
@@ -186,11 +189,13 @@ public class UserController {
 
     }
 
+  //  @PreAuthorize("hasAuthority('user:read')")
     @PostMapping(value = "/getAgentIDByMail", produces = MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Long> getAgentIDByMail(@RequestBody String email){
         return new ResponseEntity<>(agentService.getAgentIDByEmail(email), HttpStatus.OK);
     }
 
+  //  @PreAuthorize("hasAuthority('user:read')")
     @PostMapping(value = "/getAgentEmail", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getAgentMail(@RequestBody Long id){
         return new ResponseEntity<>(agentService.getAgentMail(id), HttpStatus.OK);

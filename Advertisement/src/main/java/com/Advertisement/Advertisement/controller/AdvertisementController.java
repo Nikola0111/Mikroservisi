@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(String.format("LOSELOSE"), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('advertisement:write')")
 	@RequestMapping(value = "/saveImage", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
 	public ResponseEntity<Long> uploadImage(@RequestParam(value = "file", required = false) MultipartFile file)
 			throws IOException {
@@ -49,6 +51,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('advertisement:write')")
 	@PostMapping(value = "/save")
 	public ResponseEntity<Long> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO) {
 		Long id;
@@ -84,11 +87,13 @@ public class AdvertisementController {
 	}
 
 	// @PreAuthorize("hasAnyRole('ROLE_ENDUSER', 'ROLE_AGENT')")
+	@PreAuthorize("hasAuthority('advertisement:read')")
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<AdvertisementCreationDTO>> getAll() {
 		List<AdvertisementCreationDTO> advertisements = advertisementService.findAll();
 		return new ResponseEntity<>(advertisements, HttpStatus.OK);
 	}
+
 
 	@GetMapping(value = "/getAllAdvertisementsForCart")
 	public ResponseEntity<List<AdvertisementCreationDTO>> getAllBookings() {
@@ -138,6 +143,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(advertisementService.findAll(), HttpStatus.OK);
 	}
 
+	
 	@PostMapping(value = "/allByIds", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AdvertisementCreationDTO>> getAllByIds(@RequestBody ArrayList<Long> ids) {
 
@@ -150,6 +156,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(advertisementService.filterAds(filterAdsDTO), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('advertisement:read')")
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AdvertisementDTO> getAdvertisement(@PathVariable Long id) {
 		Advertisement advertisement = advertisementService.findOneByid(id);
@@ -159,6 +166,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(new AdvertisementDTO(advertisement), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('advertisement:write')")
 	@PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Advertisement> updateAdvertisement(@RequestBody Advertisement advertisement)
 			throws Exception {
@@ -171,6 +179,7 @@ public class AdvertisementController {
 		}
 	}
 
+	@PreAuthorize("hasAuthority('advertisement:read')")
 	@GetMapping(value = "/getAllDetails", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CarDetailsDTO>> getAllDetails() {
 		List<CarDetailsDTO> cardetails = advertisementService.getCarDetails();
@@ -178,6 +187,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(cardetails, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('advertisement:write')")
 	@PostMapping(value = "/saveCarDetail", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Boolean> saveCarDetail(@RequestBody CarDetailsDTO carDetailsDTO) {
 		Boolean ret = advertisementService.saveCarDetail(carDetailsDTO);
@@ -185,6 +195,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('advertisement:write')")
 	@PostMapping(value = "/deleteCarDetail", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Boolean> deleteCarDetail(@RequestBody CarDetailsDTO carDetailsDTO) {
 		Boolean ret = advertisementService.deleteCarDetail(carDetailsDTO);
@@ -192,6 +203,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('advertisement:read')")
 	@GetMapping(value = "/preview/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AdvertisementCreationDTO> getAdvertisementPreview(@PathVariable Long id) {
 		AdvertisementCreationDTO advertisementDTO = advertisementService.findAdAndComments(id);
@@ -202,6 +214,7 @@ public class AdvertisementController {
 		return new ResponseEntity<>(advertisementDTO, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('advertisement:read')")
 	@GetMapping(value = "/getAllByUser", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Advertisement>> getAllByUser() {
 		Long id = restTemplate

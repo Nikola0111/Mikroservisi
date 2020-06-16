@@ -1,4 +1,4 @@
-package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security;
+package com.Message.Message.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -8,8 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.LoginInfoService;
-
+import com.Message.Message.service.LoginInfoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +44,7 @@ public class DaoAuthenticationProviderOurs extends AbstractUserDetailsAuthentica
 
 
   @Bean
+
   public UserDetails generated(){
   UserDetails userDetails=new UserDetails(){
   

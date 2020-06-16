@@ -99,10 +99,8 @@ public class BookingRequestController {
 
     @PreAuthorize("hasAuthority('booking:read')")
     @PostMapping(value = "/getAllSpecificForBuyer")
-    public ResponseEntity<List<BookingRequest>> getAllSpecificForBuyer(@RequestBody RequestStates state) {
-
-
     public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForBuyer(@RequestBody RequestStates state) {
+
 
         List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForBuyer(state);
 
@@ -150,7 +148,7 @@ public class BookingRequestController {
     // }
     // return new ResponseEntity<>(booked, HttpStatus.OK);
     // }
-
+    @PreAuthorize("hasAuthority('booking:read')")
     @GetMapping(value = "/getAllBookings")
     public ResponseEntity<List<BookingRequest>> getAllBookings() {
         List<BookingRequest> booked = new ArrayList<BookingRequest>();
@@ -166,7 +164,7 @@ public class BookingRequestController {
         return new ResponseEntity<>(booked, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasAuthority('booking:write')")
     @PostMapping(value = "/reserve")
     public ResponseEntity<Long> reserve(@RequestBody ReservationDTO reservation) {
 

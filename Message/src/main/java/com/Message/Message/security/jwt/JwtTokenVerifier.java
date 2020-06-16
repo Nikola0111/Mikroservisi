@@ -1,6 +1,6 @@
-package com.Advertisement.Advertisement.security.jwt;
+package com.Message.Message.security.jwt;
 
-import com.Advertisement.Advertisement.*;
+import com.Message.Message.*;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -39,8 +39,10 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
 
 
+
+
 public JwtTokenVerifier(){
- 
+
    
 }
 

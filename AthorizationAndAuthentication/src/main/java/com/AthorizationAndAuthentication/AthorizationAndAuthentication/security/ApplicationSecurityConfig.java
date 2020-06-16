@@ -59,7 +59,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.csrf().disable()
                 //odkomentarisati radi bezbednosti
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .ignoringAntMatchers("/callMe","/increaseEndUsersNumberOfAds")
                 .and()
+
+                
                 //ZBOG H2 BAZE CSRF INGORING I HEAERS.FRAME
                 //.csrf().ignoringAntMatchers("/h2-console/**")
                 //.and()
@@ -72,7 +75,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),keyPairClassService.getPrivateKey()))
                 .addFilterAfter(new JwtTokenVerifier(keyPairClassService.getPublicKey()),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/login","getPublicKey", "/register","/loginToken","/logout","/h2-console/**").permitAll()
+                .antMatchers("/login","/getAll","/getUserId","/getLoggedEndUser","/increaseEndUsersNumberOfAds","/getAgentEmail","/getAgentIDByUserID","/getAgentIDByMail","/getEmail","/getEmail","getPublicKey", "/register","/loginToken","/logout","/h2-console/**").permitAll()
                 .anyRequest()
                 .authenticated();
              
@@ -86,7 +89,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public DaoAuthenticationProviderOurs daoAuthenticationProvider() {
         DaoAuthenticationProviderOurs provider = new DaoAuthenticationProviderOurs();
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(10));
+       // provider.setPasswordEncoder(new BCryptPasswordEncoder(10));
         provider.setUserDetailsService(loginInfoService);
         return provider;
     }

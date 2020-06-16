@@ -1,3 +1,4 @@
+
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication;
 
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.KeyPairClassService;
@@ -20,15 +21,6 @@ public class AthorizationAndAuthenticationApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AthorizationAndAuthenticationApplication.class, args);
-
-
-
-	
-	
-
-	@Bean
-	@LoadBalanced
-	public RestTemplate restTemplate() { return new RestTemplate(); }
 
 
 }

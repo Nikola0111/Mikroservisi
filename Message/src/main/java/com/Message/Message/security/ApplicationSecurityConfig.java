@@ -1,4 +1,4 @@
-package com.Advertisement.Advertisement.security;
+package com.Message.Message.security;
 
 
 
@@ -18,10 +18,10 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import javax.crypto.SecretKey;
 
-import com.Advertisement.Advertisement.security.*;
-import com.Advertisement.Advertisement.security.jwt.*;
-import com.Advertisement.Advertisement.model.*;
-import com.Advertisement.Advertisement.service.*;
+import com.Message.Message.security.*;
+import com.Message.Message.security.jwt.*;
+import com.Message.Message.model.*;
+import com.Message.Message.service.*;
 
 @Configuration
 @EnableWebSecurity
@@ -31,8 +31,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
  
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private  PublicKeyClassService publicKeyClassService;
+
 
     private final LoginInfoService loginInfoService;
     

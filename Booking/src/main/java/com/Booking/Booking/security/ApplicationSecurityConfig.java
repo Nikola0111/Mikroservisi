@@ -52,7 +52,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.csrf().disable()
                 //odkomentarisati radi bezbednosti
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringAntMatchers("/callMe")
+                .ignoringAntMatchers("/callMe","/createShoopingCart")
                 .and()
                 
                 //ZBOG H2 BAZE CSRF INGORING I HEAERS.FRAME
@@ -67,7 +67,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
                 .addFilterAfter(new JwtTokenVerifier(), JwtUsernameAndPasswordAuthenticationFilter.class)
                  .authorizeRequests()
-                .antMatchers("/hello","/callMe", "/register","/loginToken","/logout","/h2-console/**").permitAll()
+                .antMatchers("/hello","/callMe", "/getAllBookings","/createShoopingCart","/h2-console/**").permitAll()
                 .anyRequest()
                 .authenticated();
              

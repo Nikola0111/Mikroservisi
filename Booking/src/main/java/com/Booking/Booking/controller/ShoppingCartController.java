@@ -33,9 +33,6 @@ public class ShoppingCartController {
 	   
 		List<ItemInCartFrontDTO> items = shoppingCartService.fotCart();
 
-
-        List<ItemInCart> items = shoppingCartService.fotCart();
-
         System.out.println("pogodio je kontroler, broj oglasa vraca==" + items.size());
 
         return new ResponseEntity<>(items, HttpStatus.OK);
