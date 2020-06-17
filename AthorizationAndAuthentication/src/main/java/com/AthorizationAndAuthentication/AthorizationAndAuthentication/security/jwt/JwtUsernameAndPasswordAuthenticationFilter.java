@@ -28,14 +28,13 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     private final AuthenticationManager authenticationManager;
 
-    private final Key privateKey;
-   
+  
    
    
 
-    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager, Key privateKey) {
+    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        this.privateKey=privateKey;
+   
         
     }
 
@@ -67,7 +66,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
 
-                                                System.out.println("On udje gde treba da generise");
+        System.out.println("On udje gde treba da generise");
 
         String secretKey = "securesecuresecuresecuresecuresecuresecuresecuresecure";
 
