@@ -60,7 +60,7 @@ services:
     image: advert-image
     restart: always
     volumes:
-    - $USERPROFILE/Desktop:/etc
+    - $USERPROFILE/Desktop/Mikroservisi/Frontend/src/assets/images:/etc
     ports:
     - "8085:8085"
     environment:
