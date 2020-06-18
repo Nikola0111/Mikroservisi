@@ -38,6 +38,12 @@ public class AdvertisementController {
 		return new ResponseEntity<>(String.format("LOSELOSE"), HttpStatus.OK);
 	}
 
+	@GetMapping("/getCsrf")
+	public ResponseEntity<?> getXsrf() {
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 	@PreAuthorize("hasAuthority('advertisement:write')")
 	@RequestMapping(value = "/saveImage", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
 	public ResponseEntity<Long> uploadImage(@RequestParam(value = "file", required = false) MultipartFile file)

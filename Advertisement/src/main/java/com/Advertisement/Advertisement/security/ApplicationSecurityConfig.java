@@ -55,22 +55,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.csrf().disable()
                 //odkomentarisati radi bezbednosti
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringAntMatchers("/save","/saveImage")
+                .ignoringAntMatchers("/save","/saveImage","/h2-console/**")
                 .and()
                 
                 //ZBOG H2 BAZE CSRF INGORING I HEAERS.FRAME
                 //.csrf().ignoringAntMatchers("/h2-console/**")
-                //.and()
+               
                 //Stavlja se zbog h2 baze
-                //.headers().frameOptions().sameOrigin()
-                //.and()
+                .headers().frameOptions().sameOrigin()
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
                 .addFilterAfter(new JwtTokenVerifier(),JwtUsernameAndPasswordAuthenticationFilter.class)
                  .authorizeRequests()
-                .antMatchers("/hello","/save","/saveImage","/getAllAdvertisementsForCart","/callMe","/getAllAdvertisementsForCart","/h2-console/**").permitAll()
+                .antMatchers("/hello","/save","/getCsrf","/saveImage","/getAllAdvertisementsForCart","/callMe","/getAllAdvertisementsForCart","/h2-console/**").permitAll()
                 .anyRequest()
                 .authenticated();
              

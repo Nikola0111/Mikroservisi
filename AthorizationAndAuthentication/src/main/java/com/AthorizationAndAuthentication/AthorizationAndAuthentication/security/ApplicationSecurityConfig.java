@@ -59,7 +59,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.csrf().disable()
                 //odkomentarisati radi bezbednosti
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringAntMatchers("/callMe","/increaseEndUsersNumberOfAds","/getUserByUsername/**")
+                .ignoringAntMatchers("/callMe","/increaseEndUsersNumberOfAds","/getCsrf","/getUserByUsername/**")
                 .and()
 
                 
@@ -67,15 +67,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.csrf().ignoringAntMatchers("/h2-console/**")
                 //.and()
                 //Stavlja se zbog h2 baze
-                //.headers().frameOptions().sameOrigin()
-                //.and()
+                .headers().frameOptions().sameOrigin()
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
                 .addFilterAfter(new JwtTokenVerifier(keyPairClassService.getPublicKey()),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/login","/getAll","/getUserByUsername/**","/getUserId","/getLoggedEndUser","/increaseEndUsersNumberOfAds","/getAgentEmail","/getAgentIDByUserID","/getAgentIDByMail","/getEmail","/getEmail","getPublicKey", "/register","/loginToken","/logout","/h2-console/**").permitAll()
+                .antMatchers("/login","/getCsrf","/getAll","/getUserByUsername/**","/getUserId","/getLoggedEndUser","/increaseEndUsersNumberOfAds","/getAgentEmail","/getAgentIDByUserID","/getAgentIDByMail","/getEmail","/getEmail","getPublicKey", "/register","/loginToken","/logout","/h2-console/**").permitAll()
                 .anyRequest()
                 .authenticated();
 
