@@ -1,15 +1,16 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.jwt;
 
-//import com.google.common.base.Strings;
-//import io.jsonwebtoken.Claims;
-//import io.jsonwebtoken.Jws;
-//import io.jsonwebtoken.JwtException;
-//import io.jsonwebtoken.Jwts;
-//import io.jsonwebtoken.security.Keys;
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.context.SecurityContextHolder;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.KeyPairClassService;
+import com.google.common.base.Strings;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
@@ -20,16 +21,26 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// extends OncePerRequestFilter
-
-public class JwtTokenVerifier {
+public class JwtTokenVerifier extends OncePerRequestFilter {
     
-/*
+private KeyPairClassService keyPairClassService;
+
+    
+
+private final Key publicKey;
+
+
+public JwtTokenVerifier(Key publicKey){
+    this.publicKey=publicKey;
+}
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -48,9 +59,13 @@ public class JwtTokenVerifier {
 
         try {
 
+          
+
             String secretKey = "securesecuresecuresecuresecuresecuresecuresecuresecure";
                                 
             Jws<Claims> claimsJws = Jwts.parser()
+            
+            
                     .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .parseClaimsJws(token);
 
@@ -78,6 +93,4 @@ public class JwtTokenVerifier {
 
         filterChain.doFilter(request, response);
     }
-
-    */
 }

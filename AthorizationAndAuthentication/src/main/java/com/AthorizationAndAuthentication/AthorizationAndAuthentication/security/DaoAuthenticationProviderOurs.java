@@ -1,11 +1,11 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security;
-/*
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.*;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.LoginInfoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -23,17 +23,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.util.Assert;
 
-extends AbstractUserDetailsAuthenticationProvider
-*/
 
-public class DaoAuthenticationProviderOurs  {
+public class DaoAuthenticationProviderOurs extends AbstractUserDetailsAuthenticationProvider {
 
-/*
+
     private PasswordEncoder passwordEncoder;
 
     private volatile String userNotFoundEncodedPassword;
 
-    @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
@@ -118,5 +115,5 @@ public class DaoAuthenticationProviderOurs  {
 		this.userNotFoundEncodedPassword = null;
 	}
 
-    */
+    
 }

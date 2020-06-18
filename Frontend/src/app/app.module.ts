@@ -149,11 +149,11 @@ import { CommentManagementComponent } from './modules/administrator/comment-mana
               ConversationService,
               HistoryService,
               EndUserService,
-            //  {
-             //   provide:HTTP_INTERCEPTORS,
-            //    useClass: AuthInterceptor,
-            //    multi:true
-            //  }
+            {
+                provide:HTTP_INTERCEPTORS,
+                useClass: AuthInterceptor,
+                multi:true
+             }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChangeDiscountDialogComponent, ImagesDialogComponent]

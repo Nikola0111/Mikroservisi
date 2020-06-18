@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,9 @@ public class ItemInCartController {
 	@Autowired
 	private ItemInCartRepository itemInCartRepository;
 
+
+
+	@PreAuthorize("hasAuthority('itemInCart:write')")
 	@PostMapping(value = "/addItem", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Long> addAdvToCart(@RequestBody ItemInCartDTO itemInCartDTO) {
 		System.out.println("POGODIO");
@@ -41,11 +45,10 @@ public class ItemInCartController {
 		}
 	}
 
+  	@PreAuthorize("hasAuthority('itemInCart:write')")
 	@PostMapping(value = "/remove", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ItemInCartFrontDTO>> removeFromCart(@RequestBody ItemInCart itemInCart) {
-
 		List<ItemInCartFrontDTO> items = itemInCartService.remove(itemInCart);
-
 		return new ResponseEntity<>(items, HttpStatus.OK);
 	}
 

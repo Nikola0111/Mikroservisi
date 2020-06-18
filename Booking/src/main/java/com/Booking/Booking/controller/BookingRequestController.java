@@ -45,6 +45,13 @@ public class BookingRequestController {
         return new ResponseEntity<>(String.format("OMMMMMMGMF"), HttpStatus.OK);
     }
 
+    
+    @GetMapping("/getCsrf")
+	public ResponseEntity<?> getXsrf() {
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 
     public ResponseEntity<List<ItemInCartFrontDTO>> Login(@RequestBody List<ItemInCartDTO> lista) {
