@@ -5,13 +5,13 @@
 // Generated on: 2020.06.16 at 04:04:33 PM CEST 
 //
 
-
 package SaveAdvertisementSoap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
+@XmlSeeAlso({GetAdvertisementResponse.class})
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "advertisement"

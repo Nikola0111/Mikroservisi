@@ -1,103 +1,103 @@
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://XML.projekat.com/JavaGeneratedFiles" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://XML.projekat.com/JavaGeneratedFiles" targetNamespace="http://XML.projekat.com/JavaGeneratedFiles">
-    <wsdl:types>
-        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://XML.projekat.com/JavaGeneratedFiles">
-            <xs:element name="getAdvertisementResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="advertisement" type="tns:advertisement"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="getAdvertisementRequest">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="name" type="xs:string"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:complexType name="advertisement">
-                <xs:sequence>
-                    <xs:element name="brand">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="id" type="xs:long"/>
-                                <xs:element name="name" type="xs:string"/>
-                                <xs:element name="code" type="xs:string"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    <xs:element name="carClass">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="id" type="xs:long"/>
-                                <xs:element name="name" type="xs:string"/>
-                                <xs:element name="code" type="xs:string"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    <xs:element name="carSeats" type="xs:int"/>
-                    <xs:element name="fuelType">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="id" type="xs:long"/>
-                                <xs:element name="name" type="xs:string"/>
-                                <xs:element name="code" type="xs:string"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    <xs:element name="model">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="id" type="xs:long"/>
-                                <xs:element name="name" type="xs:string"/>
-                                <xs:element name="code" type="xs:string"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    <xs:element name="name" type="xs:string"/>
-                    <xs:element name="price" type="xs:double"/>
-                    <xs:element name="transType">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="id" type="xs:long"/>
-                                <xs:element name="name" type="xs:string"/>
-                                <xs:element name="code" type="xs:string"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    <xs:element name="travelled" type="xs:int"/>
-                    <xs:element name="userID" type="xs:long"/>
-                </xs:sequence>
-            </xs:complexType>
-        </xs:schema>
-    </wsdl:types>
-    <wsdl:message name="getAdvertisementResponse">
-        <wsdl:part element="tns:getAdvertisementResponse" name="getAdvertisementResponse"> </wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="getAdvertisementRequest">
-        <wsdl:part element="tns:getAdvertisementRequest" name="getAdvertisementRequest"> </wsdl:part>
-    </wsdl:message>
-    <wsdl:portType name="Advertisement">
-        <wsdl:operation name="getAdvertisement">
-            <wsdl:input message="tns:getAdvertisementRequest" name="getAdvertisementRequest"> </wsdl:input>
-            <wsdl:output message="tns:getAdvertisementResponse" name="getAdvertisementResponse"> </wsdl:output>
-        </wsdl:operation>
-    </wsdl:portType>
-    <wsdl:binding name="AdvertisementSoap11" type="tns:Advertisement">
-        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <wsdl:operation name="getAdvertisement">
-            <soap:operation soapAction=""/>
-            <wsdl:input name="getAdvertisementRequest">
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output name="getAdvertisementResponse">
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-    </wsdl:binding>
-    <wsdl:service name="AdvertisementService">
-        <wsdl:port binding="tns:AdvertisementSoap11" name="AdvertisementSoap11">
-            <soap:address location="http://localhost:9090/ws"/>
-        </wsdl:port>
-    </wsdl:service>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://com.projekat.XML/JavaGeneratedFiles" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://com.projekat.XML/JavaGeneratedFiles" targetNamespace="http://com.projekat.XML/JavaGeneratedFiles">
+<wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://com.projekat.XML/JavaGeneratedFiles">
+<xs:element name="getAdvertisementRequest">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="advertisement" type="tns:advertisement"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="getAdvertisementResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:complexType name="advertisement">
+<xs:sequence>
+<xs:element name="brand">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="name" type="xs:string"/>
+<xs:element name="code" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="carClass">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="name" type="xs:string"/>
+<xs:element name="code" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="carSeats" type="xs:int"/>
+<xs:element name="fuelType">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="name" type="xs:string"/>
+<xs:element name="code" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="model">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="name" type="xs:string"/>
+<xs:element name="code" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="name" type="xs:string"/>
+<xs:element name="price" type="xs:double"/>
+<xs:element name="transType">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="id" type="xs:long"/>
+<xs:element name="name" type="xs:string"/>
+<xs:element name="code" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="travelled" type="xs:int"/>
+<xs:element name="userID" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="getAdvertisementRequest">
+<wsdl:part element="tns:getAdvertisementRequest" name="getAdvertisementRequest"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getAdvertisementResponse">
+<wsdl:part element="tns:getAdvertisementResponse" name="getAdvertisementResponse"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="Advertisement">
+<wsdl:operation name="getAdvertisement">
+<wsdl:input message="tns:getAdvertisementRequest" name="getAdvertisementRequest"> </wsdl:input>
+<wsdl:output message="tns:getAdvertisementResponse" name="getAdvertisementResponse"> </wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="AdvertisementSoap11" type="tns:Advertisement">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="getAdvertisement">
+<soap:operation soapAction=""/>
+<wsdl:input name="getAdvertisementRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getAdvertisementResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="AdvertisementService">
+<wsdl:port binding="tns:AdvertisementSoap11" name="AdvertisementSoap11">
+<soap:address location="http://localhost:9090/ws"/>
+</wsdl:port>
+</wsdl:service>
 </wsdl:definitions>

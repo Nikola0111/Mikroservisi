@@ -88,7 +88,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <generatePackage>com.group56.soap</generatePackage>
+                    <generatePackage>com.soap.SaveAdvertisement</generatePackage>
                     <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
                     <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
                     <schemaIncludes>

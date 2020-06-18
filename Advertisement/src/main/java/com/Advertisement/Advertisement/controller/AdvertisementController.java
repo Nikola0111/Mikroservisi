@@ -1,6 +1,7 @@
 package com.Advertisement.Advertisement.controller;
 
 import SaveAdvertisementSoap.GetAdvertisementRequest;
+
 import com.Advertisement.Advertisement.dtos.*;
 import com.Advertisement.Advertisement.model.Advertisement;
 import com.Advertisement.Advertisement.model.Comment;
@@ -235,8 +236,8 @@ public class AdvertisementController {
 		return new ResponseEntity<>(ads, HttpStatus.OK);
 	}
 	@PostMapping(value = "/saveAdvertisementSoap")
-	public AdvertisementSoapDTO invokeSoapClientSaveAdvertisement(@RequestBody GetAdvertisementRequest request){
-		return soapClient.getAdvertisement(request);
+	public String invokeSoapClientSaveAdvertisement(@RequestBody GetAdvertisementRequest request){
+		return soapClient.saveAdvertisement(request);
 	}
 
 	/*

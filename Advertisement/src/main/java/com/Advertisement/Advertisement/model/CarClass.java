@@ -3,17 +3,28 @@ package com.Advertisement.Advertisement.model;
 import java.util.ArrayList;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "carClass",
+        namespace="com.Advertisement.Advertisement.model",
+        propOrder = {"id", "name", "code"})
 @Entity
 public class CarClass {
     
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @XmlElement(name="id", required = true)
     private Long id;
 
+    @XmlElement(name="name", required = true)
     private String name;
 
+    @XmlElement(name="code", required = true)
     private String code;
 
     public String getCode() {

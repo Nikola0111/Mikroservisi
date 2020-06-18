@@ -10,7 +10,7 @@ public class SoapWsConfig {
     @Bean
     public Jaxb2Marshaller marshaller() {
         Jaxb2Marshaller marshaller=new Jaxb2Marshaller();
-        marshaller.setPackagesToScan("com.Advertisement.Advertisement.SaveAdvertisementSoap");
+        marshaller.setPackagesToScan("SaveAdvertisementSoap");
         return marshaller;
     }
 
