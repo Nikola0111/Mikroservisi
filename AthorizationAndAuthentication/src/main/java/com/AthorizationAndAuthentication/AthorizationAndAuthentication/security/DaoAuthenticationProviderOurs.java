@@ -3,16 +3,11 @@ package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
 
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.LoginInfoService;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -36,91 +31,36 @@ public class DaoAuthenticationProviderOurs extends AbstractUserDetailsAuthentica
 
     private volatile String userNotFoundEncodedPassword;
 
-    
-    @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
     private LoginInfoService loginInfoService;
 
-
-  @Bean
-  public UserDetails generated(){
-  UserDetails userDetails=new UserDetails(){
-  
-    @Override
-    public boolean isEnabled() {
-      // TODO Auto-generated method stub
-      return true;
-    }
-  
-    @Override
-    public boolean isCredentialsNonExpired() {
-      // TODO Auto-generated method stub
-      return true;
-    }
-  
-    @Override
-    public boolean isAccountNonLocked() {
-      // TODO Auto-generated method stub
-      return true;
-    }
-  
-    @Override
-    public boolean isAccountNonExpired() {
-      // TODO Auto-generated method stub
-      return true;
-    }
-  
-    @Override
-    public String getUsername() {
-      // TODO Auto-generated method stub
-      return null;
-    }
-  
-    @Override
-    public String getPassword() {
-      // TODO Auto-generated method stub
-      return null;
-    }
-  
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-      // TODO Auto-generated method stub
-      return null;
-    }
-  };
-
-  return userDetails;
-}
-
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails,
             UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-          /*      if (authentication.getCredentials() == null) {
+                if (authentication.getCredentials() == null) {
                     logger.debug("Authentication failed: no credentials provided");
         
                     throw new BadCredentialsException(messages.getMessage(
                             "AbstractUserDetailsAuthenticationProvider.badCredentials",
                             "Bad credentials"));
                 }
-                */
         
                 String presentedPassword = authentication.getCredentials().toString();
         
-           //     String nasSalt=loginInfoService.findSaltByUsername(userDetails.getUsername());
+                String nasSalt=loginInfoService.findSaltByUsername(userDetails.getUsername());
 
-         //       System.out.println("NAS SALT JE ===="+nasSalt);
+                System.out.println("NAS SALT JE ===="+nasSalt);
                 
                 
-         /*       if (!passwordEncoder.matches(presentedPassword+nasSalt, userDetails.getPassword())) {
+                if (!passwordEncoder.matches(presentedPassword+nasSalt, userDetails.getPassword())) {
                     logger.debug("Authentication failed: password does not match stored value");
         
                     throw new BadCredentialsException(messages.getMessage(
                             "AbstractUserDetailsAuthenticationProvider.badCredentials",
                             "Bad credentials"));
                 }
-                */
 
     }
 
@@ -129,51 +69,11 @@ public class DaoAuthenticationProviderOurs extends AbstractUserDetailsAuthentica
             throws AuthenticationException {
                 prepareTimingAttackProtection();
                 try {
-                    UserDetails loadedUser =new UserDetails(){
-                    
-                      @Override
-                      public boolean isEnabled() {
-                        // TODO Auto-generated method stub
-                        return true;
-                      }
-                    
-                      @Override
-                      public boolean isCredentialsNonExpired() {
-                        // TODO Auto-generated method stub
-                        return true;
-                      }
-                    
-                      @Override
-                      public boolean isAccountNonLocked() {
-                        // TODO Auto-generated method stub
-                        return true;
-                      }
-                    
-                      @Override
-                      public boolean isAccountNonExpired() {
-                        // TODO Auto-generated method stub
-                        return true;
-                      }
-                    
-                      @Override
-                      public String getUsername() {
-                        // TODO Auto-generated method stub
-                        return null;
-                      }
-                    
-                      @Override
-                      public String getPassword() {
-                        // TODO Auto-generated method stub
-                        return null;
-                      }
-                    
-                      @Override
-                      public Collection<? extends GrantedAuthority> getAuthorities() {
-                        // TODO Auto-generated method stub
-                        return null;
-                      }
-                    };
-                  
+                    UserDetails loadedUser = this.getUserDetailsService().loadUserByUsername(username);
+                    if (loadedUser == null) {
+                        throw new InternalAuthenticationServiceException(
+                                "UserDetailsService returned null, which is an interface contract violation");
+                    }
                     return loadedUser;
                 }
                 catch (UsernameNotFoundException ex) {

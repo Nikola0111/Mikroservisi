@@ -172,11 +172,16 @@ public class UserService {
 
         System.out.println("HESOVAN PASSWORD == " + hashIt(entityUser.getPassword(), salt));
 
-        LoginInfo loginInfo = new LoginInfo(entityUser.getUsername(), entityUser.getPassword(),
-                entityUser.getLoginInfo().getEmail(),
-                // salt,
-                // ApplicationUserRole.ENDUSER.getGrantedAuthorities(),
-                true, true, true, true);
+        LoginInfo loginInfo=new LoginInfo(
+        entityUser.getUsername(),
+        hashIt(entityUser.getPassword(),salt ), 
+        entityUser.getLoginInfo().getEmail(),
+        salt,
+        ApplicationUserRole.ENDUSER.getGrantedAuthorities(),
+        true,
+        true,
+        true,
+        true);
 
         loginInfoService.save(loginInfo);
 

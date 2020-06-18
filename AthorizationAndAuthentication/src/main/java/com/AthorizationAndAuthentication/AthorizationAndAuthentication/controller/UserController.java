@@ -158,6 +158,12 @@ public class UserController {
         return new ResponseEntity<>(userService.getLoggedUser(), HttpStatus.OK);
     }
 
+    @GetMapping("/getCsrf")
+	public ResponseEntity<?> getXsrf() {
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
     @GetMapping(value = "/getLoggedEndUser")
     public ResponseEntity<EndUser> getLoggedEndUser() {
 

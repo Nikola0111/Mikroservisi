@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,11 +45,16 @@ public class BookingRequestController {
         return new ResponseEntity<>(String.format("OMMMMMMGMF"), HttpStatus.OK);
     }
 
- @PreAuthorize("hasAuthority('booking:write')")
+    
+    @GetMapping("/getCsrf")
+	public ResponseEntity<?> getXsrf() {
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 
     public ResponseEntity<List<ItemInCartFrontDTO>> Login(@RequestBody List<ItemInCartDTO> lista) {
-
 
         System.out.println("Pogodio je back");
 
@@ -61,9 +65,7 @@ public class BookingRequestController {
         return new ResponseEntity<>(shoppingCartService.fotCart(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('booking:read')")
     @PostMapping(value = "/getAllForAgent")
-
     public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForAgent(@RequestBody RequestStates state) {
 
         List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForAgent(state);
@@ -73,8 +75,6 @@ public class BookingRequestController {
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
-
-    @PreAuthorize("hasAuthority('booking:read')")
     @PostMapping(value = "/getGroupsForAgent")
     public ResponseEntity<List<Long>> getAllSpecificGroupsForAgent(@RequestBody RequestStates state) {
 
@@ -85,8 +85,6 @@ public class BookingRequestController {
         return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 
-
-    @PreAuthorize("hasAuthority('booking:accept')")	
     @PostMapping(value = "/acceptRequest")
     public ResponseEntity<Long> acceptRequest(@RequestBody Long grupa) {
 
@@ -97,23 +95,17 @@ public class BookingRequestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('booking:read')")
     @PostMapping(value = "/getAllSpecificForBuyer")
-    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForBuyer(@RequestBody RequestStates state) {
 
+    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForBuyer(@RequestBody RequestStates state) {
 
         List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForBuyer(state);
 
         System.out.println("pogodio je kontroler, broj oglasa vraca==" + requests.size());
 
-
-        System.out.println("pogodio je kontroler, broj oglasa vraca==" + requests.size());
-
-
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('booking:read')")	
     @PostMapping(value = "/grups")
     public ResponseEntity<List<Long>> getAllSpecificGroupsForBuyer(@RequestBody RequestStates state) {
 
@@ -124,14 +116,12 @@ public class BookingRequestController {
         return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('booking:decline')")
     @PostMapping(value = "/cancelRequest")
     public ResponseEntity<Long> cancelRequest(@RequestBody Long group) {
 
         bookingRequestService.cancelRequest(group);
 
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     // @GetMapping(value = "/getAllBookings")
@@ -148,7 +138,7 @@ public class BookingRequestController {
     // }
     // return new ResponseEntity<>(booked, HttpStatus.OK);
     // }
-    @PreAuthorize("hasAuthority('booking:read')")
+
     @GetMapping(value = "/getAllBookings")
     public ResponseEntity<List<BookingRequest>> getAllBookings() {
         List<BookingRequest> booked = new ArrayList<BookingRequest>();
@@ -164,7 +154,7 @@ public class BookingRequestController {
         return new ResponseEntity<>(booked, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('booking:write')")
+
     @PostMapping(value = "/reserve")
     public ResponseEntity<Long> reserve(@RequestBody ReservationDTO reservation) {
 
@@ -173,7 +163,6 @@ public class BookingRequestController {
         bookingRequestService.saveReserve(reservation);
 
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
 }
