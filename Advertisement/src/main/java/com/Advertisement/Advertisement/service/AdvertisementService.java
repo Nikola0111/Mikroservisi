@@ -111,18 +111,15 @@ public class AdvertisementService {
 		// String path=
 		// C:\\Users\\Sherlock\\Desktop\\Mikroservisi\\Frontend\\src\\assets\\images
 
-		System.out.println("EVO GA DIREKTORIJUM");
-		String cwd = new File("").getAbsolutePath();
-		System.out.println("OVO JE NOVA PUTANJA:=" + cwd);
-		System.out.println("Putanja do direktorijuma je :" + path);
+	
 
 		// dodajte putanju do vaseg dir
-		String newPath = path.replace("Advertisement", "Frontend\\src\\assets\\images");
-		System.out.println("PRVI POKUSAJ=" + newPath);
+		String nazivSlike = image.getOriginalFilename().replace("/", "\\");
+		
 		byte[] bytes;
 		try {
 			bytes = image.getBytes();
-			Path put = Paths.get(newPath, image.getOriginalFilename());
+			Path put = Paths.get("/etc", image.getOriginalFilename());
 			Files.write(put, bytes);
 			System.out.println("UPISAO");
 		} catch (IOException e) {
@@ -131,7 +128,7 @@ public class AdvertisementService {
 			System.out.println("UPAO U EXCEPTION");
 		}
 	}
-
+	
 	public List<CarDetailsDTO> getCarDetails() {
 		List<Brand> brands = brandRepository.findAll();
 		List<CarClass> classes = carClassRepository.findAll();
