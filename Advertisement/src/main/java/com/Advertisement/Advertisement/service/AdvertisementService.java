@@ -405,8 +405,7 @@ public class AdvertisementService {
 		comment.setApproved(false);
 		comment.setDeleted(false);
 	 	commentRepository.save(comment);
-	 	//sacuvaj komentar
-	 }
+	}
 
 	public AdvertisementCreationDTO findAdAndComments(Long id) {
 		Advertisement ad = advertisementRepository.findOneByid(id); // OVA
@@ -416,6 +415,9 @@ public class AdvertisementService {
 		// //sredjivanje komentara
 		List<CommentPreviewDTO> comments = new ArrayList<CommentPreviewDTO>();
 		for(int i = 0;i < db.size();i++) {
+			if(!db.get(i).getApproved()){
+				continue;
+			}
 			
 			HttpEntity<Long> request = new HttpEntity<>(db.get(i).getEndUserID());
 			String email = 
@@ -469,12 +471,27 @@ public class AdvertisementService {
 		return usersAds;
 	}
 
-	public List<Advertisement> getAllByPostedBy(Long id) {
+	public List<AdvertisementCreationDTO> getAllByPostedBy(Long id) {
 		// salje sa fronta id usera, ne id agenta, i zato ne prikazuje formu za reply
 		HttpEntity<Long> request = new HttpEntity<>(id);
 		Long agentID = restTemplate.postForEntity("http://auth/getAgentIDByUserID", request,Long.class, id).getBody();
 		System.out.println("ID AGENTA? " + id);
-		return advertisementRepository.findAllByPostedByID(agentID);
+		List<Advertisement> advertisements = advertisementRepository.findAllByPostedByID(agentID);
+		List<AdvertisementCreationDTO> sending = new ArrayList<AdvertisementCreationDTO>();
+		AdvertisementCreationDTO temp;
+		for (int i = 0; i < advertisements.size(); i++) {
+			advertisements.get(i).setGrade(gradeService.calculateGradeForAd(advertisements.get(i).getId()));
+			Advertisement tempad = advertisements.get(i);
+
+			temp = new AdvertisementCreationDTO(tempad.getId(), tempad.getName(), tempad.getModel().getName(),
+					tempad.getBrand().getName(), tempad.getFuelType().getName(), tempad.getTransmissionType().getName(),
+					tempad.getCarClass().getName(), tempad.getTravelled(), tempad.getCarSeats(), tempad.getPrice(),
+					tempad.getPostedByID(), tempad.getDiscount(), tempad.getPriceWithDiscount(), tempad.getPictures(),
+					tempad.getGrade());
+
+			sending.add(temp);
+		}
+		return sending;
 	}
 	
 	public void saveReply(ReplyDTO replyDTO){ 

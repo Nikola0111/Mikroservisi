@@ -116,14 +116,14 @@ export class AdvertisementListComponent implements AfterViewInit, OnInit {
       this.advertisementService.getAllByPostedBy(this.sessionService.ulogovaniKorisnik.id).subscribe(data => {
         this.advertisements = data;
         this.dataSource = new AdvertisementListDataSource(this.advertisements);
-        console.log(this.dataSource);
+        console.log('Trazi agentove');
       });
     } else {
       this.advertisementService.getAll().subscribe(
         data => {
           this.advertisements = data;
           this.dataSource = new AdvertisementListDataSource(this.advertisements);
-          console.log(this.dataSource);
+          console.log('Trazi sve');
         }
       );
     }
