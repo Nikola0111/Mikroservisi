@@ -28,7 +28,11 @@ public class ItemInCartService {
     public int save(ItemInCartDTO itemInCartDTO) {
         List<ItemInCart> all = itemInCartRepository.findAll();
 
+    
+
         for (ItemInCart item : all) {
+            
+
             if (item.getUserId().equals(getLogedUserId())
                     && item.getAdvertisementId().equals(itemInCartDTO.getAdvertisementId())
                     && ((item.getTimeFrom().isAfter(itemInCartDTO.getTimeFrom())
@@ -50,9 +54,13 @@ public class ItemInCartService {
 
         ItemInCart item = new ItemInCart(getLogedUserId(), itemInCartDTO.getAdvertisementPostedById(),
                 itemInCartDTO.getAdvertisementId(), itemInCartDTO.getTimeFrom(), itemInCartDTO.getTimeTo());
-        itemInCartRepository.save(item);
 
+        if(itemInCartDTO.getTimeFrom()!=null || itemInCartDTO.getTimeTo()!=null){
+        itemInCartRepository.save(item);
         shoppingCartService.addAItemInCart(item.getId());
+        }
+
+        
 
         return 1;
 
@@ -65,6 +73,10 @@ public class ItemInCartService {
 
         return shoppingCartService.fotCart();
 
+    }
+
+    public void deleteItemInCart(Long id){
+        itemInCartRepository.deleteById(id);
     }
 
     public void removeAll() {
