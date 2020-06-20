@@ -156,6 +156,10 @@ public class EndUserController {
 
     @PostMapping(value = "/deactivate/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deactivateAccount(@PathVariable("id") Long id){
+        HttpEntity<Long> request = new HttpEntity<>(id);
+
+        restTemplate.postForEntity("http://advert/deleteCommentsByEndUserID", request, Void.class, id);
+
         endUserService.deactivate(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
