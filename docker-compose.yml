@@ -72,22 +72,22 @@ services:
     networks:
       - mikroservisi
 
-#  message-service:
-#    build: ./Message
-#    restart: always
-#    image: message-image 
-#    volumes:
-#    - $USERPROFILE/.m2:/root/.m2
-#    ports:
-#    - "8087:8087"
-#    environment:
-#      - REGISTRY_HOST=eureka-serviceregistry
-#    tty: true
-#    depends_on:
-#      - eureka-serviceregistry
-#  #    - axon-server    
-#    networks:
-#      - mikroservisi  
+  message-service:
+    build: ./Message
+    image: message-image 
+    restart: always
+    volumes:
+    - $USERPROFILE/.m2:/root/.m2
+    ports:
+    - "8087:8087"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    tty: true
+    depends_on:
+      - eureka-serviceregistry
+  #    - axon-server    
+    networks:
+      - mikroservisi  
 
   zuul:
     build: ./Gateway
@@ -103,7 +103,7 @@ services:
       - advert-service
       - book-service
       - auth-service
-   #   - message-service
+      - message-service
     networks:
       - mikroservisi
 

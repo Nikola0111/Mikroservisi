@@ -13,6 +13,7 @@ import com.Booking.Booking.dtos.ReservationDTO;
 import com.Booking.Booking.enums.RequestStates;
 import com.Booking.Booking.model.requests.BookingRequest;
 import com.Booking.Booking.repository.BookingRequestRepository;
+import com.Booking.Booking.repository.ItemInCartRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -30,6 +31,9 @@ public class BookingRequestService {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    ItemInCartService itemInCartService;
 
     // PUCACE JER LogedUserId MORA DA SE DOBAVI NEKAKO
 
@@ -106,6 +110,7 @@ public class BookingRequestService {
                             getLogedUserId(), lastGroupId, RequestStates.PENDING, ItemInCartDTO2.getAdvertisementId(),
                             ItemInCartDTO2.isTogether(), ItemInCartDTO2.getTimeFrom(), ItemInCartDTO2.getTimeTo(),null));
 
+            itemInCartService.deleteItemInCart(ItemInCartDTO2.getId());
                 }
                 seprate.clear();
 
@@ -123,6 +128,7 @@ public class BookingRequestService {
                             getLogedUserId(), lastGroupId, RequestStates.PENDING, ItemInCartDTO.getAdvertisementId(),
                             ItemInCartDTO.isTogether(), ItemInCartDTO.getTimeFrom(), ItemInCartDTO.getTimeTo(),null));
 
+                      itemInCartService.deleteItemInCart(ItemInCartDTO.getId());
                 }
 
                 together.clear();
