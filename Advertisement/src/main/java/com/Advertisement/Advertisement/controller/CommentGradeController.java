@@ -2,6 +2,7 @@ package com.Advertisement.Advertisement.controller;
 
 import java.util.List;
 
+import com.Advertisement.Advertisement.dtos.AdvertisementCreationDTO;
 import com.Advertisement.Advertisement.dtos.CommentDTO;
 import com.Advertisement.Advertisement.dtos.CommentPreviewDTO;
 import com.Advertisement.Advertisement.dtos.ReplyDTO;
@@ -25,8 +26,8 @@ public class CommentGradeController {
     private AdvertisementService advertisementService;
 
     @GetMapping(value = "/getAllByPostedBy/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Advertisement>> getAllByPostedBy(@PathVariable Long id) { 
-       List<Advertisement> advertisements = advertisementService.getAllByPostedBy(id); 
+    public ResponseEntity<List<AdvertisementCreationDTO>> getAllByPostedBy(@PathVariable Long id) { 
+       List<AdvertisementCreationDTO> advertisements = advertisementService.getAllByPostedBy(id); 
        return new ResponseEntity<>(advertisements, HttpStatus.OK); 
     }
     
