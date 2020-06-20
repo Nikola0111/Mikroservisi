@@ -36,6 +36,7 @@ this.loginService.loginToken().subscribe();
         console.log(data);
         this.loginService.getUserByUsername(this.username).subscribe(user => {
           console.log(user);
+          localStorage.setItem('korisnik', user.loginInfo.username);
           this.sessionService.ulogovaniKorisnik = user;
           console.log('proverava')
           if (user.userType.toString() === 'ADMINISTRATOR') {
