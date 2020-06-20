@@ -82,7 +82,8 @@ export class AdvertisementDetailsComponent implements OnInit {
       if(this.dataSource.comments === undefined){
         this.dataSource.comments = [] as CommentPreviewDTO[];
       }
-      this.dataSource.comments.push(listComment);
+    //  this.dataSource.comments.push(listComment);
+    alert("Komentar poslat na procenu");
 
       this.comment = '';
       this.selectedValue = -1;
