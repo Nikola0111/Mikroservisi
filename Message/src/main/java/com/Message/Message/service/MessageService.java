@@ -16,7 +16,6 @@ import java.util.*;
 
 import javax.servlet.http.HttpSession;
 
-
 import com.Message.Message.dtos.*;
 import com.Message.Message.enums.RequestStates;
 import com.Message.Message.model.*;
@@ -31,17 +30,17 @@ public class MessageService {
     @Autowired
     RestTemplate restTemplate;
 
-    public List<MessageFrontDTO> getConversation(Long id, List<UserDTO> allUsers) {
+    public List<MessageFrontDTO> getConversation(Long id, List<UserDTO> allUsers, Long userId) {
         List<Message> allMessages = messageRepository.findAll();
         List<Message> filteredMessages = new ArrayList<Message>();
         List<MessageFrontDTO> messageDTOs = new ArrayList<MessageFrontDTO>();
 
         for (Message message : allMessages) {
-            if (message.getSenderId() == id && message.getReceiverId() == getLogedUserId()) {
+            if (message.getSenderId() == id && message.getReceiverId() == id) {
                 filteredMessages.add(message);
             }
 
-            if (message.getSenderId() == getLogedUserId() && message.getReceiverId() == id) {
+            if (message.getSenderId() == userId && message.getReceiverId() == id) {
                 filteredMessages.add(message);
             }
         }
@@ -52,23 +51,22 @@ public class MessageService {
             }
         });
 
-
-        for(Message message : filteredMessages){
+        for (Message message : filteredMessages) {
             messageDTOs.add(new MessageFrontDTO(message, allUsers));
         }
         return messageDTOs;
     }
 
-    public int newMessage(MessageDTO messageDTO, List<UserDTO> allUsers) {
+    public int newMessage(MessageDTO messageDTO, List<UserDTO> allUsers, Long id) {
 
         System.out.println(messageDTO.email + " " + messageDTO.text);
 
-        if (getLogedUserId() == null) {
+        if (id == null) {
             return 0;
         }
 
         Message message = new Message();
-        message.setSenderId(getLogedUserId());
+        message.setSenderId(id);
 
         if (messageDTO.getEmail() != null && !messageDTO.getEmail().equals("")) {
             for (UserDTO user : allUsers) {
@@ -94,57 +92,56 @@ public class MessageService {
         return 1;
     }
 
-    public List<UserDTO> getInboxUsers(List<UserDTO> allUsers) {
+    public List<UserDTO> getInboxUsers(List<UserDTO> allUsers, Long id) {
         List<Message> allMessages = messageRepository.findAll();
         List<Message> filteredMessages = new ArrayList<Message>();
         List<UserDTO> users = new ArrayList<UserDTO>();
-        Long loggedID = getLogedUserId();
 
         for (Message message : allMessages) {
-            if (message.getReceiverId() == loggedID) {
+            if (message.getReceiverId() == id) {
                 filteredMessages.add(message);
             }
 
-            if (message.getSenderId() == loggedID) {
+            if (message.getSenderId() == id) {
                 filteredMessages.add(message);
             }
         }
 
-        System.out.println("FilterMessages suuuuuuuuu prvi for="+filteredMessages.size());
+        System.out.println("FilterMessages suuuuuuuuu prvi for=" + filteredMessages.size());
 
-  //      System.out.println("USER======"+users.get(0).getId()+"EMAIL"+users.get(0).getLoginInfo().getEmail());
-        
+        // System.out.println("USER======"+users.get(0).getId()+"EMAIL"+users.get(0).getLoginInfo().getEmail());
+
         for (Message message : filteredMessages) {
-            if (!users.contains(getUserDTOById(allUsers, message.getReceiverId())) && message.getReceiverId() != loggedID) {
+            if (!users.contains(getUserDTOById(allUsers, message.getReceiverId())) && message.getReceiverId() != id) {
                 users.add(getUserDTOById(allUsers, message.getReceiverId()));
             }
 
-            if (!users.contains(getUserDTOById(allUsers, message.getSenderId())) && message.getSenderId() != loggedID) {
+            if (!users.contains(getUserDTOById(allUsers, message.getSenderId())) && message.getSenderId() != id) {
                 users.add(getUserDTOById(allUsers, message.getSenderId()));
             }
         }
 
-        System.out.println("Posle drugog fora==="+users.size());
+        System.out.println("Posle drugog fora===" + users.size());
 
         // return users; OVAKO KASNIJE
         return users;
     }
 
-    public List<UserDTO> getAllMessagableUsers(List<BookingRequestDTO> bookingRequests, List<UserDTO> allUsers) {
+    public List<UserDTO> getAllMessagableUsers(List<BookingRequestDTO> bookingRequests, List<UserDTO> allUsers,
+            Long id) {
         List<UserDTO> messagableUsers = new ArrayList<UserDTO>();
-        Long loggedID = getLogedUserId();
 
         for (BookingRequestDTO bookingRequest : bookingRequests) {
-            if (bookingRequest.getUserForId().equals(loggedID)
-                    && (bookingRequest.getStateOfRequest() == RequestStates.RESERVED || bookingRequest.getStateOfRequest() == RequestStates.PAID)) {
+            if (bookingRequest.getUserForId().equals(id)
+                    && (bookingRequest.getStateOfRequest() == RequestStates.RESERVED
+                            || bookingRequest.getStateOfRequest() == RequestStates.PAID)) {
                 if (!messagableUsers.contains(getUserDTOById(allUsers, bookingRequest.getUserToId()))) {
                     messagableUsers.add(getUserDTOById(allUsers, bookingRequest.getUserToId()));
                 }
             }
 
-            if (bookingRequest.getUserToId().equals(loggedID)
-                    && (bookingRequest.getStateOfRequest() == RequestStates.RESERVED 
-                            || bookingRequest.getStateOfRequest() == RequestStates.PAID)) {
+            if (bookingRequest.getUserToId().equals(id) && (bookingRequest.getStateOfRequest() == RequestStates.RESERVED
+                    || bookingRequest.getStateOfRequest() == RequestStates.PAID)) {
                 if (!messagableUsers.contains(getUserDTOById(allUsers, bookingRequest.getUserForId()))) {
                     messagableUsers.add(getUserDTOById(allUsers, bookingRequest.getUserForId()));
                 }
@@ -165,14 +162,15 @@ public class MessageService {
         return user;
     }
 
-    private Long getLogedUserId() {
-        Long id = restTemplate
-                .exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
-                }).getBody();
+    // private Long getLogedUserId(Long id) {
+    // Long id = restTemplate
+    // .exchange("http://auth/getUserId", HttpMethod.GET, null, new
+    // ParameterizedTypeReference<Long>() {
+    // }).getBody();
 
-        System.out.println("Nasao je id=" + id);
+    // System.out.println("Nasao je id=" + id);
 
-        return id;
-    }
+    // return id;
+    // }
 
 }

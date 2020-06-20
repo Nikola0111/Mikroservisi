@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.Booking.Booking.dtos.BookingRequestFrontDTO;
 import com.Booking.Booking.dtos.ItemInCartDTO;
 import com.Booking.Booking.dtos.ItemInCartFrontDTO;
@@ -14,9 +16,12 @@ import com.Booking.Booking.model.requests.BookingRequest;
 import com.Booking.Booking.repository.BookingRequestRepository;
 import com.Booking.Booking.service.BookingRequestService;
 import com.Booking.Booking.service.ItemInCartService;
+import com.Booking.Booking.service.SessionService;
 import com.Booking.Booking.service.ShoppingCartService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +30,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 
 @RestController
 // @RequestMapping(value = "booking")
@@ -39,26 +46,39 @@ public class BookingRequestController {
     @Autowired
     ShoppingCartService shoppingCartService;
 
+    @Autowired
+    SessionService sessionService;
+
+    @Autowired
+    RestTemplate restTemplate;
+
     @GetMapping("/hello")
     public ResponseEntity<?> get() {
 
         return new ResponseEntity<>(String.format("OMMMMMMGMF"), HttpStatus.OK);
     }
 
-    
     @GetMapping("/getCsrf")
-	public ResponseEntity<?> getXsrf() {
+    public ResponseEntity<?> getXsrf() {
 
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 
-    public ResponseEntity<List<ItemInCartFrontDTO>> Login(@RequestBody List<ItemInCartDTO> lista) {
+    public ResponseEntity<List<ItemInCartFrontDTO>> Login(@RequestBody List<ItemInCartDTO> lista,
+            HttpServletRequest request) {
+
+        String authorization = request.getHeader("Authorization");
+        HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
+
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
+                }).getBody();
 
         System.out.println("Pogodio je back");
 
-        bookingRequestService.makeRequests(lista);
+        bookingRequestService.makeRequests(lista, id);
 
         itemInCartService.removeAll();
 
@@ -66,9 +86,17 @@ public class BookingRequestController {
     }
 
     @PostMapping(value = "/getAllForAgent")
-    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForAgent(@RequestBody RequestStates state) {
+    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForAgent(@RequestBody RequestStates state,
+            HttpServletRequest request) {
 
-        List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForAgent(state);
+        String authorization = request.getHeader("Authorization");
+        HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
+
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
+                }).getBody();
+
+        List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForAgent(state, id);
 
         System.out.println("pogodio je kontroler, broj oglasa vraca==" + requests.size());
 
@@ -76,9 +104,17 @@ public class BookingRequestController {
     }
 
     @PostMapping(value = "/getGroupsForAgent")
-    public ResponseEntity<List<Long>> getAllSpecificGroupsForAgent(@RequestBody RequestStates state) {
+    public ResponseEntity<List<Long>> getAllSpecificGroupsForAgent(@RequestBody RequestStates state,
+            HttpServletRequest request) {
 
-        List<Long> groups = bookingRequestService.getSpecificGroupsForAgent(state);
+        String authorization = request.getHeader("Authorization");
+        HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
+
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
+                }).getBody();
+
+        List<Long> groups = bookingRequestService.getSpecificGroupsForAgent(state, id);
 
         System.out.println("pogodio je kontroler, broj grupa==" + groups.size());
 
@@ -97,9 +133,16 @@ public class BookingRequestController {
 
     @PostMapping(value = "/getAllSpecificForBuyer")
 
-    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForBuyer(@RequestBody RequestStates state) {
+    public ResponseEntity<List<BookingRequestFrontDTO>> getAllSpecificForBuyer(@RequestBody RequestStates state,
+            HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
 
-        List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForBuyer(state);
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
+                }).getBody();
+
+        List<BookingRequestFrontDTO> requests = bookingRequestService.getAllSpecificForBuyer(state, id);
 
         System.out.println("pogodio je kontroler, broj oglasa vraca==" + requests.size());
 
@@ -107,9 +150,17 @@ public class BookingRequestController {
     }
 
     @PostMapping(value = "/grups")
-    public ResponseEntity<List<Long>> getAllSpecificGroupsForBuyer(@RequestBody RequestStates state) {
+    public ResponseEntity<List<Long>> getAllSpecificGroupsForBuyer(@RequestBody RequestStates state,
+            HttpServletRequest request) {
 
-        List<Long> groups = bookingRequestService.getSpecificGroupsForBuyer(state);
+        String authorization = request.getHeader("Authorization");
+        HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
+
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
+                }).getBody();
+
+        List<Long> groups = bookingRequestService.getSpecificGroupsForBuyer(state, id);
 
         System.out.println("pogodio je kontroler, broj grupa==" + groups.size());
 
@@ -154,13 +205,16 @@ public class BookingRequestController {
         return new ResponseEntity<>(booked, HttpStatus.OK);
     }
 
-
     @PostMapping(value = "/reserve")
-    public ResponseEntity<Long> reserve(@RequestBody ReservationDTO reservation) {
+    public ResponseEntity<Long> reserve(@RequestBody ReservationDTO reservation, HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
 
-        
+        Long id = restTemplate
+                .exchange("http://auth/getUserId", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
+                }).getBody();
 
-        bookingRequestService.saveReserve(reservation);
+        bookingRequestService.saveReserve(reservation, id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

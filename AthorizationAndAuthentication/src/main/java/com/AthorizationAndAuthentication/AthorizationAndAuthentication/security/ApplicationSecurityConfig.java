@@ -1,7 +1,5 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.security;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,53 +31,47 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.*
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
- 
     private final PasswordEncoder passwordEncoder;
     private final LoginInfoService loginInfoService;
 
-    
     private final KeyPairClassService keyPairClassService;
 
-    
-@Autowired
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,LoginInfoService loginInfoService, KeyPairClassService keyPairClassService){
+    @Autowired
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, LoginInfoService loginInfoService,
+            KeyPairClassService keyPairClassService) {
         this.passwordEncoder = passwordEncoder;
         this.loginInfoService = loginInfoService;
-        this.keyPairClassService=keyPairClassService;
+        this.keyPairClassService = keyPairClassService;
         this.keyPairClassService.setKeyPair();
-     
+
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                
-                
-               
-                //.csrf().disable()
-                //odkomentarisati radi bezbednosti
+
+                // .csrf().disable()
+                // odkomentarisati radi bezbednosti
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringAntMatchers("/callMe","/increaseEndUsersNumberOfAds","/getCsrf","/getUserByUsername/**")
+                .ignoringAntMatchers("/callMe", "/increaseEndUsersNumberOfAds", "/getCsrf", "/getUserByUsername/**",
+                        "/h2-console/**")
                 .and()
 
-                
-                //ZBOG H2 BAZE CSRF INGORING I HEAERS.FRAME
-                //.csrf().ignoringAntMatchers("/h2-console/**")
-                //.and()
-                //Stavlja se zbog h2 baze
-                .headers().frameOptions().sameOrigin()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                // ZBOG H2 BAZE CSRF INGORING I HEAERS.FRAME
+                // .csrf().ignoringAntMatchers("/h2-console/**")
+                // .and()
+                // Stavlja se zbog h2 baze
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
-                .addFilterAfter(new JwtTokenVerifier(keyPairClassService.getPublicKey()),JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenVerifier(keyPairClassService.getPublicKey()),
+                        JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/login","/getCsrf","/getAll","/getUserByUsername/**","/getUserId","/getLoggedEndUser","/increaseEndUsersNumberOfAds","/getAgentEmail","/getAgentIDByUserID","/getAgentIDByMail","/getEmail","/getEmail","getPublicKey", "/register","/loginToken","/logout","/h2-console/**").permitAll()
-                .anyRequest()
-                .authenticated();
+                .antMatchers("/login", "/getCsrf", "/getAll", "/getUserByUsername/**", "/getUserId",
+                        "/getLoggedEndUser", "/increaseEndUsersNumberOfAds", "/getAgentEmail", "/getAgentIDByUserID",
+                        "/getAgentIDByMail", "/getEmail", "/getEmail", "getPublicKey", "/register", "/loginToken",
+                        "/logout", "/h2-console/**")
+                .permitAll().anyRequest().authenticated();
 
-             
     }
 
     @Override
@@ -90,7 +82,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public DaoAuthenticationProviderOurs daoAuthenticationProvider() {
         DaoAuthenticationProviderOurs provider = new DaoAuthenticationProviderOurs();
-       provider.setPasswordEncoder(new BCryptPasswordEncoder(10));
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(10));
         provider.setUserDetailsService(loginInfoService);
         return provider;
     }

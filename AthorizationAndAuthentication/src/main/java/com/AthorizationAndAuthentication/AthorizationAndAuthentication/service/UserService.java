@@ -81,23 +81,16 @@ public class UserService {
 
     }
 
-    public Long getLoggedUser() {
+    public Long getLoggedUserId() {
 
-        Long userId = (Long) session.getAttribute("user");
+        Long userId = sessionService.getLoggedUserId();
         return userId;
 
     }
 
     public EndUser getLoggedEndUser() {
-        List<EndUser> all = endUserRepository.findAll();
-        Long userId = (Long) session.getAttribute("user");
-
-        for (EndUser endUser : all) {
-            if (endUser.getUser().getId().equals(userId)) {
-                return endUser;
-            }
-        }
-        return null;
+        EndUser endUser = sessionService.getLoggedEndUser();
+        return endUser;
     }
 
     public int getEndusersNumberOfAds(Long endUserId) {
@@ -114,7 +107,7 @@ public class UserService {
     }
 
     public Long increaseEndUsersNumberOfAds() {
-        EndUser endUser = getLoggedEndUser();
+        EndUser endUser = sessionService.getLoggedEndUser();
         endUser.setNumberOfAds(endUser.getNumberOfAds() + 1);
         endUserRepository.save(endUser);
         return endUser.getId();
@@ -172,16 +165,9 @@ public class UserService {
 
         System.out.println("HESOVAN PASSWORD == " + hashIt(entityUser.getPassword(), salt));
 
-        LoginInfo loginInfo=new LoginInfo(
-        entityUser.getUsername(),
-        hashIt(entityUser.getPassword(),salt ), 
-        entityUser.getLoginInfo().getEmail(),
-        salt,
-        ApplicationUserRole.ENDUSER.getGrantedAuthorities(),
-        true,
-        true,
-        true,
-        true);
+        LoginInfo loginInfo = new LoginInfo(entityUser.getUsername(), hashIt(entityUser.getPassword(), salt),
+                entityUser.getLoginInfo().getEmail(), salt, ApplicationUserRole.ENDUSER.getGrantedAuthorities(), true,
+                true, true, true);
 
         loginInfoService.save(loginInfo);
 

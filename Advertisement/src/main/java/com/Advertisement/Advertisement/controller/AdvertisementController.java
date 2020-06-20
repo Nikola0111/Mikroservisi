@@ -4,12 +4,15 @@ import com.Advertisement.Advertisement.dtos.*;
 import com.Advertisement.Advertisement.model.Advertisement;
 import com.Advertisement.Advertisement.model.Comment;
 import com.Advertisement.Advertisement.service.AdvertisementService;
+import com.Advertisement.Advertisement.service.SessionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.security.auth.message.callback.SecretKeyCallback.Request;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 // @RequestMapping(value = "advertisement")
@@ -31,6 +35,9 @@ public class AdvertisementController {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Autowired
+	SessionService sessionService;
 
 	@GetMapping("/hello")
 	public ResponseEntity<?> get() {
@@ -59,15 +66,19 @@ public class AdvertisementController {
 
 	@PreAuthorize("hasAuthority('advertisement:write')")
 	@PostMapping(value = "/save")
-	public ResponseEntity<Long> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO) {
+	public ResponseEntity<Long> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO,
+			HttpServletRequest request) {
 		Long id;
+
+		String authorizationHeader = request.getHeader("Authorization");
+		HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorizationHeader);
 
 		System.out.println("Pogodio je ovaj SAVE");
 		id = restTemplate
-				.exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+				.exchange("http://auth/getUserId", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
 				}).getBody();
 
-		EndUserNumberOfAdsDTO endUser = restTemplate.exchange("http://auth/getLoggedEndUser", HttpMethod.GET, null,
+		EndUserNumberOfAdsDTO endUser = restTemplate.exchange("http://auth/getLoggedEndUser", HttpMethod.GET, entity,
 				new ParameterizedTypeReference<EndUserNumberOfAdsDTO>() {
 				}).getBody();
 
@@ -76,7 +87,7 @@ public class AdvertisementController {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
-			if(endUser.isBlocked()){
+			if (endUser.isBlocked()) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 		}
@@ -84,7 +95,7 @@ public class AdvertisementController {
 		Advertisement createdAd = advertisementService.save(advertisementCreationDTO, id);
 		if (endUser != null) {
 			if (createdAd != null) {
-				restTemplate.exchange("http://auth/increaseEndUsersNumberOfAds", HttpMethod.GET, null,
+				restTemplate.exchange("http://auth/increaseEndUsersNumberOfAds", HttpMethod.GET, entity,
 						new ParameterizedTypeReference<Long>() {
 						}).getBody();
 			}
@@ -99,7 +110,6 @@ public class AdvertisementController {
 		List<AdvertisementCreationDTO> advertisements = advertisementService.findAll();
 		return new ResponseEntity<>(advertisements, HttpStatus.OK);
 	}
-
 
 	@GetMapping(value = "/getAllAdvertisementsForCart")
 	public ResponseEntity<List<AdvertisementCreationDTO>> getAllBookings() {
@@ -149,7 +159,6 @@ public class AdvertisementController {
 		return new ResponseEntity<>(advertisementService.findAll(), HttpStatus.OK);
 	}
 
-	
 	@PostMapping(value = "/allByIds", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AdvertisementCreationDTO>> getAllByIds(@RequestBody ArrayList<Long> ids) {
 
@@ -222,9 +231,12 @@ public class AdvertisementController {
 
 	@PreAuthorize("hasAuthority('advertisement:read')")
 	@GetMapping(value = "/getAllByUser", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Advertisement>> getAllByUser() {
+	public ResponseEntity<List<Advertisement>> getAllByUser(HttpServletRequest request) {
+
+		String authorization = request.getHeader("Authorization");
+		HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
 		Long id = restTemplate
-				.exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+				.exchange("http://auth/getUserId", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
 				}).getBody();
 
 		List<Advertisement> ads = advertisementService.getAllByUser(id);
@@ -232,17 +244,14 @@ public class AdvertisementController {
 		return new ResponseEntity<>(ads, HttpStatus.OK);
 	}
 
-	
-	  
-	//  @GetMapping(value = "/getAllComments/{id}", produces =
-	//  MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
-	//  public ResponseEntity<List<CommentPreviewDTO>> getAllComments(@PathVariable
-	//  Long id) { System.out.println(id); AdvertisementDTO advertisementDTO =
-	//  advertisementService.findAdAndComments(id); if(advertisementDTO == null) {
-	//  return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
-	//  System.out.println(advertisementDTO.getName());
-	//  System.out.println(advertisementDTO.getComments()); return new
-	//  ResponseEntity<>(advertisementDTO.getComments(), HttpStatus.OK); }
-	
-}
+	// @GetMapping(value = "/getAllComments/{id}", produces =
+	// MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
+	// public ResponseEntity<List<CommentPreviewDTO>> getAllComments(@PathVariable
+	// Long id) { System.out.println(id); AdvertisementDTO advertisementDTO =
+	// advertisementService.findAdAndComments(id); if(advertisementDTO == null) {
+	// return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
+	// System.out.println(advertisementDTO.getName());
+	// System.out.println(advertisementDTO.getComments()); return new
+	// ResponseEntity<>(advertisementDTO.getComments(), HttpStatus.OK); }
 
+}

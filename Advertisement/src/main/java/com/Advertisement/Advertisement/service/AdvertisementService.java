@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Service
@@ -69,11 +70,11 @@ public class AdvertisementService {
 	// @Autowired
 	// AgentRepository agentRepository;
 
-	// @Autowired
-	// LoggerService loggerService;
+	@Autowired
+	LoggerService loggerService;
 
-	// @Autowired
-	// SessionService sessionService;
+	@Autowired
+	SessionService sessionService;
 
 	public Advertisement save(AdvertisementCreationDTO advertisementCreationDTO, Long id) {
 
@@ -100,6 +101,8 @@ public class AdvertisementService {
 
 		// kada se kreira korisnik kreira mu se i korpa u koju ce moci da dodaje oglase!
 
+		loggerService.doLog("dodo", "result", "INFO");
+
 		return advertisementRepository.save(ad);
 	}
 
@@ -110,11 +113,9 @@ public class AdvertisementService {
 		// String path=
 		// C:\\Users\\Sherlock\\Desktop\\Mikroservisi\\Frontend\\src\\assets\\images
 
-	
-
 		// dodajte putanju do vaseg dir
 		String nazivSlike = image.getOriginalFilename().replace("/", "\\");
-		
+
 		byte[] bytes;
 		try {
 			bytes = image.getBytes();
@@ -387,26 +388,28 @@ public class AdvertisementService {
 		return filteredAdsDTOs;
 	}
 
-	public void saveCommentAndGrade(CommentDTO commentDTO){
-	 	Advertisement ad = advertisementRepository.findOneByid(commentDTO.getAd());
-	 	Grade grade = new Grade(commentDTO.getGrade(), ad); //OVDE TREBA DOBITI ENDUSERA PO ID
+	public void saveCommentAndGrade(CommentDTO commentDTO, HttpServletRequest request) {
+		Advertisement ad = advertisementRepository.findOneByid(commentDTO.getAd());
+		Grade grade = new Grade(commentDTO.getGrade(), ad); // OVDE TREBA DOBITI ENDUSERA PO ID
 
-	 	gradeService.save(grade);
+		gradeService.save(grade);
 
-		EndUserNumberOfAdsDTO endUser = restTemplate.exchange("http://auth/getLoggedEndUser", HttpMethod.GET, null,
+		String authorization = request.getHeader("Authorization");
+		HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
+
+		EndUserNumberOfAdsDTO endUser = restTemplate.exchange("http://auth/getLoggedEndUser", HttpMethod.GET, entity,
 				new ParameterizedTypeReference<EndUserNumberOfAdsDTO>() {
 				}).getBody();
 
-	 	Date date = new Date();
-	 	System.out.println(date);
+		Date date = new Date();
+		System.out.println(date);
 
-		Comment comment = new Comment(commentDTO.getMessage(), date, ad,
-	 	endUser.getId(), commentDTO.getGrade());
+		Comment comment = new Comment(commentDTO.getMessage(), date, ad, endUser.getId(), commentDTO.getGrade());
 		comment.setApproved(false);
 		comment.setDeleted(false);
-	 	commentRepository.save(comment);
-	 	//sacuvaj komentar
-	 }
+		commentRepository.save(comment);
+		// sacuvaj komentar
+	}
 
 	public AdvertisementCreationDTO findAdAndComments(Long id) {
 		Advertisement ad = advertisementRepository.findOneByid(id); // OVA
@@ -415,29 +418,28 @@ public class AdvertisementService {
 
 		// //sredjivanje komentara
 		List<CommentPreviewDTO> comments = new ArrayList<CommentPreviewDTO>();
-		for(int i = 0;i < db.size();i++) {
-			
+		for (int i = 0; i < db.size(); i++) {
+
 			HttpEntity<Long> request = new HttpEntity<>(db.get(i).getEndUserID());
-			String email = 
-			restTemplate.postForEntity("http://auth/getEmail", request,String.class, db.get(i).getEndUserID()).getBody();
+			String email = restTemplate
+					.postForEntity("http://auth/getEmail", request, String.class, db.get(i).getEndUserID()).getBody();
 
 			String commentValue;
 
-			if(db.get(i).getDeleted() == true){
+			if (db.get(i).getDeleted() == true) {
 				commentValue = "Komentar je obrisan od strane administratora";
-			}else {
+			} else {
 				commentValue = db.get(i).getValue();
 			}
 
-			CommentPreviewDTO temp = new CommentPreviewDTO(commentValue,
-			email,
-			db.get(i).getGrade(), db.get(i).getDate());
+			CommentPreviewDTO temp = new CommentPreviewDTO(commentValue, email, db.get(i).getGrade(),
+					db.get(i).getDate());
 			temp.setId(db.get(i).getId());
 
-			if(db.get(i).getReply() != null) {
+			if (db.get(i).getReply() != null) {
 				request = new HttpEntity<>(db.get(i).getReply().getAgentID());
-				String agentMail = restTemplate.postForEntity("http://auth/getAgentEmail", request,String.class, db.get(i).getReply().getAgentID()).getBody();
-
+				String agentMail = restTemplate.postForEntity("http://auth/getAgentEmail", request, String.class,
+						db.get(i).getReply().getAgentID()).getBody();
 
 				ReplyDTO replyDTO = new ReplyDTO();
 				replyDTO.setComment(db.get(i).getReply().getComment());
@@ -472,48 +474,51 @@ public class AdvertisementService {
 	public List<Advertisement> getAllByPostedBy(Long id) {
 		// salje sa fronta id usera, ne id agenta, i zato ne prikazuje formu za reply
 		HttpEntity<Long> request = new HttpEntity<>(id);
-		Long agentID = restTemplate.postForEntity("http://auth/getAgentIDByUserID", request,Long.class, id).getBody();
+		Long agentID = restTemplate.postForEntity("http://auth/getAgentIDByUserID", request, Long.class, id).getBody();
 		System.out.println("ID AGENTA? " + id);
 		return advertisementRepository.findAllByPostedByID(agentID);
 	}
-	
-	public void saveReply(ReplyDTO replyDTO){ 
+
+	public void saveReply(ReplyDTO replyDTO) {
 		HttpEntity<String> request = new HttpEntity<>(replyDTO.getAgentMail());
-		//Long agentID = restTemplate.postForEntity("http://auth/getAgentIDByMail", request, Long.class).getBody();
-		Long agentID = restTemplate.exchange("http://auth/getAgentIDByMail", HttpMethod.POST, request, 
-		new ParameterizedTypeReference<Long>() {
-		}).getBody();
-		
+		// Long agentID = restTemplate.postForEntity("http://auth/getAgentIDByMail",
+		// request, Long.class).getBody();
+		Long agentID = restTemplate.exchange("http://auth/getAgentIDByMail", HttpMethod.POST, request,
+				new ParameterizedTypeReference<Long>() {
+				}).getBody();
+
 		Comment comment = commentRepository.findOneByid(replyDTO.getId());
-		Reply reply = new Reply(replyDTO.getComment(), comment, agentID); 
-		comment.setReply(reply); 
+		Reply reply = new Reply(replyDTO.getComment(), comment, agentID);
+		comment.setReply(reply);
 		replyRepository.save(reply);
 		commentRepository.save(comment);
-	} 
+	}
 
-	public List<CommentPreviewDTO> getUnapprovedComments(){
+	public List<CommentPreviewDTO> getUnapprovedComments() {
 		List<Comment> list = commentRepository.findByApproved(false);
 		List<CommentPreviewDTO> comments = new ArrayList<>();
 
 		String email;
 		for (Comment temp : list) {
 			HttpEntity<Long> request = new HttpEntity<>(temp.getEndUserID());
-			email = restTemplate.postForEntity("http://auth/getEmail", request, String.class, temp.getEndUserID()).getBody();
+			email = restTemplate.postForEntity("http://auth/getEmail", request, String.class, temp.getEndUserID())
+					.getBody();
 			System.out.println("Email komentara: " + email);
-			comments.add(new CommentPreviewDTO(temp.getId(), temp.getValue(), email, gradeService.calculateGradeForAd(temp.getId()), temp.getDate()));
+			comments.add(new CommentPreviewDTO(temp.getId(), temp.getValue(), email,
+					gradeService.calculateGradeForAd(temp.getId()), temp.getDate()));
 		}
 
 		return comments;
 	}
 
-	public void approveComment(Long id){
+	public void approveComment(Long id) {
 		Comment comment = commentRepository.findOneByid(id);
 
 		comment.setApproved(true);
 		commentRepository.save(comment);
 	}
 
-	public void deleteComment(Long id){
+	public void deleteComment(Long id) {
 		Comment comment = commentRepository.findOneByid(id);
 
 		comment.setApproved(true);

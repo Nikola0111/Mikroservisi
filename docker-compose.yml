@@ -41,7 +41,7 @@ services:
     restart: always
     image: auth-image 
     volumes:
-    - $USERPROFILE/.m2:/root/.m2
+    - $USERPROFILE/XML/Mikroservisi/Logs:/tmp
     ports:
     - "8080:8080"
     environment:
@@ -60,7 +60,8 @@ services:
     image: advert-image
     restart: always
     volumes:
-    - $USERPROFILE/Desktop/Mikroservisi/Frontend/src/assets/images:/etc
+    - $USERPROFILE/XML/Mikroservisi/Frontend/src/assets/images:/etc
+    - $USERPROFILE/XML/Mikroservisi/Logs:/tmp
     ports:
     - "8085:8085"
     environment:
@@ -77,7 +78,7 @@ services:
 #    restart: always
 #    image: message-image 
 #    volumes:
-#    - $USERPROFILE/.m2:/root/.m2
+#    - $USERPROFILE/XML/Mikroservisi/Logs:/tmp
 #    ports:
 #    - "8087:8087"
 #    environment:

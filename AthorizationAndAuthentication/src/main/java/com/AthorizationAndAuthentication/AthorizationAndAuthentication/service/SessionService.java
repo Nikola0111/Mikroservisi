@@ -4,6 +4,8 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.repositor
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ public class SessionService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired 
+    @Autowired
     LoginInfoRepository loginInfoRepository;
 
     @Autowired
@@ -26,42 +28,55 @@ public class SessionService {
 
     @Autowired
     AgentRepository agentRepository;
-    
-    /*
-    public String getLoggedUsername(){
+
+    public String getLoggedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
+        System.out.println("OVO JE USERNAME...." + username);
 
         return username;
     }
 
-    public String getLoggedEmail(){
+    public String getLoggedEmail() {
         String username = getLoggedUsername();
         String email = loginInfoRepository.findByUsername(username).getEmail();
 
         return email;
     }
-    
-    public EntityUser getLoggedUser(){
+
+    public EntityUser getLoggedUser() {
         String username = getLoggedUsername();
         Long loginInfoID = loginInfoRepository.findByUsername(username).getId();
 
         List<EntityUser> users = userRepository.findAll();
-        for(EntityUser user : users){
-            if(user.getLoginInfo().getId() == loginInfoID){
+        for (EntityUser user : users) {
+            if (user.getLoginInfo().getId().equals(loginInfoID)) {
                 return user;
             }
         }
         return null;
     }
 
-    public EndUser getLoggedEndUser(){
+    public Long getLoggedUserId() {
+        String username = getLoggedUsername();
+        Long loginInfoID = loginInfoRepository.findByUsername(username).getId();
+
+        List<EntityUser> users = userRepository.findAll();
+        for (EntityUser user : users) {
+            if (user.getLoginInfo().getId().equals(loginInfoID)) {
+                return user.getId();
+            }
+        }
+        return null;
+    }
+
+    public EndUser getLoggedEndUser() {
         Long userID = getLoggedUser().getId();
 
         List<EndUser> all = endUserRepository.findAll();
 
-        for(EndUser endUser : all){
-            if(endUser.getUser().getId() == userID){
+        for (EndUser endUser : all) {
+            if (endUser.getUser().getId().equals(userID)) {
                 return endUser;
             }
         }
@@ -69,31 +84,33 @@ public class SessionService {
     }
 
     // public Administrator getLoggedAdministrator(){
-    //     Long userID = getLoggedUser().getId();
+    // Long userID = getLoggedUser().getId();
 
-    //     List<Administrator> all = administratorRepository.findAll();
+    // List<Administrator> all = administratorRepository.findAll();
 
-    //     for(Administrator administrator : all){
-    //         if(administrator.getUser().getId() == userID){
-    //             return administrator;
-    //         }
-    //     }
-    //     return null;
+    // for(Administrator administrator : all){
+    // if(administrator.getUser().getId() == userID){
+    // return administrator;
+    // }
+    // }
+    // return null;
     // }
 
-    public Agent getLoggedAgent(){
+    public Agent getLoggedAgent() {
         Long userID = getLoggedUser().getId();
 
         List<Agent> all = agentRepository.findAll();
 
-        for(Agent agent : all){
-            if(agent.getUser().getId() == userID){
+        for (Agent agent : all) {
+            if (agent.getUser().getId().equals(userID)) {
                 return agent;
             }
         }
         return null;
     }
 
-    */
+    public void invalidateSession() {
+        SecurityContextHolder.clearContext();
+    }
 
 }

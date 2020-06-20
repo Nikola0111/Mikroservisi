@@ -1,11 +1,11 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.controller;
 
-
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.EndUser;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.EntityUser;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.LoginInfo;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.AgentService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.LoginInfoService;
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.SessionService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.KeyPairClassService;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.UserService;
 
@@ -30,9 +30,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.Key;
 
-
-
-
 @RestController
 public class UserController {
 
@@ -42,134 +39,124 @@ public class UserController {
     @Autowired
     private LoginInfoService loginInfoService;
 
-  @Autowired
+    @Autowired
     RestTemplate restTemplate;
 
     @Autowired
     KeyPairClassService keyPairClassService;
 
-
     @Autowired
     private AgentService agentService;
 
-  @GetMapping("/hello")
+    @Autowired
+    private SessionService sessionService;
+
+    @GetMapping("/hello")
     public ResponseEntity<?> get() {
-       
-		
+
         return new ResponseEntity<>(String.format("NEMANJA TI SI GOVNOI i jebi se i pusi "), HttpStatus.OK);
     }
 
-
-
-    
     @PostMapping(value = "/login")
-    public String Login(){
-
+    public String Login() {
 
         System.out.println("PROSO PROSO");
 
-        String authorizationHeader =keyPairClassService.getPublicKey().toString();
-
+        String authorizationHeader = keyPairClassService.getPublicKey().toString();
 
         HttpHeaders requestHeaders = new HttpHeaders();
-        
+
         requestHeaders.add("publicKeyAttribute", authorizationHeader);
 
         HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
 
-        ResponseEntity<?> responseEntity = restTemplate.exchange(
-            "http://advertisement/publicKey",
-            HttpMethod.GET,
-            requestEntity,
-            new ParameterizedTypeReference<ResponseEntity<?>>() {
-            }).getBody();
+        ResponseEntity<?> responseEntity = restTemplate.exchange("http://advertisement/publicKey", HttpMethod.GET,
+                requestEntity, new ParameterizedTypeReference<ResponseEntity<?>>() {
+                }).getBody();
 
-
-
-      return "proslo";
+        return "proslo";
     }
 
-    
-	@GetMapping(value = "/getPublicKey")
+    @GetMapping(value = "/getPublicKey")
     public ResponseEntity<String> getPublicKey() {
 
-
-
-		System.out.println("OVO JE poslati PUBLIC KEY="+keyPairClassService.getPublicKey().toString());
+        System.out.println("OVO JE poslati PUBLIC KEY=" + keyPairClassService.getPublicKey().toString());
 
         return new ResponseEntity<>(keyPairClassService.getPublicKey().toString(), HttpStatus.OK);
     }
 
-
     @GetMapping(value = "/loginToken")
     public ResponseEntity getToken() {
-    
+
         System.out.println("POGODIO JE LOGIN TOKEN");
 
+        // String publicK =
+        // Base64.encodeBase64String(keyPairClassService.getPublicKey().getEncoded());
 
+        // System.out.println("PUBLIC KEY JE NA
+        // AUTH="+keyPairClassService.getPublicKey());
 
-       // String publicK = Base64.encodeBase64String(keyPairClassService.getPublicKey().getEncoded());
+        // HttpEntity<String> request = new HttpEntity<>(publicK);
 
-      //  System.out.println("PUBLIC KEY JE NA AUTH="+keyPairClassService.getPublicKey());
+        // restTemplate
+        // .exchange("http://advert/callMe", HttpMethod.POST, request, new
+        // ParameterizedTypeReference<Long>() {
+        // }).getBody();
 
-      //  HttpEntity<String> request = new HttpEntity<>(publicK);
-
-      //  restTemplate
-      //  .exchange("http://advert/callMe", HttpMethod.POST, request, new ParameterizedTypeReference<Long>() {
-      //  }).getBody();
-
-     /*   String authorizationHeader =keyPairClassService.getPublicKey().toString();
-
-
-        HttpHeaders requestHeaders = new HttpHeaders();
-
-      
-        requestHeaders.setContentType(MediaType.TEXT_PLAIN);
-        
-        requestHeaders.add("publicKeyAttribute", authorizationHeader);
-
-        HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
-
-        ResponseEntity<?> responseEntity = restTemplate.exchange(
-            "http://advert/publicKey",
-            HttpMethod.GET,
-            requestEntity,
-            new ParameterizedTypeReference<ResponseEntity<?>>() {
-            }).getBody();
-*/
+        /*
+         * String authorizationHeader =keyPairClassService.getPublicKey().toString();
+         * 
+         * 
+         * HttpHeaders requestHeaders = new HttpHeaders();
+         * 
+         * 
+         * requestHeaders.setContentType(MediaType.TEXT_PLAIN);
+         * 
+         * requestHeaders.add("publicKeyAttribute", authorizationHeader);
+         * 
+         * HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
+         * 
+         * ResponseEntity<?> responseEntity = restTemplate.exchange(
+         * "http://advert/publicKey", HttpMethod.GET, requestEntity, new
+         * ParameterizedTypeReference<ResponseEntity<?>>() { }).getBody();
+         */
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 
     @GetMapping(value = "/logout")
-    public ResponseEntity getAllForCart() {
-      
-        
-        System.out.println("izbrisao sve proslo izlogovan");
+    public ResponseEntity logOut() {
+
+        sessionService.invalidateSession();
+
+        restTemplate.exchange("http://advert/logOut", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+        }).getBody();
+
+        restTemplate.exchange("http://book/logOut", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+        }).getBody();
+
+        restTemplate.exchange("http://message/logOut", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+        }).getBody();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
     @GetMapping(value = "/getUserId")
     public ResponseEntity<Long> getUserId() {
 
-        return new ResponseEntity<>(userService.getLoggedUser(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getLoggedUserId(), HttpStatus.OK);
     }
 
     @GetMapping("/getCsrf")
-	public ResponseEntity<?> getXsrf() {
+    public ResponseEntity<?> getXsrf() {
 
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping(value = "/getLoggedEndUser")
     public ResponseEntity<EndUser> getLoggedEndUser() {
 
         return new ResponseEntity<>(userService.getLoggedEndUser(), HttpStatus.OK);
     }
-
 
     @GetMapping(value = "/getUserByUsername/{username}")
     public ResponseEntity<EntityUser> getUserByUsername(@PathVariable("username") String username) {
@@ -179,31 +166,29 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-
     @GetMapping(value = "/increaseEndUsersNumberOfAds")
     public ResponseEntity<Long> increaseEndUsersNumberOfAds() {
 
         return new ResponseEntity<>(userService.increaseEndUsersNumberOfAds(), HttpStatus.OK);
     }
 
-   // @PreAuthorize("hasAuthority('user:read')")
-    @GetMapping(value= "/getAll")
-    public ResponseEntity<List<EntityUser>> getAllUsers(){
-
+    // @PreAuthorize("hasAuthority('user:read')")
+    @GetMapping(value = "/getAll")
+    public ResponseEntity<List<EntityUser>> getAllUsers() {
 
         return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
 
     }
 
-  //  @PreAuthorize("hasAuthority('user:read')")
-    @PostMapping(value = "/getAgentIDByMail", produces = MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Long> getAgentIDByMail(@RequestBody String email){
+    // @PreAuthorize("hasAuthority('user:read')")
+    @PostMapping(value = "/getAgentIDByMail", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<Long> getAgentIDByMail(@RequestBody String email) {
         return new ResponseEntity<>(agentService.getAgentIDByEmail(email), HttpStatus.OK);
     }
 
-  //  @PreAuthorize("hasAuthority('user:read')")
+    // @PreAuthorize("hasAuthority('user:read')")
     @PostMapping(value = "/getAgentEmail", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> getAgentMail(@RequestBody Long id){
+    public ResponseEntity<String> getAgentMail(@RequestBody Long id) {
         return new ResponseEntity<>(agentService.getAgentMail(id), HttpStatus.OK);
     }
 
