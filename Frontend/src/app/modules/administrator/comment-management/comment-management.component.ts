@@ -19,15 +19,20 @@ export class CommentManagementComponent implements OnInit {
   ngOnInit() {
   }
 
-  approve(comment: CommentPreviewDTO){
-    this.comments.splice(this.comments.indexOf(comment));
+  approve(comment: CommentPreviewDTO) {
     console.log(comment.id);
-    this.commentService.approve(comment.id).subscribe();
+    this.commentService.approve(comment.id).subscribe(data => {
+      this.commentService.getUnapprovedComments().subscribe(newDataSource => {
+        this.comments = newDataSource;
+      });
+    });
   }
 
-  delete(comment: CommentPreviewDTO){
-    this.comments.splice(this.comments.indexOf(comment));
-    this.commentService.delete(comment.id).subscribe();
+  delete(comment: CommentPreviewDTO) {
+    this.commentService.delete(comment.id).subscribe(data => {
+      this.commentService.getUnapprovedComments().subscribe(newDataSource => {
+        this.comments = newDataSource;
+      });
+    });
   }
-
 }

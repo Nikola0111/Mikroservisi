@@ -4,6 +4,7 @@ import com.Advertisement.Advertisement.dtos.*;
 import com.Advertisement.Advertisement.model.Advertisement;
 import com.Advertisement.Advertisement.model.Comment;
 import com.Advertisement.Advertisement.service.AdvertisementService;
+import com.Advertisement.Advertisement.service.CommentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -30,6 +31,9 @@ public class AdvertisementController {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Autowired
+	private CommentService commentService;
 
 	@GetMapping("/hello")
 	public ResponseEntity<?> get() {
@@ -213,7 +217,11 @@ public class AdvertisementController {
 		return new ResponseEntity<>(ads, HttpStatus.OK);
 	}
 
-	
+	@PostMapping(value = "/deleteCommentsByEndUserID", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> deleteCommentsByEndUserID(@RequestBody Long id)	{
+		commentService.deleteByEndUserID(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	  
 	//  @GetMapping(value = "/getAllComments/{id}", produces =
 	//  MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
