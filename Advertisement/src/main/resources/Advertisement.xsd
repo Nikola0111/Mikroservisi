@@ -1,0 +1,77 @@
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://com.Advertisement/JavaGeneratedFiles"
+           targetNamespace="http://com.Advertisement/JavaGeneratedFiles">
+
+    <xs:element name="getAdvertisementRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="advertisement" type="tns:advertisement"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getAdvertisementResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name = "advertisement">
+        <xs:sequence>
+            <xs:element name="brand">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="code" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="carClass">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="code" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element type="xs:int" name="carSeats"/>
+            <xs:element name="fuelType">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="code" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="model">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="code" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element type="xs:string" name="name"/>
+            <xs:element type="xs:double" name="price"/>
+            <xs:element name="transType">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="code" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element type="xs:int" name="travelled"/>
+            <xs:element type="xs:long" name="userID"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import advertisement.com.javageneratedfiles.GetAdvertisementRequest;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -536,5 +538,21 @@ public class AdvertisementService {
 		comment.setApproved(true);
 		comment.setDeleted(true);
 		commentRepository.save(comment);
+	}
+
+	public String saveSoapAdvertisement(GetAdvertisementRequest request){
+		Model model = modelRepository.findOneByid(request.getAdvertisement().getModel().getId());
+		Brand brand = brandRepository.findOneByid(request.getAdvertisement().getModel().getId());
+		FuelType fueltype = fuelTypeRepository.findOneByid(request.getAdvertisement().getModel().getId());
+		TransmissionType transmissionType = transmissionTypeRepository.findOneByid(request.getAdvertisement().getModel().getId());
+		CarClass carClass = carClassRepository.findOneByid(request.getAdvertisement().getModel().getId());
+
+		Advertisement advertisement = new Advertisement(request.getAdvertisement().getName(),
+				model, brand, fueltype, transmissionType, carClass, request.getAdvertisement().getTravelled(), request.getAdvertisement().getCarSeats(),
+				request.getAdvertisement().getPrice(), request.getAdvertisement().getUserID(), 10.0,new ArrayList<String>(), 0.0);
+
+		advertisementRepository.save(advertisement);
+
+		return "saved";
 	}
 }
