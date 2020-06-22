@@ -71,7 +71,7 @@ public class LoggerService {
                 aclAfter.add(0, entryAfter);
                 view.setAcl(aclAfter);
             } else {
-                fh = new FileHandler("/tmp/Logs/RentACarLogFile.log", 1000000, 5, true);
+                fh = new FileHandler("/tmp/RentACarLogFile.log", 1000000, 5, true);
                 logger.addHandler(fh);
                 SimpleFormatter formatter = new SimpleFormatter();
                 fh.setFormatter(formatter);

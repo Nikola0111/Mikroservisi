@@ -101,7 +101,7 @@ public class AdvertisementService {
 
 		// kada se kreira korisnik kreira mu se i korpa u koju ce moci da dodaje oglase!
 
-		loggerService.doLog("dodo", "result", "INFO");
+		loggerService.doLog("1", "ime:" + ad.getName(), "INFO");
 
 		return advertisementRepository.save(ad);
 	}
@@ -297,6 +297,7 @@ public class AdvertisementService {
 	}
 
 	public Advertisement update(Advertisement advertisement) {
+		loggerService.doLog("14", "ime:" + advertisement.getName(), "INFO");
 		return advertisementRepository.save(advertisement);
 	}
 
@@ -388,27 +389,21 @@ public class AdvertisementService {
 		return filteredAdsDTOs;
 	}
 
-	public void saveCommentAndGrade(CommentDTO commentDTO, HttpServletRequest request) {
+	public void saveCommentAndGrade(CommentDTO commentDTO, Long id) {
 		Advertisement ad = advertisementRepository.findOneByid(commentDTO.getAd());
 		Grade grade = new Grade(commentDTO.getGrade(), ad); // OVDE TREBA DOBITI ENDUSERA PO ID
 
 		gradeService.save(grade);
 
-		String authorization = request.getHeader("Authorization");
-		HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
-
-		EndUserNumberOfAdsDTO endUser = restTemplate.exchange("http://auth/getLoggedEndUser", HttpMethod.GET, entity,
-				new ParameterizedTypeReference<EndUserNumberOfAdsDTO>() {
-				}).getBody();
-
 		Date date = new Date();
 		System.out.println(date);
 
-		Comment comment = new Comment(commentDTO.getMessage(), date, ad, endUser.getId(), commentDTO.getGrade());
+		Comment comment = new Comment(commentDTO.getMessage(), date, ad, id, commentDTO.getGrade());
 		comment.setApproved(false);
 		comment.setDeleted(false);
 		commentRepository.save(comment);
 		// sacuvaj komentar
+		loggerService.doLog("13", "Tekst:" + comment.getValue(), "INFO");
 	}
 
 	public AdvertisementCreationDTO findAdAndComments(Long id) {

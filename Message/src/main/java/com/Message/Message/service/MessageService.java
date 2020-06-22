@@ -30,6 +30,9 @@ public class MessageService {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    LoggerService loggerService;
+
     public List<MessageFrontDTO> getConversation(Long id, List<UserDTO> allUsers, Long userId) {
         List<Message> allMessages = messageRepository.findAll();
         List<Message> filteredMessages = new ArrayList<Message>();
@@ -88,7 +91,7 @@ public class MessageService {
         message.setTimeSent(LocalDateTime.now());
 
         messageRepository.save(message);
-
+        loggerService.doLog("12", "Tekst: " + message.getText() + " Primalac: " + message.getReceiverId(), "INFO");
         return 1;
     }
 

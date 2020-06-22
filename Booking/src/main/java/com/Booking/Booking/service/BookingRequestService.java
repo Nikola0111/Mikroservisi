@@ -31,6 +31,9 @@ public class BookingRequestService {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    LoggerService loggerService;
+
     // PUCACE JER LogedUserId MORA DA SE DOBAVI NEKAKO
 
     public void makeRequests(List<ItemInCartDTO> listaZahteva, Long loggedUserId) {
@@ -106,7 +109,7 @@ public class BookingRequestService {
                             loggedUserId, lastGroupId, RequestStates.PENDING, ItemInCartDTO2.getAdvertisementId(),
                             ItemInCartDTO2.isTogether(), ItemInCartDTO2.getTimeFrom(), ItemInCartDTO2.getTimeTo(),
                             null));
-
+                    loggerService.doLog("6", "id oglasa: " + ItemInCartDTO2.getAdvertisementId(), "INFO");
                 }
                 seprate.clear();
 
@@ -123,7 +126,7 @@ public class BookingRequestService {
                     bookingRequestRepository.save(new BookingRequest(ItemInCartDTO.getAdvertisementPostedById(),
                             loggedUserId, lastGroupId, RequestStates.PENDING, ItemInCartDTO.getAdvertisementId(),
                             ItemInCartDTO.isTogether(), ItemInCartDTO.getTimeFrom(), ItemInCartDTO.getTimeTo(), null));
-
+                    loggerService.doLog("6", "id oglasa: " + ItemInCartDTO.getAdvertisementId(), "INFO");
                 }
 
                 together.clear();
@@ -144,6 +147,7 @@ public class BookingRequestService {
 
             request.setStateOfRequest(RequestStates.CANCELED);
             bookingRequestRepository.save(request);
+            loggerService.doLog("8", "id bookinga: " + request.getId(), "INFO");
         }
 
     }
@@ -326,6 +330,8 @@ public class BookingRequestService {
 
             bookingRequestRepository.save(request);
 
+            loggerService.doLog("7", "id oglasa: " + request.getAdvertisementId(), "INFO");
+
         }
     }
 
@@ -375,6 +381,7 @@ public class BookingRequestService {
 
         bookingRequestRepository.save(toBook);
 
+        loggerService.doLog("7", "id oglasa: " + toBook.getAdvertisementId(), "INFO");
     }
 
     private void cancelInSameGroup(List<BookingRequest> svi, Long groupId) {
@@ -385,6 +392,7 @@ public class BookingRequestService {
                 booked.setStateOfRequest(RequestStates.CANCELED);
                 bookingRequestRepository.save(booked);
 
+                loggerService.doLog("8", "id bookinga: " + booked.getId(), "INFO");
             }
         }
 
