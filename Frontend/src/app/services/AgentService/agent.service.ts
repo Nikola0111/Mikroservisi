@@ -13,15 +13,15 @@ export class AgentService {
   constructor(private http: HttpClient) { }
 
   public checkPasswordChanged() {
-    return this.http.get<boolean>('/server/agent/checkPasswordChanged', httpOptions);
+    return this.http.get<boolean>('/server/advertisement/checkPasswordChanged', httpOptions);
   }
 
   public getOwnersCars() {
-    return this.http.get<CarDTO[]>('/server/agent/getOwnersCars', httpOptions);
+    return this.http.get<CarDTO[]>('/server/advertisement/getOwnersCars', httpOptions);
   }
 
   public saveReport(report: CarReport){
     const body = JSON.stringify(report);
-    return this.http.post('/server/agent/saveReport', body, httpOptions);
+    return this.http.post('/server/advertisement/saveReport', body, httpOptions);
   }
 }
