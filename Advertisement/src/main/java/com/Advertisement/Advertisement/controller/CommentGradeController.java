@@ -55,6 +55,7 @@ public class CommentGradeController {
     public ResponseEntity<Long> saveCommentAndGrade(@RequestBody CommentDTO commentDTO, HttpServletRequest request) {
 
         String authorization = request.getHeader("Authorization");
+
         HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
 
         EndUserNumberOfAdsDTO endUser = restTemplate.exchange("http://auth/getLoggedEndUser", HttpMethod.GET, entity,

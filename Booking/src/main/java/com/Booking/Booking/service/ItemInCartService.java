@@ -25,12 +25,11 @@ public class ItemInCartService {
     @Autowired
     RestTemplate restTemplate;
 
-    public int save(ItemInCartDTO itemInCartDTO) {
+    public int save(ItemInCartDTO itemInCartDTO, Long id) {
         List<ItemInCart> all = itemInCartRepository.findAll();
 
         for (ItemInCart item : all) {
-            if (item.getUserId().equals(getLogedUserId())
-                    && item.getAdvertisementId().equals(itemInCartDTO.getAdvertisementId())
+            if (item.getUserId().equals(id) && item.getAdvertisementId().equals(itemInCartDTO.getAdvertisementId())
                     && ((item.getTimeFrom().isAfter(itemInCartDTO.getTimeFrom())
                             && item.getTimeFrom().isBefore(itemInCartDTO.getTimeTo()))
                             || (item.getTimeTo().isAfter(itemInCartDTO.getTimeFrom())
@@ -48,41 +47,30 @@ public class ItemInCartService {
             }
         }
 
-        ItemInCart item = new ItemInCart(getLogedUserId(), itemInCartDTO.getAdvertisementPostedById(),
+        ItemInCart item = new ItemInCart(id, itemInCartDTO.getAdvertisementPostedById(),
                 itemInCartDTO.getAdvertisementId(), itemInCartDTO.getTimeFrom(), itemInCartDTO.getTimeTo());
         itemInCartRepository.save(item);
 
-        shoppingCartService.addAItemInCart(item.getId());
+        shoppingCartService.addAItemInCart(item.getId(), id);
 
         return 1;
 
     }
 
-    public List<ItemInCartFrontDTO> remove(ItemInCart itemInCart) {
+    public List<ItemInCartFrontDTO> remove(ItemInCart itemInCart, Long id) {
 
         // itemInCartRepository.delete(itemInCart);
-        shoppingCartService.removeItemInCart(itemInCart.getId());
+        shoppingCartService.removeItemInCart(itemInCart.getId(), id);
 
-        return shoppingCartService.fotCart();
+        return shoppingCartService.fotCart(id);
 
     }
 
-    public void removeAll() {
+    public void removeAll(Long id) {
 
         // itemInCartRepository.deleteAll();
-        shoppingCartService.removeAll();
+        shoppingCartService.removeAll(id);
 
-    }
-
-    public Long getLogedUserId() {
-
-        Long id = restTemplate
-                .exchange("http://auth/getUserId", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
-                }).getBody();
-
-        System.out.println("Nasao je id=" + id);
-
-        return id;
     }
 
 }

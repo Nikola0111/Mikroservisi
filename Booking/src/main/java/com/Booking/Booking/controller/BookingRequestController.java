@@ -80,9 +80,9 @@ public class BookingRequestController {
 
         bookingRequestService.makeRequests(lista, id);
 
-        itemInCartService.removeAll();
+        itemInCartService.removeAll(id);
 
-        return new ResponseEntity<>(shoppingCartService.fotCart(), HttpStatus.OK);
+        return new ResponseEntity<>(shoppingCartService.fotCart(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/getAllForAgent")
