@@ -2,13 +2,19 @@ package com.Advertisement.Advertisement.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.Advertisement.Advertisement.dtos.CommentDTO;
 import com.Advertisement.Advertisement.dtos.CommentPreviewDTO;
+import com.Advertisement.Advertisement.dtos.EndUserNumberOfAdsDTO;
 import com.Advertisement.Advertisement.dtos.ReplyDTO;
 import com.Advertisement.Advertisement.model.Advertisement;
 import com.Advertisement.Advertisement.service.AdvertisementService;
+import com.Advertisement.Advertisement.service.SessionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +23,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 
 @RestController
 public class CommentGradeController {
     
     @Autowired
     private AdvertisementService advertisementService;
+
+    @Autowired
+    private SessionService sessionService;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @GetMapping(value = "/getAllByPostedBy/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Advertisement>> getAllByPostedBy(@PathVariable Long id) { 
@@ -38,8 +52,16 @@ public class CommentGradeController {
     }
 
     @PostMapping(value = "/saveCommentAndGrade", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> saveCommentAndGrade(@RequestBody CommentDTO commentDTO) {
-       advertisementService.saveCommentAndGrade(commentDTO);
+    public ResponseEntity<Long> saveCommentAndGrade(@RequestBody CommentDTO commentDTO, HttpServletRequest request) {
+
+        String authorization = request.getHeader("Authorization");
+		HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
+
+		EndUserNumberOfAdsDTO endUser = restTemplate.exchange("http://auth/getLoggedEndUser", HttpMethod.GET, entity,
+				new ParameterizedTypeReference<EndUserNumberOfAdsDTO>() {
+                }).getBody();
+                
+       advertisementService.saveCommentAndGrade(commentDTO, endUser.getId());
 
        return new ResponseEntity<>((long) 1, HttpStatus.OK);
 
