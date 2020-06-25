@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.client.RestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import java.net.InetAddress;
@@ -124,17 +127,21 @@ public class UserController {
     }
 
     @GetMapping(value = "/logout")
-    public ResponseEntity logOut() {
+    public ResponseEntity logOut(HttpServletRequest request) {
+
+        String authorization = request.getHeader("Authorization");
+        HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
 
         sessionService.invalidateSession();
 
-        restTemplate.exchange("http://advert/logOut", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+
+        restTemplate.exchange("http://advert/logOut", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
         }).getBody();
 
-        restTemplate.exchange("http://book/logOut", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+        restTemplate.exchange("http://book/logOut", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
         }).getBody();
 
-        restTemplate.exchange("http://message/logOut", HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
+        restTemplate.exchange("http://message/logOut", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
         }).getBody();
 
         return new ResponseEntity<>(HttpStatus.OK);

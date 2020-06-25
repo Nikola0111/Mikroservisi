@@ -8,6 +8,7 @@ import java.util.Base64.Encoder;
 
 import javax.servlet.http.HttpSession;
 
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.enums.UserType;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.*;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.repository.*;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.*;
@@ -172,7 +173,7 @@ public class UserService {
         loginInfoService.save(loginInfo);
 
         entityUser.setLoginInfo(loginInfoService.findOneById(loginInfo.getId()));
-
+        entityUser.setUserType(UserType.ENDUSER);
         // cuvanje u bazi
         saveInDatabase(entityUser);
 

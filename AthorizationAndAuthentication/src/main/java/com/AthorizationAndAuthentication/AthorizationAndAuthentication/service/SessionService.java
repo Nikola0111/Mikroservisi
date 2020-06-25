@@ -4,6 +4,9 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.repositor
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.model.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.Authentication;
@@ -112,5 +115,17 @@ public class SessionService {
     public void invalidateSession() {
         SecurityContextHolder.clearContext();
     }
+
+    public HttpEntity<String> makeAuthorizationHeader(String authorization) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", authorization);
+
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+        return entity;
+    }
+
+   
 
 }

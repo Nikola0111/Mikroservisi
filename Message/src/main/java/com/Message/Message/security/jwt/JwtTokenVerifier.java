@@ -91,7 +91,7 @@ public JwtTokenVerifier(){
                     simpleGrantedAuthorities
             );
 
-            System.out.println("PROSAO SAM NEMANJA SMRADE SMRDLJIVI");
+           
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 

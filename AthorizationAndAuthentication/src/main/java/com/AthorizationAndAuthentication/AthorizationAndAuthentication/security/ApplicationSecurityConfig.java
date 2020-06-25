@@ -68,7 +68,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login", "/getCsrf", "/getAll", "/getUserByUsername/**", "/getUserId",
                         "/getLoggedEndUser", "/increaseEndUsersNumberOfAds", "/getAgentEmail", "/getAgentIDByUserID",
-                        "/getAgentIDByMail", "/getEmail", "/getEmail", "getPublicKey", "/register", "/loginToken",
+                        "/getAgentIDByMail",  "/getEmail", "getPublicKey", "/register", "/loginToken",
                         "/logout", "/h2-console/**")
                 .permitAll().anyRequest().authenticated();
 

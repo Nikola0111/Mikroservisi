@@ -3,6 +3,7 @@ package com.Message.Message.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.parser.Entity;
 
 import com.Message.Message.dtos.*;
 import com.Message.Message.model.Message;
@@ -47,7 +48,7 @@ public class MessageController {
                 }).getBody();
 
         List<UserDTO> allUsers = restTemplate
-                .exchange("http://auth/getAll", HttpMethod.GET, null, new ParameterizedTypeReference<List<UserDTO>>() {
+                .exchange("http://auth/getAll", HttpMethod.GET, entity, new ParameterizedTypeReference<List<UserDTO>>() {
                 }).getBody();
 
         System.out.println("Broj usera koje vrati sa auth=" + allUsers.size());
@@ -67,10 +68,10 @@ public class MessageController {
                 }).getBody();
 
         List<UserDTO> allUsers = restTemplate
-                .exchange("http://auth/getAll", HttpMethod.GET, null, new ParameterizedTypeReference<List<UserDTO>>() {
+                .exchange("http://auth/getAll", HttpMethod.GET, entity, new ParameterizedTypeReference<List<UserDTO>>() {
                 }).getBody();
 
-        List<BookingRequestDTO> allBookings = restTemplate.exchange("http://book/getAllBookings", HttpMethod.GET, null,
+        List<BookingRequestDTO> allBookings = restTemplate.exchange("http://book/getAllBookings", HttpMethod.GET, entity,
                 new ParameterizedTypeReference<List<BookingRequestDTO>>() {
                 }).getBody();
 

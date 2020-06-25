@@ -34,7 +34,7 @@ const httpOptions = {
         }
 
       public sendMessage(message: MessageDTO){
-        
+        console.log(message);
         const body = JSON.stringify(message);
         return this.http.post<MessageDTO>('/server/inbox/new', body, httpOptions);
         

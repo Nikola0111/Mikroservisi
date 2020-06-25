@@ -33,17 +33,17 @@ public class MessageService {
     @Autowired
     LoggerService loggerService;
 
-    public List<MessageFrontDTO> getConversation(Long id, List<UserDTO> allUsers, Long userId) {
+    public List<MessageFrontDTO> getConversation(Long id, List<UserDTO> allUsers, Long loggedUserId) {
         List<Message> allMessages = messageRepository.findAll();
         List<Message> filteredMessages = new ArrayList<Message>();
         List<MessageFrontDTO> messageDTOs = new ArrayList<MessageFrontDTO>();
 
         for (Message message : allMessages) {
-            if (message.getSenderId() == id && message.getReceiverId() == id) {
+            if (message.getSenderId() == id && message.getReceiverId() == loggedUserId) {
                 filteredMessages.add(message);
             }
 
-            if (message.getSenderId() == userId && message.getReceiverId() == id) {
+            if (message.getSenderId() == loggedUserId && message.getReceiverId() == id) {
                 filteredMessages.add(message);
             }
         }
