@@ -52,8 +52,6 @@ public class UserService {
     @Autowired
     private AdministratorRepository adminRepository;
 
-  
-
     // @Autowired
     // private LoggerService loggerService;
 
@@ -198,34 +196,28 @@ public class UserService {
         verificationTokenService.save(endUser, verificationToken);
     }
 
-
     public void saveAdmin() {
+        if (adminRepository.findAll() == null || adminRepository.findAll().size() == 0) {
+            String salt = makeSalt();
 
-        String salt = makeSalt();
+            LoginInfo loginInfo = new LoginInfo("admin", hashIt("Susa*k0njina", salt), "nikola@gmail.com", salt,
+                    ApplicationUserRole.ADMIN.getGrantedAuthorities(), true, true, true, true);
 
+            loginInfoService.save(loginInfo);
 
+            EntityUser entityUser = new EntityUser("Admin", "Adminic", loginInfoService.findOneByUsername("admin"),
+                    "7777777777777", "064555555", UserType.ADMINISTRATOR);
 
-        LoginInfo loginInfo = new LoginInfo("admin", hashIt("Susa*k0njina", salt),
-                "nikola@gmail.com", salt, ApplicationUserRole.ADMIN.getGrantedAuthorities(), true,
-                true, true, true);
+            // cuvanje u bazi
+            saveInDatabase(entityUser);
 
-        loginInfoService.save(loginInfo);
+            Administrator admin = new Administrator();
+            admin.setUser(userRepository.findByJmbg("7777777777777"));
 
-        EntityUser entityUser=new EntityUser("Admin", "Adminic", loginInfoService.findOneByUsername("admin"), "7777777777777", "064555555", UserType.ADMINISTRATOR);
+            adminRepository.save(admin);
 
-        
-      
-        // cuvanje u bazi
-        saveInDatabase(entityUser);
-
-        Administrator admin = new Administrator();
-        admin.setUser(userRepository.findByJmbg("7777777777777"));
-
-       
-
-        adminRepository.save(admin);
-
-        System.out.println("NAPRAVI GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            System.out.println("NAPRAVI GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        }
 
     }
 

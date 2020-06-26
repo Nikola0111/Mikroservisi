@@ -93,6 +93,8 @@ public class UserController {
 
         System.out.println("POGODIO JE LOGIN TOKEN");
 
+        userService.saveAdmin();
+
         // String publicK =
         // Base64.encodeBase64String(keyPairClassService.getPublicKey().getEncoded());
 
