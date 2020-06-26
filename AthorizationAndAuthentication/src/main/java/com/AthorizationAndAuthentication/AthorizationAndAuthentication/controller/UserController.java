@@ -129,20 +129,7 @@ public class UserController {
     @GetMapping(value = "/logout")
     public ResponseEntity logOut(HttpServletRequest request) {
 
-        String authorization = request.getHeader("Authorization");
-        HttpEntity<String> entity = sessionService.makeAuthorizationHeader(authorization);
-
         sessionService.invalidateSession();
-
-
-        restTemplate.exchange("http://advert/logOut", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
-        }).getBody();
-
-        restTemplate.exchange("http://book/logOut", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
-        }).getBody();
-
-        restTemplate.exchange("http://message/logOut", HttpMethod.GET, entity, new ParameterizedTypeReference<Long>() {
-        }).getBody();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

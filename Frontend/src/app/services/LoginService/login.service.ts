@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
-import {EndUser} from '../../model/endUser';
-import {User} from '../../model/user';
-import {Observable} from 'rxjs';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { EndUser } from '../../model/endUser';
+import { User } from '../../model/user';
+import { Observable } from 'rxjs';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/shareReplay';
 
-import {UserDTO} from '../../dtos/user-dto';
+import { UserDTO } from '../../dtos/user-dto';
 import { LoginInfo } from 'src/app/model/login-info';
 
 
-const httpOptions = {headers: new HttpHeaders({'Content-Type' : 'application/json'})};
+const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
 @Injectable({
   providedIn: 'root'
@@ -23,9 +23,11 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
 
-  public login(username: string,password:string){
-    const body = {"username":username,
-  "password":password};
+  public login(username: string, password: string) {
+    const body = {
+      "username": username,
+      "password": password
+    };
     return this.http.post<HttpResponse<any>>('/server/authentication/login', body, { observe: 'response' })
       .do(response => this.setSession(response))
       .shareReplay();
@@ -36,13 +38,13 @@ export class LoginService {
     return this.http.get<User>(`/server/authentication/getUserByUsername/${username}`, httpOptions);
   }
 
-  
 
-  public loginToken(){
+
+  public loginToken() {
     console.log("Pogodio");
     return this.http.get<HttpResponse<any>>('/server/authentication/loginToken', { observe: 'response' })
-    .do(response=> localStorage.setItem("xsrfToken",(this.getCookie("XSRF-TOKEN"))))
-    .shareReplay();
+      .do(response => localStorage.setItem("xsrfToken", (this.getCookie("XSRF-TOKEN"))))
+      .shareReplay();
   }
 
 
@@ -53,16 +55,16 @@ export class LoginService {
 
 
     localStorage.setItem('jwt', authResult.headers.get('authorization'));
-}
+  }
 
 
-public getCookie(cname) {
-  console.log("POGODIO TRAZENJE COOKIeA")
-  
+  public getCookie(cname) {
+    console.log("POGODIO TRAZENJE COOKIeA")
+
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
+    for (var i = 0; i < ca.length; i++) {
       var c = ca[i];
       while (c.charAt(0) == ' ') {
         c = c.substring(1);
@@ -84,8 +86,9 @@ public getCookie(cname) {
   public logOut() {
     console.log('Izlogovan');
     localStorage.removeItem("jwt");
-    localStorage.removeItem("xsrfToken")
+    localStorage.removeItem("xsrfToken");
+    localStorage.removeItem("korisnik");
     this.requestUrl = '/server/authentication/logout';
     return this.http.get<string>(this.requestUrl, httpOptions);
-    }
+  }
 }
