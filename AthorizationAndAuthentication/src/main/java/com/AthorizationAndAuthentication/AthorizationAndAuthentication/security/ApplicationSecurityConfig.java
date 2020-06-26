@@ -53,7 +53,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 // .csrf().disable()
                 // odkomentarisati radi bezbednosti
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringAntMatchers("/callMe", "/increaseEndUsersNumberOfAds", "/getCsrf", "/getUserByUsername/**",
+                .ignoringAntMatchers("/callMe", "/increaseEndUsersNumberOfAds", "/getCsrf","/dodajUsere", "/getUserByUsername/**","/registrationConfirm",
                         "/h2-console/**")
                 .and()
 
@@ -66,9 +66,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(keyPairClassService.getPublicKey()),
                         JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/login", "/getCsrf", "/getAll", "/getUserByUsername/**", "/getUserId",
+                .antMatchers("/login", "/getCsrf", "/getAll", "/getUserByUsername/**", "/getUserId","/registrationConfirm",
                         "/getLoggedEndUser", "/increaseEndUsersNumberOfAds", "/getAgentEmail", "/getAgentIDByUserID",
-                        "/getAgentIDByMail",  "/getEmail", "getPublicKey", "/register", "/loginToken",
+                        "/getAgentIDByMail",  "/getEmail", "getPublicKey", "/register", "/loginToken","/dodajUsere",
                         "/logout", "/h2-console/**")
                 .permitAll().anyRequest().authenticated();
 

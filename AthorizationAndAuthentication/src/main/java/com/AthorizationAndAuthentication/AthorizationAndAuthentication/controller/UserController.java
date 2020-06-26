@@ -93,40 +93,24 @@ public class UserController {
 
         System.out.println("POGODIO JE LOGIN TOKEN");
 
-        userService.saveAdmin();
-
-        // String publicK =
-        // Base64.encodeBase64String(keyPairClassService.getPublicKey().getEncoded());
-
-        // System.out.println("PUBLIC KEY JE NA
-        // AUTH="+keyPairClassService.getPublicKey());
-
-        // HttpEntity<String> request = new HttpEntity<>(publicK);
-
-        // restTemplate
-        // .exchange("http://advert/callMe", HttpMethod.POST, request, new
-        // ParameterizedTypeReference<Long>() {
-        // }).getBody();
-
-        /*
-         * String authorizationHeader =keyPairClassService.getPublicKey().toString();
-         * 
-         * 
-         * HttpHeaders requestHeaders = new HttpHeaders();
-         * 
-         * 
-         * requestHeaders.setContentType(MediaType.TEXT_PLAIN);
-         * 
-         * requestHeaders.add("publicKeyAttribute", authorizationHeader);
-         * 
-         * HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
-         * 
-         * ResponseEntity<?> responseEntity = restTemplate.exchange(
-         * "http://advert/publicKey", HttpMethod.GET, requestEntity, new
-         * ParameterizedTypeReference<ResponseEntity<?>>() { }).getBody();
-         */
+      
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+    @GetMapping(value = "/dodajUsere")
+    public ResponseEntity addUsers() {
+
+        System.out.println("POGODIO JE ADD USERS");
+
+      
+       userService.saveAdmin();
+       userService.saveAgent();
+       userService.saveEndUser();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
 
     @GetMapping(value = "/logout")
     public ResponseEntity logOut(HttpServletRequest request) {

@@ -112,7 +112,7 @@ public class EndUserController {
         try {
             mailSenderService.sendSimpleMessage(endUser.getUser().getLoginInfo().getEmail(), "Aktivacioni link",
                     "Vaša registracija je prihvaćena! Kliknite na link da bi aktivirali vaš nalog i koristili usluge našeg servisa!\n\n"
-                            + "http://localhost:4200/registrationConfirm.html?token=" + verificationToken.getToken());
+                            + "https://localhost:4200/registrationConfirm.html?token=" + verificationToken.getToken());
         } catch (Exception e) {
             System.out.println("Slanje mail-a nije uspelo!");
         }
@@ -139,7 +139,8 @@ public class EndUserController {
         }
 
         Calendar cal = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime() + 60*24*7) <= 0) {
+        cal.add(Calendar.DATE, -7);
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime() ) <= 0) {
             
             return new ResponseEntity(0, HttpStatus.BAD_REQUEST);
         } 

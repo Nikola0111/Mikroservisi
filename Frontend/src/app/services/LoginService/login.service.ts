@@ -38,6 +38,9 @@ export class LoginService {
     return this.http.get<User>(`/server/authentication/getUserByUsername/${username}`, httpOptions);
   }
 
+  public addPredefined() {
+    return this.http.get<User>('/server/authentication/dodajUsere', httpOptions);
+  }
 
 
   public loginToken() {

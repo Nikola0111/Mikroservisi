@@ -40,8 +40,8 @@ services:
     build: ./AthorizationAndAuthentication
     restart: always
     image: auth-image 
- #   volumes:
- #   - $USERPROFILE/XML/Mikroservisi/Logs:/tmp
+    volumes:
+    - $USERPROFILE/Desktop/Mikroservisi/Logs:/tmp
     ports:
     - "8080:8080"
     environment:
@@ -60,8 +60,8 @@ services:
     image: advert-image
     restart: always
     volumes:
-    - $USERPROFILE/XML/Mikroservisi/Frontend/src/assets/images:/etc
-   # - $USERPROFILE/XML/Mikroservisi/Logs:/tmp
+    #- C:/Users/Sherlock/Desktop/Mikroservisi/Frontend/src/assets/images:/etc
+    - C:/Users/Sherlock//Desktop/Mikroservisi/Loger:/tmp
     ports:
     - "8085:8085"
     environment:
@@ -78,7 +78,7 @@ services:
     restart: always
     image: message-image 
     volumes:
-    - $USERPROFILE/XML/Mikroservisi/Logs:/tmp
+    - $USERPROFILE/Desktop/Mikroservisi/Logs:/tmp
     ports:
     - "8087:8087"
     environment:
@@ -104,10 +104,10 @@ services:
       - eureka-serviceregistry
     #  - consumer-service
     #  - reglog-service
-   #   - advert-service
+      - advert-service
       - book-service
       - auth-service
-   #   - message-service
+      - message-service
     networks:
       - mikroservisi
 

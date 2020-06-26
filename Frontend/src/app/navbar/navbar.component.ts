@@ -36,6 +36,10 @@ export class NavbarComponent implements OnInit {
     this.sessionService.commentManagment = false;
   }
 
+  addPredefined(){
+    this.loginService.addPredefined().subscribe();
+  }
+
   codebook() {
     this.sessionService.requests = false;
     this.sessionService.adminhome = false;
