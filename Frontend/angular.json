@@ -65,6 +65,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
+            "ssl": true,
             
             "browserTarget": "Frontend:build"
           },

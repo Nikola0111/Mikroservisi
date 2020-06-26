@@ -17,32 +17,32 @@ public class EntityUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
- //   @Column(name = "name", nullable = false)
- //   @Size(min=2, max=40)
- //   @NotBlank(message="Name must not be empty")
- //   @Pattern(regexp="^$|[a-zA-Z ]+$", message="Name must not include special characters.")
+    @Column(name = "name", nullable = false)
+    @Size(min=2, max=40)
+    @NotBlank(message="Name must not be empty")
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Name must not include special characters.")
     private String name;
 
- //   @Column(name = "surname", nullable = false)
-  //  @Size(min=2, max=40)
-  //  @NotBlank(message="Surame must not be empty")
-  //  @Pattern(regexp="^$|[a-zA-Z ]+$", message="Name must not include special characters.")
+    @Column(name = "surname", nullable = false)
+    @Size(min=2, max=40)
+    @NotBlank(message="Surame must not be empty")
+    @Pattern(regexp="^$|[a-zA-Z ]+$", message="Name must not include special characters.")
     private String surname;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "login_info", referencedColumnName = "id")
     private LoginInfo loginInfo;
 
- //   @Column(name = "jmbg", unique = true, nullable = false)
-  //  @Size(min=13, max=13)
- //   @NotBlank(message="JMBG must not be empty")
- //   @Pattern(regexp = "[0-9]{13}", message = "JMBG must only contain 13 digits.")
+    @Column(name = "jmbg", unique = true, nullable = false)
+    @Size(min=13, max=13)
+    @NotBlank(message="JMBG must not be empty")
+    @Pattern(regexp = "[0-9]{13}", message = "JMBG must only contain 13 digits.")
     private String jmbg;
 
-  //  @Column(name = "phone_number")
-  //  @Size(min=9, max=10)
-  //  @NotBlank(message="Phone number must not be empty")
-  //  @Pattern(regexp = "[0-9]{9,10}", message = "Phone number must only contain 9-10 digits.")
+    @Column(name = "phone_number")
+    @Size(min=9, max=10)
+    @NotBlank(message="Phone number must not be empty")
+    @Pattern(regexp = "[0-9]{9,10}", message = "Phone number must only contain 9-10 digits.")
     private String phoneNumber;
 
     @Column(name = "user_type")

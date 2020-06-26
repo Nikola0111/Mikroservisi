@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.util.Calendar;
 import java.util.Optional;
 
 @Service
@@ -21,7 +23,7 @@ public class VerificationTokenService {
     public EndUserRepository endUserRepository;
 
     public void save(EndUser user, String verificationToken){
-        verificationTokenRepository.save(new VerificationToken(verificationToken, user));
+        verificationTokenRepository.save(new VerificationToken(verificationToken, user, Calendar.getInstance().getTime()));
     }
 
     public VerificationToken findByUser(EndUser endUser) {

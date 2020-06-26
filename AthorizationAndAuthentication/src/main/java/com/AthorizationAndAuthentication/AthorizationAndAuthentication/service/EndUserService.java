@@ -24,7 +24,7 @@ public class EndUserService {
     @Autowired
     private LoginInfoRepository loginInfoRepository;
 
-    @Autowired
+   @Autowired
     private UserRepository userRepository;
 
     // @Autowired

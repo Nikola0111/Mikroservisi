@@ -22,7 +22,7 @@ services:
     build: ./Booking
     restart: always
     image: booking-image 
-  #  volumes:
+   # volumes:
 
     ports:
     - "8086:8086"
@@ -59,8 +59,8 @@ services:
     build: ./Advertisement
     image: advert-image
     restart: always
-#    volumes:
-   # - $USERPROFILE/XML/Mikroservisi/Frontend/src/assets/images:/etc
+    volumes:
+    - $USERPROFILE/XML/Mikroservisi/Frontend/src/assets/images:/etc
    # - $USERPROFILE/XML/Mikroservisi/Logs:/tmp
     ports:
     - "8085:8085"
@@ -77,8 +77,8 @@ services:
     build: ./Message
     restart: always
     image: message-image 
-#    volumes:
-#    - $USERPROFILE/XML/Mikroservisi/Logs:/tmp
+    volumes:
+    - $USERPROFILE/XML/Mikroservisi/Logs:/tmp
     ports:
     - "8087:8087"
     environment:
@@ -93,16 +93,18 @@ services:
 
   zuul:
     build: ./Gateway
+    volumes:
+    - $USERPROFILE/Desktop/Mikroservisi/Gateway/src/main/resources:/etc
     ports:
-    - "8083:8083"
+    - "8443:8443"
     environment:
-      - REGISTRY_HOST=eureka-serviceregistry
+    - REGISTRY_HOST=eureka-serviceregistry
     tty: true
     depends_on:
       - eureka-serviceregistry
     #  - consumer-service
     #  - reglog-service
-      - advert-service
+   #   - advert-service
       - book-service
       - auth-service
    #   - message-service

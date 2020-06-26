@@ -15,6 +15,7 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.security.
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 //import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -46,6 +48,11 @@ public class UserService {
 
     @Autowired
     private EndUserRepository endUserRepository;
+
+    @Autowired
+    private AdministratorRepository adminRepository;
+
+  
 
     // @Autowired
     // private LoggerService loggerService;
@@ -187,8 +194,39 @@ public class UserService {
 
         endUserService.save(endUser);
 
-        // String verificationToken = UUID.randomUUID().toString();
-        // verificationTokenService.save(endUser, verificationToken);
+        String verificationToken = UUID.randomUUID().toString();
+        verificationTokenService.save(endUser, verificationToken);
+    }
+
+
+    public void saveAdmin() {
+
+        String salt = makeSalt();
+
+
+
+        LoginInfo loginInfo = new LoginInfo("admin", hashIt("Susa*k0njina", salt),
+                "nikola@gmail.com", salt, ApplicationUserRole.ADMIN.getGrantedAuthorities(), true,
+                true, true, true);
+
+        loginInfoService.save(loginInfo);
+
+        EntityUser entityUser=new EntityUser("Admin", "Adminic", loginInfoService.findOneByUsername("admin"), "7777777777777", "064555555", UserType.ADMINISTRATOR);
+
+        
+      
+        // cuvanje u bazi
+        saveInDatabase(entityUser);
+
+        Administrator admin = new Administrator();
+        admin.setUser(userRepository.findByJmbg("7777777777777"));
+
+       
+
+        adminRepository.save(admin);
+
+        System.out.println("NAPRAVI GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
     }
 
     private String hashIt(String password, String salt) {

@@ -27,6 +27,7 @@ import javax.print.attribute.standard.Media;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.List;
 
 import java.util.UUID;
@@ -136,6 +137,12 @@ public class EndUserController {
         if (verificationToken == null) {
             return new ResponseEntity(1, HttpStatus.BAD_REQUEST);
         }
+
+        Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime() + 60*24*7) <= 0) {
+            
+            return new ResponseEntity(0, HttpStatus.BAD_REQUEST);
+        } 
 
         // iz nekog razloga ne vraca nista na front, servis se nikad ne izvrsi na frontu
         // i ne ode na homepage, vecno se zaglavi u ucitavanju
