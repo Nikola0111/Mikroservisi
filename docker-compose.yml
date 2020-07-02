@@ -18,22 +18,22 @@ services:
  #     - 8024:8024
  #     - 8124:8124
 
-  book-service:
-    build: ./Booking
-    restart: always
-    image: booking-image 
-    volumes:
-    - $USERPROFILE/.m2:/root/.m2
-    ports:
-    - "8086:8086"
-    environment:
-      - REGISTRY_HOST=eureka-serviceregistry
-    tty: true
-    depends_on:
-      - eureka-serviceregistry
+#  book-service:
+#    build: ./Booking
+#    restart: always
+#    image: booking-image 
+#    volumes:
+#    - $USERPROFILE/.m2:/root/.m2
+#    ports:
+#    - "8086:8086"
+#    environment:
+#      - REGISTRY_HOST=eureka-serviceregistry
+#    tty: true
+#    depends_on:
+#      - eureka-serviceregistry
   #    - axon-server    
-    networks:
-      - mikroservisi 
+#    networks:
+#      - mikroservisi 
 
 
   auth-service:
@@ -53,41 +53,53 @@ services:
     networks:
       - mikroservisi
 
+  rabbitmq:
+   image: rabbitmq:management
+   ports:
+     - "5672:5672"
+     - "15672:15672"
 
 
-  advert-service:
-    build: ./Advertisement
-    image: advert-image
-    restart: always
-    volumes:
-    - $USERPROFILE/Desktop/Mikroservisi/Frontend/src/assets/images:/etc
-    ports:
-    - "8085:8085"
-    environment:
-      - REGISTRY_HOST=eureka-serviceregistry
-    tty: true
-    depends_on:
-      - eureka-serviceregistry
+
+
+#  advert-service:
+#    build: ./Advertisement
+#    image: advert-image
+#    restart: always
+#    volumes:
+#    - $USERPROFILE/Desktop/Mikroservisi/Frontend/src/assets/images:/etc
+#    ports:
+#    - "8085:8085"
+#    environment:
+#      - REGISTRY_HOST=eureka-serviceregistry
+#    tty: true
+#    depends_on:
+#      - eureka-serviceregistry
     #  - axon-server   
-    networks:
-      - mikroservisi
+#    networks:
+#      - mikroservisi
 
-  message-service:
-    build: ./Message
-    image: message-image 
-    restart: always
-    volumes:
-    - $USERPROFILE/.m2:/root/.m2
-    ports:
-    - "8087:8087"
-    environment:
-      - REGISTRY_HOST=eureka-serviceregistry
-    tty: true
-    depends_on:
-      - eureka-serviceregistry
+#  message-service:
+#    build: ./Message
+#    image: message-image 
+#    restart: always
+#    volumes:
+#    - $USERPROFILE/.m2:/root/.m2
+#    ports:
+#    - "8087:8087"
+#    environment:
+#      - REGISTRY_HOST=eureka-serviceregistry
+#    tty: true
+#    depends_on:
+#      - eureka-serviceregistry
   #    - axon-server    
-    networks:
-      - mikroservisi  
+#    networks:
+#      - mikroservisi
+
+
+
+   
+  
 
   zuul:
     build: ./Gateway
@@ -100,10 +112,10 @@ services:
       - eureka-serviceregistry
     #  - consumer-service
     #  - reglog-service
-      - advert-service
-      - book-service
+    #  - advert-service
+    #  - book-service
       - auth-service
-      - message-service
+    #  - message-service
     networks:
       - mikroservisi
 
