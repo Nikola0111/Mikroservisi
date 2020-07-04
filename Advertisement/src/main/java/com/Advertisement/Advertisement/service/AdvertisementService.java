@@ -542,10 +542,10 @@ public class AdvertisementService {
 
 	public String saveSoapAdvertisement(GetAdvertisementRequest request){
 		Model model = modelRepository.findOneByid(request.getAdvertisement().getModel().getId());
-		Brand brand = brandRepository.findOneByid(request.getAdvertisement().getModel().getId());
-		FuelType fueltype = fuelTypeRepository.findOneByid(request.getAdvertisement().getModel().getId());
-		TransmissionType transmissionType = transmissionTypeRepository.findOneByid(request.getAdvertisement().getModel().getId());
-		CarClass carClass = carClassRepository.findOneByid(request.getAdvertisement().getModel().getId());
+		Brand brand = brandRepository.findOneByid(request.getAdvertisement().getBrand().getId());
+		FuelType fueltype = fuelTypeRepository.findOneByid(request.getAdvertisement().getFuelType().getId());
+		TransmissionType transmissionType = transmissionTypeRepository.findOneByid(request.getAdvertisement().getTransType().getId());
+		CarClass carClass = carClassRepository.findOneByid(request.getAdvertisement().getCarClass().getId());
 
 		Advertisement advertisement = new Advertisement(request.getAdvertisement().getName(),
 				model, brand, fueltype, transmissionType, carClass, request.getAdvertisement().getTravelled(), request.getAdvertisement().getCarSeats(),
