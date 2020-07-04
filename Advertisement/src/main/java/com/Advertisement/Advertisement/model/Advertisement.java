@@ -12,6 +12,14 @@ public class Advertisement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private String name;
 
     @ManyToOne
@@ -130,14 +138,6 @@ public class Advertisement {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
