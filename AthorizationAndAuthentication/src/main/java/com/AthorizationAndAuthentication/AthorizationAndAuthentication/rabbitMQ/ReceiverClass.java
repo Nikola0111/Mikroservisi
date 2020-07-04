@@ -1,6 +1,9 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.rabbitMQ;
 
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.UserService;
+
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
@@ -8,10 +11,14 @@ import org.springframework.stereotype.Service;
 public class ReceiverClass {
     
 
+    @Autowired
+    UserService userService;
     
 
-    public void receiveMessage(final Long id){
-        System.out.println("POGODIO JE RESIVERRAAAAAA");
-        System.out.println("AAA id je= "+id );
+    @RabbitListener(queues = "auth")
+    public void receiveMessage(Long number){
+        System.out.println("POGODIO JE AUTHHHHHHHH RECEIVER-A");
+        userService.increaseEndUsersNumberOfAds();
+        
     }
 }

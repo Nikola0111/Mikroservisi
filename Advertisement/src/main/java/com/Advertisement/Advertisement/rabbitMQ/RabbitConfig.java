@@ -1,4 +1,4 @@
-package com.AthorizationAndAuthentication.AthorizationAndAuthentication.rabbitMQ;
+package com.Advertisement.Advertisement.rabbitMQ;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
     
   
-    static final String topicExchangeName = "auth-exchange";
+    static final String topicExchangeName = "advert-exchange";
   
-    static final String queueName = "auth";
+    static final String queueName = "advert";
   
     @Bean
     Queue queue() {
@@ -32,7 +32,7 @@ public class RabbitConfig {
   
     @Bean
     Binding binding(Queue queue, TopicExchange exchange) {
-      return BindingBuilder.bind(queue).to(exchange).with("foo.auth.#");
+      return BindingBuilder.bind(queue).to(exchange).with("foo.advert.#");
     }
   
     @Bean

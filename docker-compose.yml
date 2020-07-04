@@ -18,22 +18,24 @@ services:
  #     - 8024:8024
  #     - 8124:8124
 
-#  book-service:
-#    build: ./Booking
-#    restart: always
-#    image: booking-image 
-#    volumes:
-#    - $USERPROFILE/.m2:/root/.m2
-#    ports:
-#    - "8086:8086"
-#    environment:
-#      - REGISTRY_HOST=eureka-serviceregistry
-#    tty: true
-#    depends_on:
-#      - eureka-serviceregistry
+  book-service:
+    build: ./Booking
+    restart: always
+    image: booking-image 
+    volumes:
+    - $USERPROFILE/.m2:/root/.m2
+    ports:
+    - "8086:8086"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+    tty: true
+    depends_on:
+      - eureka-serviceregistry
   #    - axon-server    
-#    networks:
-#      - mikroservisi 
+    networks:
+      - mikroservisi 
 
 
   auth-service:
@@ -51,7 +53,7 @@ services:
     tty: true
     depends_on:
       - eureka-serviceregistry
- #     - axon-server    
+#     - axon-server    
     networks:
       - mikroservisi
 
@@ -67,22 +69,24 @@ services:
 
 
 
-#  advert-service:
-#    build: ./Advertisement
-#    image: advert-image
-#    restart: always
-#    volumes:
-#    - $USERPROFILE/Desktop/Mikroservisi/Frontend/src/assets/images:/etc
-#    ports:
-#    - "8085:8085"
-#    environment:
-#      - REGISTRY_HOST=eureka-serviceregistry
-#    tty: true
-#    depends_on:
-#      - eureka-serviceregistry
+  advert-service:
+    build: ./Advertisement
+    image: advert-image
+    restart: always
+    volumes:
+    - $USERPROFILE/Desktop/Mikroservisi/Frontend/src/assets/images:/etc
+    ports:
+    - "8085:8085"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+    tty: true
+    depends_on:
+      - eureka-serviceregistry
     #  - axon-server   
-#    networks:
-#      - mikroservisi
+    networks:
+      - mikroservisi
 
 #  message-service:
 #    build: ./Message
@@ -117,8 +121,8 @@ services:
       - eureka-serviceregistry
     #  - consumer-service
     #  - reglog-service
-    #  - advert-service
-    #  - book-service
+      - advert-service
+      - book-service
       - auth-service
     #  - message-service
     networks:

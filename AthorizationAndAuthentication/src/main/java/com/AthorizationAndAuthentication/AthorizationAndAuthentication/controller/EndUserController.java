@@ -94,7 +94,7 @@ public class EndUserController {
 
         // restTemplate.postForEntity("http://book/createShoopingCart", request,Long.class, entityUser.getId());
         
-       // rabbitTemplate.convertAndSend("booking-exchange","foo.bar.booking", entityUser.getId().toString());
+        rabbitTemplate.convertAndSend("booking-exchange","foo.booking.createCart", entityUser.getId());
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
