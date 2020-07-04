@@ -28,6 +28,8 @@ services:
     - "8086:8086"
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     tty: true
     depends_on:
       - eureka-serviceregistry
@@ -46,12 +48,24 @@ services:
     - "8080:8080"
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     tty: true
     depends_on:
       - eureka-serviceregistry
- #     - axon-server    
+#     - axon-server    
     networks:
       - mikroservisi
+
+  rabbitmq:
+   image: rabbitmq:management
+   hostname: rabbitmq
+   ports:
+     - "5672:5672"
+     - "15672:15672"
+   networks:
+     - mikroservisi
+
 
 
 
@@ -65,6 +79,8 @@ services:
     - "8085:8085"
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     tty: true
     depends_on:
       - eureka-serviceregistry
@@ -72,22 +88,27 @@ services:
     networks:
       - mikroservisi
 
-  message-service:
-    build: ./Message
-    image: message-image 
-    restart: always
-    volumes:
-    - $USERPROFILE/.m2:/root/.m2
-    ports:
-    - "8087:8087"
-    environment:
-      - REGISTRY_HOST=eureka-serviceregistry
-    tty: true
-    depends_on:
-      - eureka-serviceregistry
+#  message-service:
+#    build: ./Message
+#    image: message-image 
+#    restart: always
+#    volumes:
+#    - $USERPROFILE/.m2:/root/.m2
+#    ports:
+#    - "8087:8087"
+#    environment:
+#      - REGISTRY_HOST=eureka-serviceregistry
+#    tty: true
+#    depends_on:
+#      - eureka-serviceregistry
   #    - axon-server    
-    networks:
-      - mikroservisi  
+#    networks:
+#      - mikroservisi
+
+
+
+   
+  
 
   zuul:
     build: ./Gateway
@@ -103,7 +124,7 @@ services:
       - advert-service
       - book-service
       - auth-service
-      - message-service
+    #  - message-service
     networks:
       - mikroservisi
 

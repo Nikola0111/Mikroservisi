@@ -6,6 +6,7 @@ import com.Advertisement.Advertisement.model.Comment;
 import com.Advertisement.Advertisement.service.AdvertisementService;
 import com.Advertisement.Advertisement.service.CommentService;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -34,6 +35,13 @@ public class AdvertisementController {
 
 	@Autowired
 	private CommentService commentService;
+
+
+	private final RabbitTemplate rabbitTemplate;
+
+	public AdvertisementController(RabbitTemplate rabbitTemplate){
+		this.rabbitTemplate=rabbitTemplate;
+	}
 
 	@GetMapping("/hello")
 	public ResponseEntity<?> get() {
@@ -79,9 +87,7 @@ public class AdvertisementController {
 		Advertisement createdAd = advertisementService.save(advertisementCreationDTO, id);
 		if (endUser != null) {
 			if (createdAd != null) {
-				restTemplate.exchange("http://auth/increaseEndUsersNumberOfAds", HttpMethod.GET, null,
-						new ParameterizedTypeReference<Long>() {
-						}).getBody();
+				rabbitTemplate.convertAndSend("auth-exchange","foo.auth.increaseNumbOfAds",Long.valueOf(1));
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.OK);

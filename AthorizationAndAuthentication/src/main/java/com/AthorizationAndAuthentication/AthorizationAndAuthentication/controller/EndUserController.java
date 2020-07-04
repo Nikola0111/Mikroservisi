@@ -12,6 +12,7 @@ import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.U
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.VerificationTokenService;
 import com.netflix.ribbon.proxy.annotation.Http.HttpMethod;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -55,6 +56,13 @@ public class EndUserController {
     @Autowired
     private AgentService agentService;
 
+
+    private final RabbitTemplate rabbitTemplate;
+
+	public EndUserController(RabbitTemplate rabbitTemplate){
+		this.rabbitTemplate=rabbitTemplate;
+	}
+
  
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -82,11 +90,11 @@ public class EndUserController {
         userService.saveNewUser(entityUser);
         
         HttpEntity<Long> request = new HttpEntity<>(entityUser.getId());
-        //restTemplate.postForLocation("http://book/createShoopingCart", HttpMethod.POST,request);
+       
 
-         restTemplate.postForEntity("http://book/createShoopingCart", request,Long.class, entityUser.getId());
+        // restTemplate.postForEntity("http://book/createShoopingCart", request,Long.class, entityUser.getId());
         
-        //restTemplate.exchange("http://book/createShoopingCart", HttpMethod.POST, request);
+        rabbitTemplate.convertAndSend("booking-exchange","foo.booking.createCart", entityUser.getId());
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
