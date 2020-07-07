@@ -1,0 +1,31 @@
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://com.Advertisement/JavaGeneratedFiles"
+           targetNamespace="http://com.Advertisement/JavaGeneratedFiles">
+
+    <xs:element name="getBookingRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="xs:long" name="userFromID"/>
+                <xs:element type="xs:long" name="userToID"/>
+                <xs:element type="xs:long" name="advertisementIdInMonolith"/>
+                <xs:element type="xs:boolean" name="together"/>
+                <xs:element type="xs:long" name="groupID"/>
+                <xs:element type="xs:dateTime" name="timeFrom"/>
+                <xs:element type="xs:dateTime" name="timeTo"/>
+                <xs:element type="xs:dateTime" name="timeAccepted"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getBookingResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="response" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    
+</xs:schema>
