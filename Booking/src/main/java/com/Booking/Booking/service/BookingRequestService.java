@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.Booking.Booking.dtos.AdvertisementCreationDTO;
 import com.Booking.Booking.dtos.BookingRequestFrontDTO;
@@ -21,6 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import advertisement.com.javageneratedfiles.GetBookingRequest;
+
 import org.springframework.core.ParameterizedTypeReference;
 
 @Service
@@ -392,6 +396,28 @@ public class BookingRequestService {
             }
         }
 
+    }
+
+    public void saveSoapBooking(GetBookingRequest request){
+        BookingRequest booking = new BookingRequest();
+
+        XMLGregorianCalendar timefrom = request.getTimeFrom();
+        XMLGregorianCalendar timeto = request.getTimeTo();
+        XMLGregorianCalendar timeaccepted = request.getTimeAccepted();
+
+        booking.setUserForId(request.getUserFromID());
+        booking.setUserToId(request.getUserToID());
+        booking.setAdvertisementId(request.getAdvertisementIdInMonolith());
+        booking.setGroupId(request.getGroupID());
+        booking.setTogether(request.isTogether());
+        booking.setStateOfRequest(RequestStates.PENDING);
+        
+        booking.setTimeFrom(LocalDateTime.of(timefrom.getYear(), timefrom.getMonth(), timefrom.getDay(), 
+            timefrom.getHour(), timefrom.getMinute()));
+        booking.setTimeTo(LocalDateTime.of(timeto.getYear(), timeto.getMonth(), timeto.getDay(), 
+            timeto.getHour(), timeto.getMinute()));
+
+        bookingRequestRepository.save(booking);
     }
 
 }
