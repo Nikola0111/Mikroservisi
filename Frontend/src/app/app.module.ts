@@ -57,7 +57,9 @@ import {MatSelectModule} from "@angular/material/select";
 import { AuthInterceptor } from './services/httpInterceptor.service';
 import { ReserveComponent } from './modules/reserve/reserve.component';
 import { CommentManagementComponent } from './modules/administrator/comment-management/comment-management.component';
-
+import { AdvertisementCommentsChartComponent } from './modules/statistics/advertisement-comments-chart/advertisement-comments-chart.component';
+import { AdvertisementReviewsChartComponent } from './modules/statistics/advertisement-reviews-chart/advertisement-reviews-chart.component';
+import { MaxTravelledChartComponent } from './modules/statistics/max-travelled-chart/max-travelled-chart.component';
 
 
 
@@ -92,7 +94,10 @@ import { CommentManagementComponent } from './modules/administrator/comment-mana
     ImagesDialogComponent,
     AgentsAdvertisementsComponent,
     ReserveComponent,
-    CommentManagementComponent
+    CommentManagementComponent,
+    AdvertisementCommentsChartComponent,
+    AdvertisementReviewsChartComponent,
+    MaxTravelledChartComponent
 ],
   imports: [
     BrowserModule,
@@ -123,7 +128,10 @@ import { CommentManagementComponent } from './modules/administrator/comment-mana
       {path: 'conversation/:id', component: ConversationComponent},
       {path: 'statistics', component: StatisticsComponent},
       {path: 'advertisement-details/:id', component: AdvertisementDetailsComponent},
-      {path: 'reserve', component: ReserveComponent}
+      {path: 'reserve', component: ReserveComponent},
+      {path: 'max-travelled-chart', component: MaxTravelledChartComponent},
+      {path: 'advertisemet-comments-chart', component: AdvertisementCommentsChartComponent},
+      {path: 'advertisemet-reviews-chart', component: AdvertisementReviewsChartComponent}
     ]),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBcBUQxfS6JldNG0Ltoju5YxE_0-CKJsu4',
