@@ -24,7 +24,7 @@ export class AdvertisementReviewsChartComponent implements OnInit {
     this.advertisementsGrades = new Array<number>();
     const ctx = document.getElementById('myChart');
 
-    this.advertisementService.getAllByPostedBy(this.sessionService.ulogovaniKorisnik.id).subscribe(
+    this.advertisementService.getStatisticsAdvertisements(this.sessionService.ulogovaniKorisnik.id).subscribe(
       data => {
      this.advertisements = data;
      for (let i = 0; i < data.length; i ++) {
@@ -73,7 +73,7 @@ export class AdvertisementReviewsChartComponent implements OnInit {
     // this.advertisementService.getAll().subscribe(
     //   data => {
     //     this.advertisements = data;
-        
+
       });
   }
 

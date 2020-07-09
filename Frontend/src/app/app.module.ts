@@ -130,8 +130,8 @@ import { MaxTravelledChartComponent } from './modules/statistics/max-travelled-c
       {path: 'advertisement-details/:id', component: AdvertisementDetailsComponent},
       {path: 'reserve', component: ReserveComponent},
       {path: 'max-travelled-chart', component: MaxTravelledChartComponent},
-      {path: 'advertisemet-comments-chart', component: AdvertisementCommentsChartComponent},
-      {path: 'advertisemet-reviews-chart', component: AdvertisementReviewsChartComponent}
+      {path: 'advertisement-comments-chart', component: AdvertisementCommentsChartComponent},
+      {path: 'advertisement-reviews-chart', component: AdvertisementReviewsChartComponent}
     ]),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBcBUQxfS6JldNG0Ltoju5YxE_0-CKJsu4',

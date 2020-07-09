@@ -21,12 +21,12 @@ export class AdvertisementCommentsChartComponent implements OnInit {
     this.advertisements = new Array<Advertisement>();
     this.advertisementNames = new Array<string>();
     this.advertisementsNumberOfComments = new Array<number>();
-    
+
     const ctx = document.getElementById('myChart');
-    this.advertisementService.getAllByPostedBy(this.sessionService.ulogovaniKorisnik.id).subscribe(
+    this.advertisementService.getStatisticsAdvertisements(this.sessionService.ulogovaniKorisnik.id).subscribe(
       data => {
      this.advertisements = data;
-     
+
         for (let i = 0; i < data.length; i ++) {
           this.advertisementNames[i] = data[i].name;
         }

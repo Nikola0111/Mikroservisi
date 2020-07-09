@@ -418,7 +418,6 @@ public class AdvertisementService {
 
 		List<Comment> db = commentRepository.findByAd_Id(id);
 
-		// //sredjivanje komentara
 		List<CommentPreviewDTO> comments = new ArrayList<CommentPreviewDTO>();
 		for(int i = 0;i < db.size();i++) {
 			if(!db.get(i).getApproved()){
@@ -479,10 +478,7 @@ public class AdvertisementService {
 
 	public List<AdvertisementCreationDTO> getAllByPostedBy(Long id) {
 		// salje sa fronta id usera, ne id agenta, i zato ne prikazuje formu za reply
-		HttpEntity<Long> request = new HttpEntity<>(id);
-		Long agentID = restTemplate.postForEntity("http://auth/getAgentIDByUserID", request,Long.class, id).getBody();
-		System.out.println("ID AGENTA? " + id);
-		List<Advertisement> advertisements = advertisementRepository.findAllByPostedByID(agentID);
+		List<Advertisement> advertisements = advertisementRepository.findAllByPostedByID(id);
 		List<AdvertisementCreationDTO> sending = new ArrayList<AdvertisementCreationDTO>();
 		AdvertisementCreationDTO temp;
 		for (int i = 0; i < advertisements.size(); i++) {
@@ -599,5 +595,49 @@ public class AdvertisementService {
         newReport.setBookingID(carReportDTO.getBookingID());
 
         carReportRepository.save(newReport);
-    }
+	}
+	
+	public List<AdvertisementCreationDTO> getStatisticsAdvertisement(Long id){
+		List<Advertisement> db = advertisementRepository.findAllByPostedByID(id);
+
+		List<AdvertisementCreationDTO> sending = new ArrayList<AdvertisementCreationDTO>();
+		AdvertisementCreationDTO temp;
+		for (int i = 0; i < db.size(); i++) {
+			db.get(i).setGrade(gradeService.calculateGradeForAd(db.get(i).getId()));
+			Advertisement tempad = db.get(i);
+
+			temp = new AdvertisementCreationDTO(tempad.getId(), tempad.getName(), tempad.getModel().getName(),
+					tempad.getBrand().getName(), tempad.getFuelType().getName(), tempad.getTransmissionType().getName(),
+					tempad.getCarClass().getName(), tempad.getTravelled(), tempad.getCarSeats(), tempad.getPrice(),
+					tempad.getPostedByID(), tempad.getDiscount(), tempad.getPriceWithDiscount(), tempad.getPictures(),
+					tempad.getGrade());
+
+			sending.add(temp);
+		}
+
+		return sending;
+	}
+
+	public AdvertisementCreationDTO findAdAndCommentsStatistics(Long id) {
+		Advertisement ad = advertisementRepository.findOneByid(id); // OVA
+
+		List<Comment> db = commentRepository.findByAd_Id(id);
+
+		List<CommentPreviewDTO> comments = new ArrayList<CommentPreviewDTO>();
+		for(int i = 0;i < db.size();i++) {
+			if(!db.get(i).getApproved()){
+				continue;
+			}
+
+			CommentPreviewDTO temp = new CommentPreviewDTO();
+			comments.add(temp);
+		}
+
+		AdvertisementCreationDTO adDTO = new AdvertisementCreationDTO(ad);
+
+		adDTO.setGrade(gradeService.calculateGradeForAd(id));
+
+		adDTO.setComments(comments);
+		return adDTO;
+	}
 }

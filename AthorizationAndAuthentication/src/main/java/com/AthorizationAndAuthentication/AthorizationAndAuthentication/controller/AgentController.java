@@ -1,5 +1,6 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.controller;
 
+import com.AthorizationAndAuthentication.AthorizationAndAuthentication.dtos.AgentDTO;
 import com.AthorizationAndAuthentication.AthorizationAndAuthentication.service.AgentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,19 @@ public class AgentController {
     // }
 
     
-    @PostMapping(value = "getAgentIDByUserID", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/getAgentIDByUserID", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> getAgentIDByUserID(@RequestBody Long id){
         return new ResponseEntity<>(agentService.getAgentIDByUserID(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/registerAgent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> registerAgent(@RequestBody AgentDTO agentDTO){
+        Integer ret = agentService.registerAgent(agentDTO);
+
+        if(ret != 0){
+            return new ResponseEntity<>(ret, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(ret, HttpStatus.OK);
+        }
     }
 }

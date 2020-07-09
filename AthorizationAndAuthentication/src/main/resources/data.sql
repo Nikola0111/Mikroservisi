@@ -11,10 +11,10 @@ INSERT INTO LOGIN_INFO (EMAIL, IS_ACCOUNT_NON_EXPIRED, IS_ACCOUNT_NON_LOCKED, IS
 VALUES ('agent@gmail.com', true, true, true, true, 'Susa$k0njina', 'agent');
 
 INSERT INTO LOGIN_INFO (EMAIL, IS_ACCOUNT_NON_EXPIRED, IS_ACCOUNT_NON_LOCKED, IS_CREDENTIALS_NON_EXPIRED, IS_ENABLED,  PASSWORD, USERNAME)
-VALUES ('sss', true, true, true, true, 'sss', 'sss');
+VALUES ('sssss@gmail.com', true, true, true, true, 'sss', 'Slobodan');
 
 INSERT INTO LOGIN_INFO (EMAIL, IS_ACCOUNT_NON_EXPIRED, IS_ACCOUNT_NON_LOCKED, IS_CREDENTIALS_NON_EXPIRED, IS_ENABLED,  PASSWORD, USERNAME)
-VALUES ('ddd', true, true, true, true, 'ddd', 'ddd');
+VALUES ('ddddd@gmail.com', true, true, true, true, 'ddd', 'Dusan');
 
 
 --USER

@@ -99,6 +99,9 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['']);
     this.loginService.logOut().subscribe(data => {
       this.sessionService.ulogovaniKorisnik = undefined;
+      this.sessionService.isAgent = false;
+      this.sessionService.isAdmin = false;
+      this.sessionService.isEndUser = false;
     });
   }
 }
