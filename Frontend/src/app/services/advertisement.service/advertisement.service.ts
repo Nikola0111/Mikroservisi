@@ -9,6 +9,7 @@ import {CommentPreviewDTO} from '../../dtos/comment-preview-dto';
 import {CarDetails} from '../../model/car-details';
 import { AdvertisementInCart } from 'src/app/model/advertisementInCart';
 import { ReserveDTO } from 'src/app/dtos/reserveDTO';
+import {AdvertisementReportDTO} from '../../dtos/AdvertisementReportDTO';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type' : 'application/json'})
@@ -21,6 +22,10 @@ export class AdvertisementService {
 
   public getAllDetails() {
     return this.http.get<CarDetails[]>('/server/advertisement/getAllDetails', httpOptions);
+  }
+
+  public getOwnersCars(id: number) {
+    return this.http.get<AdvertisementReportDTO[]>(`/server/advertisement/getAllByPostedByCars/${id}`, httpOptions);
   }
 
   public saveCarDetail(cardetail: CarDetails){

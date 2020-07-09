@@ -23,16 +23,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
 
-
-
 import javax.print.attribute.standard.Media;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 import java.util.UUID;
 import java.util.Base64.Encoder;
+import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -140,12 +140,19 @@ public class EndUserController {
     }
 
     @PostMapping(value = "/registrationConfirm")
-    public ResponseEntity<Long> confirmRegistration(@RequestBody String token){
+    public ResponseEntity<Integer> confirmRegistration(@RequestBody String token){
         System.out.println("usao je ovde");
         VerificationToken verificationToken = verificationTokenService.findByToken(token);
 
         if(verificationToken == null){
             return new ResponseEntity(1, HttpStatus.BAD_REQUEST);
+        }
+
+        Date currentDate = new Date();
+        Long diffInMilliseconds = Math.abs(currentDate.getTime() - verificationToken.getExpiryDate().getTime());
+        int diff = (int) TimeUnit.DAYS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS);
+        if(diff > 7) {
+            return new ResponseEntity<>(2, HttpStatus.BAD_REQUEST);
         }
 
         //iz nekog razloga ne vraca nista na front, servis se nikad ne izvrsi na frontu i ne ode na homepage, vecno se zaglavi u ucitavanju

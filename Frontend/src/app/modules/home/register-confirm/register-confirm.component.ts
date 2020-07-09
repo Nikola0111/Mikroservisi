@@ -17,6 +17,15 @@ export class RegisterConfirmComponent implements OnInit {
     this.registerService.verify(splitted[1]).subscribe(data => {
       console.log('treba da ode na drugu stranicu')
       this.router.navigate(['/homepage']);
+    }, error => {
+      this.router.navigate(['/homepage']);
+      if (error.error === 1) {
+        alert('Greska pri registraciji');
+      } else if(error.error === 2){
+        alert('Isteklo je 7 dana, registrujte se opet');
+      } else {
+        alert('Nepoznata greska');
+      }
     });
   }
 

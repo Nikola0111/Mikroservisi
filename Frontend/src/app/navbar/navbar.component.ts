@@ -97,6 +97,8 @@ export class NavbarComponent implements OnInit {
     console.log(this.sessionService.ulogovaniKorisnik);
     this.sessionService.isAdmin = false;
     this.router.navigate(['']);
-    this.loginService.logOut().subscribe();
+    this.loginService.logOut().subscribe(data => {
+      this.sessionService.ulogovaniKorisnik = undefined;
+    });
   }
 }

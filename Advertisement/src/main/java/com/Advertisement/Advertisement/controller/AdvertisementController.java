@@ -36,7 +36,6 @@ public class AdvertisementController {
 	@Autowired
 	private CommentService commentService;
 
-
 	private final RabbitTemplate rabbitTemplate;
 
 	public AdvertisementController(RabbitTemplate rabbitTemplate){
@@ -60,6 +59,13 @@ public class AdvertisementController {
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+	@PostMapping(value = "/saveReport", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity saveReport(@RequestBody CarReportDTO carReport){
+        advertisementService.saveReport(carReport);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
 	@PostMapping(value = "/save")
 	public ResponseEntity<Long> save(@RequestBody AdvertisementCreationDTO advertisementCreationDTO) {
@@ -227,6 +233,17 @@ public class AdvertisementController {
 	public ResponseEntity<Void> deleteCommentsByEndUserID(@RequestBody Long id)	{
 		commentService.deleteByEndUserID(id);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/getAllByPostedByCars/{id}", produces = MediaType.APPLICATION_JSON_VALUE,  consumes= MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AdvertisementReportDTO>> getAllByPostedByCars(@PathVariable Long id) {
+
+		List<BookingDTO> bookings = restTemplate.exchange("http://book/getBookingsCarReport", HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<BookingDTO>>() {
+				}).getBody();
+
+		List<AdvertisementReportDTO> advertisements = advertisementService.getAllByPostedByCars(id, bookings);
+		return new ResponseEntity<>(advertisements, HttpStatus.OK);
 	}
 	  
 	//  @GetMapping(value = "/getAllComments/{id}", produces =

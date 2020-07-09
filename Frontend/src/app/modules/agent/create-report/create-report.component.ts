@@ -24,7 +24,7 @@ export class CreateReportComponent implements OnInit {
   }
 
   onSubmit() {
-    const report = new CarReport(this.id, +this.travelled, this.comment);
+    const report = new CarReport(this.id, +this.travelled, this.comment, this.sessionService.bookingID);
     console.log(report);
     this.agentService.saveReport(report).subscribe(data => {
       this.sessionService.report = true;

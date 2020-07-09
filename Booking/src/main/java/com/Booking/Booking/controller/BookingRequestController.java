@@ -147,6 +147,13 @@ public class BookingRequestController {
         return new ResponseEntity<>(booked, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/getBookingsCarReport")
+    public ResponseEntity<List<BookingRequest>> getBookingsCarReport() {
+        List<BookingRequest> all = bookingRequestService.findAll();
+
+        return new ResponseEntity<>(all, HttpStatus.OK);
+    }
+
 
     @PostMapping(value = "/reserve")
     public ResponseEntity<Long> reserve(@RequestBody ReservationDTO reservation) {

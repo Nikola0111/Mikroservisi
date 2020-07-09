@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import advertisement.com.javageneratedfiles.GetAdvertisementRequest;
 
 import java.io.File;
@@ -64,6 +65,9 @@ public class AdvertisementService {
 
 	@Autowired
 	RestTemplate restTemplate;
+
+	@Autowired
+	CarReportRepository carReportRepository;
 
 	// @Autowired
 	// EndUserRepository endUserRepository;
@@ -555,4 +559,45 @@ public class AdvertisementService {
 
 		return "saved";
 	}
+
+	public List<AdvertisementReportDTO> getAllByPostedByCars(Long id, List<BookingDTO> bookings){
+		System.out.println("Ovo su bookinzi: " + bookings);
+		System.out.println("Ovo je id korisnika: " + id);
+		List<Advertisement> ads = advertisementRepository.findAllByPostedByID(id);
+		
+
+
+		System.out.println("Ovo su reklame: " + ads);
+
+		List<AdvertisementReportDTO> ret = new ArrayList<>();
+		for (Advertisement temp: ads) {
+			for(BookingDTO tempBooking: bookings) {
+				if(tempBooking.getAdvertisementId() == temp.getId()){
+					CarReport carReport = carReportRepository.findByBookingID(tempBooking.getId());
+
+					if(carReport == null){
+
+						LocalDateTime currentDate = LocalDateTime.now();
+
+						if(currentDate.isAfter(tempBooking.getTimeTo())) {
+							ret.add(new AdvertisementReportDTO(temp.getId(), temp.getName(), temp.getModel().getName(), temp.getBrand().getName(), temp.getTravelled(), tempBooking.getId()));
+						}
+					}
+				}
+			}
+		}
+		
+		return ret;
+	}
+
+	public void saveReport(CarReportDTO carReportDTO){
+        Advertisement ad = advertisementRepository.findOneByid(carReportDTO.getCarId());
+
+        ad.setTravelled(ad.getTravelled() + carReportDTO.getTravelled());
+
+        CarReport newReport = new CarReport(carReportDTO.getTravelled(), carReportDTO.getComment(), ad);
+        newReport.setBookingID(carReportDTO.getBookingID());
+
+        carReportRepository.save(newReport);
+    }
 }
