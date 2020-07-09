@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -194,9 +195,8 @@ public class UserService {
         endUser.setNumberOfAds(0);
 
         endUserService.save(endUser);
-
-        // String verificationToken = UUID.randomUUID().toString();
-        // verificationTokenService.save(endUser, verificationToken);
+        String verificationToken = UUID.randomUUID().toString();
+        verificationTokenService.save(endUser, verificationToken);
     }
 
     private String hashIt(String password, String salt) {
