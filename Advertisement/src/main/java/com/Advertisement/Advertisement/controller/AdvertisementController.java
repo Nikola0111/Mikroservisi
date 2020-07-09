@@ -245,15 +245,23 @@ public class AdvertisementController {
 		List<AdvertisementReportDTO> advertisements = advertisementService.getAllByPostedByCars(id, bookings);
 		return new ResponseEntity<>(advertisements, HttpStatus.OK);
 	}
+
+	@PostMapping(value = "/getStatisticsAdvertisement/{id}", produces = MediaType.APPLICATION_JSON_VALUE,  consumes= MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AdvertisementCreationDTO>> getStatisticsAdvertisement(@PathVariable Long id){
+		return new ResponseEntity<>(advertisementService.getStatisticsAdvertisement(id), HttpStatus.OK);
+	}
 	  
-	//  @GetMapping(value = "/getAllComments/{id}", produces =
-	//  MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
-	//  public ResponseEntity<List<CommentPreviewDTO>> getAllComments(@PathVariable
-	//  Long id) { System.out.println(id); AdvertisementDTO advertisementDTO =
-	//  advertisementService.findAdAndComments(id); if(advertisementDTO == null) {
-	//  return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
-	//  System.out.println(advertisementDTO.getName());
-	//  System.out.println(advertisementDTO.getComments()); return new
-	//  ResponseEntity<>(advertisementDTO.getComments(), HttpStatus.OK); }
+	@GetMapping(value = "/getAllComments/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes= MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<CommentPreviewDTO>> getAllComments(@PathVariable Long id) { 
+		System.out.println(id); 
+		AdvertisementCreationDTO advertisementDTO = advertisementService.findAdAndCommentsStatistics(id); 
+		if(advertisementDTO == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+		}
+
+	 	System.out.println(advertisementDTO.getName());
+		System.out.println(advertisementDTO.getComments()); 
+		return new ResponseEntity<>(advertisementDTO.getComments(), HttpStatus.OK); 
+	}
 	
 }

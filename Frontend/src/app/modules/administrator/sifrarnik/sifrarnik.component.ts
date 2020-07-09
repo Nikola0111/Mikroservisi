@@ -37,7 +37,7 @@ export class SifrarnikComponent implements OnInit {
 
     this.datasource = this.helper.filter(item => {
       let newValue;
-      if (value.toLowerCase() !== 'fuel' && value.toLowerCase() !== 'gearshift' && value.toLowerCase() !== 'brand') {
+      if (value.toLowerCase() !== 'gearshift' && value.toLowerCase() !== 'brand') {
         newValue = value.split(' ')[0] + value.split(' ')[1];
       } else {
         newValue = value.toLowerCase();
@@ -61,7 +61,10 @@ export class SifrarnikComponent implements OnInit {
       this.newCarDetail.type = 'CarModel';
     } else if(this.newCarDetail.type === 'Car Class'){
       this.newCarDetail.type = 'CarClass';
+    } else if(this.newCarDetail.type === 'Fuel Type') {
+      this.newCarDetail.type = 'FUELTYPE';
     }
+
     this.advertisementService.saveCarDetail(this.newCarDetail).subscribe(data => {
       this.datasource.push(this.newCarDetail);
       this.newCarDetail = new CarDetails();

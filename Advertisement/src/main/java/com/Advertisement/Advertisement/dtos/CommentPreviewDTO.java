@@ -16,6 +16,10 @@ public class CommentPreviewDTO {
 
     private ReplyDTO replyDTO;
 
+    public CommentPreviewDTO(){
+        
+    }
+
     public CommentPreviewDTO(String comment, String userMail, Double grade, Date date) {
         this.comment = comment;
         this.userMail = userMail;

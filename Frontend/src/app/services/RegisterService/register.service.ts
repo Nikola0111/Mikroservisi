@@ -25,7 +25,7 @@ export class RegisterService {
 
   public registerAgent(agentDTO: AgentDTO){
     const body = JSON.stringify(agentDTO);
-    return this.http.post<number>('server/agent/register', body, httpOptions);
+    return this.http.post<number>('server/authentication/registerAgent', body, httpOptions);
   }
 
   public verify(token: string) {

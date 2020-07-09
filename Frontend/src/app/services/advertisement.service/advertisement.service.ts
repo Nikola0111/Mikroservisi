@@ -107,6 +107,10 @@ export class AdvertisementService {
     return this.http.get<AdvertisementDTO>(this.requestUrl, httpOptions);
   }
 
+  public getStatisticsAdvertisements(id: number) {
+    return this.http.post<Advertisement[]>('server/advertisement/getStatisticsAdvertisement/' + id, httpOptions);
+  }
+
   public getAllByPostedBy(id: number) {
       return this.http.get<Advertisement[]>('server/advertisement/getAllByPostedBy/' + id, httpOptions);
   }

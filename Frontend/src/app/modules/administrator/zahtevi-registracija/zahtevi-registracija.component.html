@@ -4,17 +4,17 @@
       <div class="card-header card-header-danger">
         <h4 class="card-title">Requests</h4>
       </div>
-      <div *ngFor="let enduser of endusers">
+      <div style="width: 50%;"  *ngFor="let enduser of endusers">
         <div class = "zahtev">
           <div class="card-body">
             <div class="row">
-              <p>E-mail adress: {{enduser.loginInfo.email}}</p>
+              <p>E-mail adress: {{enduser.user.loginInfo.email}}</p>
             </div>
             <div class="row">
-              <p>Username: {{enduser.loginInfo.username}} </p>
+              <p>Username: {{enduser.user.loginInfo.username}} </p>
             </div>
             <div class="row">
-              <p>JMBG: {{enduser.jmbg}} </p>
+              <p>JMBG: {{enduser.user.jmbg}} </p>
             </div>
             <div class="clearfix"></div>
           </div>
