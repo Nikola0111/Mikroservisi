@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class BookingDTO {
 
+    private Long id;
     private LocalDateTime timeFrom;
     private LocalDateTime timeTo;
     private Long advertisementId;
@@ -15,6 +16,14 @@ public class BookingDTO {
     }
 
     public BookingDTO() {
+    }
+    
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDateTime getTimeFrom() {
@@ -41,4 +50,9 @@ public class BookingDTO {
         this.advertisementId = advertisementId;
     }
 
+    @Override
+    public String toString() {
+        return "Booking{" + "id=" + id + ", timeFrom='" + timeFrom + '\'' + ", timeTo='" + timeTo + '\'' + ", adID='"
+                + advertisementId + '}';
+    }
 }

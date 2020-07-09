@@ -1,5 +1,7 @@
 package com.AthorizationAndAuthentication.AthorizationAndAuthentication.model;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,6 +18,8 @@ public class VerificationToken {
     @JoinColumn(nullable = false, name = "user_id")
     private EndUser user;
 
+    private Date expiryDate;
+
     public VerificationToken(){
 
     }
@@ -23,6 +27,15 @@ public class VerificationToken {
     public VerificationToken(String token, EndUser user) {
         this.token = token;
         this.user = user;
+        this.expiryDate = new Date();
+    }
+
+    public Date getExpiryDate() {
+        return this.expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public String getToken() {

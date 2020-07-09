@@ -19,10 +19,23 @@ public class CarReport {
     @JoinColumn(referencedColumnName = "id", name = "advertisement_id")
     private Advertisement ad;
 
+    private Long bookingID;
+
+    public CarReport() {
+
+    }
+
     public CarReport(int travelled, String comment, Advertisement ad) {
         this.travelled = travelled;
         this.comment = comment;
         this.ad = ad;
+    }
+
+    public CarReport(int travelled, String comment, Advertisement ad, Long bookingID) {
+        this.travelled = travelled;
+        this.comment = comment;
+        this.ad = ad;
+        this.bookingID = bookingID;
     }
 
     public Long getId() {
@@ -55,5 +68,14 @@ public class CarReport {
 
     public void setAd(Advertisement ad) {
         this.ad = ad;
+    }
+
+    
+    public Long getBookingID() {
+        return this.bookingID;
+    }
+
+    public void setBookingID(Long bookingID) {
+        this.bookingID = bookingID;
     }
 }

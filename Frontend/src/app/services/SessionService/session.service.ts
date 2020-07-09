@@ -32,5 +32,6 @@ export class SessionService {
   enterReport = false;
   //////////////////////////////// Nesto
   rentedCars: Advertisement[];
+  bookingID: number;
   constructor() { }
 }
